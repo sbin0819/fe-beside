@@ -1,55 +1,62 @@
 {
-    "name": "fe-beside",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "export": "next build && next export",
-        "start": "next start",
-        "lint": "next lint",
-        "prepare": "husky install",
-        "cm": "cz",
-        "cy:open": "cypress open",
-        "cy:run": "cypress run"
-    },
-    "dependencies": {
-        "next": "^12.0.7",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "styled-components": "^5.3.3"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^15.0.0",
-        "@types/node": "^16.11.11",
-        "@types/prettier": "^2.4.2",
-        "@types/react": "^17.0.37",
-        "@types/react-dom": "^17.0.11",
-        "@types/styled-components": "^5.1.16",
-        "@typescript-eslint/eslint-plugin": "^5.5.0",
-        "@typescript-eslint/parser": "^5.5.0",
-        "babel-loader": "^8.2.3",
-        "babel-plugin-styled-components": "^2.0.2",
-        "babel-preset-react-app": "^10.0.0",
-        "commitizen": "^4.2.4",
-        "commitlint-config-gitmoji": "^2.2.5",
-        "cross-env": "^7.0.3",
-        "cypress": "^9.1.1",
-        "cz-customizable": "^6.3.0",
-        "eslint": "^8.1.0",
-        "eslint-plugin-import": "^2.25.2",
-        "eslint-plugin-jsx-a11y": "^6.4.1",
-        "eslint-plugin-react": "^7.26.1",
-        "eslint-plugin-react-hooks": "^4.2.0",
-        "eslint-plugin-unused-imports": "^1.1.5",
-        "husky": "^7.0.0",
-        "prettier": "^2.5.1",
-        "typescript": "^4.5.2"
-    },
-    "config": {
-        "commitizen": {
-            "path": "cz-customizable"
-        }
+  "name": "fe-beside",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next build && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky install",
+    "cm": "cz",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "next": "^12.0.7",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@commitlint/cli": "^15.0.0",
+    "@storybook/addon-actions": "^6.4.7",
+    "@storybook/addon-essentials": "^6.4.7",
+    "@storybook/addon-links": "^6.4.7",
+    "@storybook/react": "^6.4.7",
+    "@types/node": "^16.11.11",
+    "@types/prettier": "^2.4.2",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "@types/styled-components": "^5.1.16",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-styled-components": "^2.0.2",
+    "babel-preset-react-app": "^10.0.0",
+    "commitizen": "^4.2.4",
+    "commitlint-config-gitmoji": "^2.2.5",
+    "cross-env": "^7.0.3",
+    "cypress": "^9.1.1",
+    "cz-customizable": "^6.3.0",
+    "eslint": "^8.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unused-imports": "^1.1.5",
+    "husky": "^7.0.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-customizable"
     }
+  }
 }
