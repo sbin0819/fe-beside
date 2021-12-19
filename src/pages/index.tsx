@@ -8,6 +8,7 @@ const Home = () => {
     return (
         <Container>
             <Test />
+            <button>click</button>
         </Container>
     )
 }
