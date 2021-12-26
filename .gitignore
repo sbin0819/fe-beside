@@ -14,3 +14,5 @@ yarn-error.log*
 __snapshots__
 __image_snapshots__
 storybook-static
+package-lock.json
+yarn.lock
