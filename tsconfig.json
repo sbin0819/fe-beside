@@ -17,7 +17,8 @@
         "baseUrl": "src",
         "paths": {
             "@styles/*": ["styles/*"],
-            "@components/*": ["components/*"]
+            "@components/*": ["components/*"],
+            "@store/*": ["store/*"]
         },
         "incremental": true
     },
