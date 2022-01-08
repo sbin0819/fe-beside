@@ -18,7 +18,8 @@
         "paths": {
             "@styles/*": ["styles/*"],
             "@components/*": ["components/*"],
-            "@store/*": ["store/*"]
+            "@store/*": ["store/*"],
+            "@api/*": ["api/*"]
         },
         "incremental": true
     },
