@@ -18,14 +18,18 @@ module.exports = {
         '^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': `<rootDir>/__mocks__/w.js`,
 
         // Handle module aliases
-        '^@/components/(.*)$': '<rootDir>/src/components/$1',
-        '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
-        '^@/api/(.*)$': '<rootDir>/src/api/$1',
-        '^@/store/(.*)$': '<rootDir>/src/store/$1',
-        '^@/styles/(.*)$': '<rootDir>/src/styles/$1',
+        '^@components(.*)$': '<rootDir>/src/components/$1',
+        '^@hooks(.*)$': '<rootDir>/src/hooks/$1',
+        '^@store(.*)$': '<rootDir>/src/store/$1',
+        '^@api(.*)$': '<rootDir>/src/api/$1',
+        '^@styles(.*)$': '<rootDir>/src/styles/$1',
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
+    testPathIgnorePatterns: [
+        '<rootDir>/node_modules/',
+        '<rootDir>/.next/',
+        '<rootDir>/cypress/',
+    ],
     testEnvironment: 'jsdom',
     transform: {
         // Use babel-jest to transpile tests with the next/babel preset

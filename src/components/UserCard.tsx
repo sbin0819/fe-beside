@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector, useDispatch } from '@store/hook'
+import { useSelector, useDispatch } from 'react-redux'
 import { setUserName, setInit } from '@store/user/userSlice'
 import styled from 'styled-components'
 

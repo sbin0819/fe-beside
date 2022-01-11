@@ -34,4 +34,8 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch
 export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>
 
+declare module 'react-redux' {
+    interface DefaultRootState extends RootState {}
+}
+
 export const wrapper = createWrapper(initStore)
