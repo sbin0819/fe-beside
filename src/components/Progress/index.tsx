@@ -1,9 +1,17 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import useTimer from '@hooks/useTimer'
 import styled from 'styled-components'
 import useSWR from 'swr'
 
 import axios from 'axios'
+
+interface Timer {
+    id: string
+    start: boolean
+    duration: number
+    remainingTime: number
+    level: number
+}
 
 const TimterContainer = styled.div`
     display: inline-block;
@@ -33,20 +41,36 @@ function Progress() {
     const { data } = useSWR('http://localhost:3000/api/timer', (url) =>
         axios.get(url)
     )
-    const { minutes, seconds, start, stop, reset, remainingTime } = useTimer({
-        duration: data?.data?.duration,
-        onEnd: () => {},
-    })
+    const { minutes, seconds, start, stop, reset, isRunning, remainingTime } =
+        useTimer({
+            duration: data?.data?.duration,
+            onEnd: () => {},
+        })
 
-    const putRemainTime = async () => {
-        await axios.put('http://localhost:3000/api/timer', { resetTime: 400 })
+    const putRemainTime = async (time) => {
+        await axios.put(
+            'http://localhost:3000/api/timer',
+            {
+                remainingTime: Math.floor(time),
+            },
+            { withCredentials: true }
+        )
     }
+    useEffect(() => {
+        let timer
+        if (isRunning) {
+            timer = setTimeout(() => putRemainTime(remainingTime / 100))
+        }
+        if (!isRunning) {
+            clearTimeout(timer)
+        }
+        return () => clearTimeout(timer)
+    }, [isRunning, seconds])
 
     return (
         <div>
             <h1>임시 미팅 진행 페이지</h1>
-            <button onClick={() => putRemainTime()}>click</button>
-
+            <button onClick={() => putRemainTime(seconds)}>click</button>
             <TimterContainer>
                 <h1 className="display">
                     {minutes}:{seconds}

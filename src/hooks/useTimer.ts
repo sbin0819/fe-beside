@@ -28,7 +28,6 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         if (isRunning) {
             setRunning(false)
         }
-
         if (interval.current) {
             clearTimeout(interval.current)
             interval.current = null

@@ -1,12 +1,15 @@
+import { nanoid } from '@reduxjs/toolkit'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-interface Data {
+interface Timer {
+    id: string
     start: boolean
     duration: number
     remainingTime: number
     level: number
 }
 const data = {
+    id: nanoid(),
     start: false,
     duration: 60 * 2,
     remainingTime: 60 * 2,
@@ -15,11 +18,14 @@ const data = {
 
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<Timer>
 ) {
     if (req.method === 'PUT') {
-        console.log(req.body)
-        // Process a POST request
+        const newData = {
+            ...data,
+            remainingTime: JSON.parse(req.body.remainingTime),
+        }
+        res.status(200).json(newData)
     } else {
         res.status(200).json(data)
     }
