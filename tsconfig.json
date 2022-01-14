@@ -18,6 +18,7 @@
         "paths": {
             "@styles/*": ["styles/*"],
             "@components/*": ["components/*"],
+            "@hooks/*": ["hooks/*"],
             "@store/*": ["store/*"],
             "@api/*": ["api/*"]
         },

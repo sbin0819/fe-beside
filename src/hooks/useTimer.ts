@@ -4,12 +4,11 @@ type Seconds = number
 
 type Props = {
     autostart?: boolean
-    children?: any
     duration: Seconds
     onEnd: () => any
 }
 
-const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
+const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     const [isRunning, setRunning] = useState(autostart)
     const [currentTime, setCurrentTime] = useState(Number(new Date()))
     const [endTime, setEndTime] = useState(currentTime + duration * 1000)
@@ -54,7 +53,7 @@ const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
         reset()
     }, [duration])
 
-    // if autostart is set to true, autostart timer ON FIRST MOUNT ONLY!
+    // if autostart is set to true, autostart useTimer ON FIRST MOUNT ONLY!
     useEffect(() => {
         if (
             autostart === true &&
@@ -64,7 +63,7 @@ const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
         ) {
             start()
         }
-        // if this eslint rule is not disabled, the timer auto restarts
+        // if this eslint rule is not disabled, the useTimer auto restarts
         // once the user clicks "reset", even if `isRunning` is false.
     }, [])
     // with exhaustive-deps:
@@ -83,7 +82,7 @@ const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
         }
     }, [currentTime, endTime, onEnd])
 
-    // stop and clear timeout when timer is expired
+    // stop and clear timeout when useTimer is expired
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
             stop()
@@ -110,7 +109,7 @@ const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
 
     const seconds = Math.floor((remainingTime / 1000) % 60)
 
-    return children({
+    return {
         days: Math.floor(remainingTime / 1000 / 60 / 60 / 24).toString(),
         hours: Math.floor((remainingTime / 1000 / 60 / 60) % 24)
             .toString()
@@ -129,7 +128,7 @@ const Timer = ({ autostart = false, children, duration = 0, onEnd }: Props) => {
         start,
         stop,
         toggle,
-    })
+    }
 }
 
-export default Timer
+export default useTimer
