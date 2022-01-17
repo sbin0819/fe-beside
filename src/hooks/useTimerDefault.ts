@@ -13,7 +13,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     const [currentTime, setCurrentTime] = useState(Number(new Date()))
     const [endTime, setEndTime] = useState(currentTime + duration * 1000)
     const [remainingTime, setRemainingTime] = useState(duration)
-    const [overTime, setOverTime] = useState(0)
+
     const interval = useRef<any>(null)
 
     const start = useCallback(() => {
@@ -21,7 +21,6 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
             setRunning(true)
             setCurrentTime(Number(new Date()))
             setEndTime(Number(new Date()) + remainingTime)
-            setOverTime(0)
         }
     }, [isRunning, remainingTime])
 
@@ -74,26 +73,17 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         const remaining = endTime - currentTime
         if (remaining <= 0) {
             setRemainingTime(0)
-            // if (typeof onEnd === 'function' && duration > 0) {
-            //     onEnd()
-            // }
-            if (overTime > 0) {
-                const over = currentTime - endTime
-                setOverTime(over)
+            if (typeof onEnd === 'function') {
+                onEnd()
             }
         } else {
             setRemainingTime(remaining)
         }
-    }, [currentTime, endTime, overTime, onEnd])
+    }, [currentTime, endTime, onEnd])
 
     // stop and clear timeout when useTimer is expired
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
-            // stop()
-            setOverTime(1)
-        }
-        if (overTime) {
-            // 1시간 초과시 stop
             stop()
         }
     }, [isRunning, remainingTime, stop])
@@ -101,8 +91,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     // force re-render
     useEffect(() => {
         if (
-            // remainingTime > 0 &&
-            overTime < 1000 * 60 * 60 &&
+            remainingTime > 0 &&
             isRunning === true &&
             interval.current === null
         ) {
@@ -115,11 +104,10 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
             clearTimeout(interval.current)
             interval.current = null
         }
-    }, [isRunning, remainingTime, overTime])
+    }, [isRunning, remainingTime])
 
     const seconds = Math.floor((remainingTime / 1000) % 60)
 
-    const overSeconds = Math.floor((overTime / 1000) % 60)
     return {
         days: Math.floor(remainingTime / 1000 / 60 / 60 / 24).toString(),
         hours: Math.floor((remainingTime / 1000 / 60 / 60) % 24)
@@ -129,10 +117,6 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
             .toString()
             .padStart(2, '0'),
         seconds: seconds.toString().padStart(2, '0'),
-        overMinutes: Math.floor((overTime / 1000 / 60) % 60)
-            .toString()
-            .padStart(2, '0'),
-        overSeconds: overSeconds.toString().padStart(2, '0'),
         milliseconds: (remainingTime - seconds * 1000)
             .toString()
             .padStart(3, '0'),

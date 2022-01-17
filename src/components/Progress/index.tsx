@@ -41,11 +41,22 @@ function Progress() {
     const { data } = useSWR('http://localhost:3000/api/timer', (url) =>
         axios.get(url)
     )
-    const { minutes, seconds, start, stop, reset, isRunning, remainingTime } =
-        useTimer({
-            duration: data?.data?.duration,
-            onEnd: () => {},
-        })
+    const {
+        minutes,
+        seconds,
+        overMinutes,
+        overSeconds,
+        start,
+        stop,
+        reset,
+        isRunning,
+        remainingTime,
+    } = useTimer({
+        duration: data?.data?.duration, // 프리패칭으로 처리해야하나?
+        onEnd: () => {
+            console.log('ontime')
+        },
+    })
 
     const putRemainTime = async (time) => {
         await axios.put(
@@ -73,7 +84,15 @@ function Progress() {
             <button onClick={() => putRemainTime(seconds)}>click</button>
             <TimterContainer>
                 <h1 className="display">
-                    {minutes}:{seconds}
+                    {remainingTime > 0 ? (
+                        <span style={{ color: 'blue' }}>
+                            {minutes}:{seconds}
+                        </span>
+                    ) : (
+                        <span style={{ color: 'red' }}>
+                            {overMinutes}:{overSeconds}
+                        </span>
+                    )}
                 </h1>
                 <div className="timer_btns">
                     <button onClick={() => start()}>Start</button>
