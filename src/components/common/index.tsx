@@ -1,3 +1,5 @@
 import Timer from './Timer'
+import Header from './Header'
+import Icon from './Icon'
 
-export { Timer }
+export { Header, Icon, Timer }
