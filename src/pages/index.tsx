@@ -1,10 +1,34 @@
 import React from 'react'
+import Link from 'next/link'
 import UserCard from '@components/UserCard'
 import SampleTimer from '@components/SampleTimer'
 import { apiGetTest } from '@api/index'
+
 const Home = () => {
     return (
         <>
+            <div
+                style={{
+                    border: '1px solid tomato',
+                    display: 'inline-block',
+                    fontSize: '20px',
+                    padding: '20px 30px',
+                }}
+            >
+                <h1>미팅 셋업 페이지 샘플</h1>
+                <div
+                    style={{
+                        color: 'blue',
+                        display: 'flex',
+                        gap: '5px',
+                        marginTop: '10px',
+                    }}
+                >
+                    <Link href="setting">처음 세팅 샘플</Link>
+
+                    <Link href="setting/1">기존 미팅 샘플</Link>
+                </div>
+            </div>
             <SampleTimer />
             <ApiTest />
             <UserCard />

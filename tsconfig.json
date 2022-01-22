@@ -20,7 +20,9 @@
             "@components/*": ["components/*"],
             "@hooks/*": ["hooks/*"],
             "@store/*": ["store/*"],
-            "@api/*": ["api/*"]
+            "@api/*": ["api/*"],
+            "@common/*": ["components/common/*"],
+            "@common": ["components/common"]
         },
         "incremental": true
     },
