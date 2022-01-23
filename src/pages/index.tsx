@@ -19,18 +19,25 @@ const Home = () => {
                 <div
                     style={{
                         color: 'blue',
-                        display: 'flex',
                         gap: '5px',
                         marginTop: '10px',
                     }}
                 >
-                    <Link href="setting">처음 세팅 샘플</Link>
-
-                    <Link href="setting/1">기존 미팅 샘플</Link>
+                    <li>
+                        <Link href="setting">처음 세팅 샘플</Link>
+                    </li>
+                    <li>
+                        <Link href="setting/1">기존 미팅 샘플 1</Link>
+                    </li>
+                    <li>
+                        <Link href="setting/2">기존 미팅 샘플 2</Link>
+                    </li>
                 </div>
             </div>
-            <SampleTimer />
-            <ApiTest />
+            <h1 style={{ color: 'blue' }}>
+                <Link href="progress">timer 링크</Link>
+            </h1>
+            {/* <ApiTest /> */}
             <UserCard />
         </>
     )
