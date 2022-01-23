@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { Header } from '@common'
 import styled from 'styled-components'
 import { nanoid } from '@reduxjs/toolkit'
 import axios from 'axios'
+
+import { Forms, Form } from 'types/setting'
 
 const Container = styled.div`
     display: flex;
@@ -34,23 +37,13 @@ const StyledButton = styled.button`
     border: 1px solid tomato;
 `
 
-interface Form {
-    id: string
-    agenda: string
-    duration: number
-    order: number
-    created_at: Date
-    updated_at?: Date
-}
-interface Forms {
-    [key: string]: Form
-}
-
 // array to obj
 function Setting({ init }: { init: boolean }) {
     // id 세팅 페이지 // order 추가
+    const router = useRouter()
+    const { id } = router.query
     const formOrderRef = useRef(1)
-    const [form, setForm] = useState<Forms>(
+    const [forms, setForms] = useState<Forms>(
         init && {
             1: {
                 id: nanoid(),
@@ -64,18 +57,17 @@ function Setting({ init }: { init: boolean }) {
     )
     const onChange = (order) => (e) => {
         const { name, value, type } = e.target
-        setForm((prev) => ({
+        setForms((prev) => ({
             ...prev,
             [order]: {
                 ...prev[order],
-                [name]: type === 'number' ? +value : value,
+                [name]: type === 'text' ? value : value === '' ? '' : +value,
                 updated_at: new Date(),
             },
         }))
     }
-
     const onDelete = (order) => () => {
-        const newForm = Object.entries(form).reduce((acc, curr) => {
+        const newForm = Object.entries(forms).reduce((acc, curr) => {
             const [key, obj] = curr
             if (obj.order == order) {
                 return acc
@@ -90,14 +82,14 @@ function Setting({ init }: { init: boolean }) {
             return acc
         }, {})
         // formOrderRef 초기화
-        formOrderRef.current = Object.keys(form).length - 1
-        setForm(newForm)
+        formOrderRef.current = Object.keys(forms).length - 1
+        setForms(newForm)
     }
 
     const addAgendaInput = () => {
         // next order
-        formOrderRef.current += 1
-        setForm((prev) => ({
+        formOrderRef.current = Object.keys(forms).length + 1
+        setForms((prev) => ({
             ...prev,
             [formOrderRef.current]: {
                 id: nanoid(),
@@ -111,18 +103,15 @@ function Setting({ init }: { init: boolean }) {
 
     useEffect(() => {
         if (!init) {
-            // api 기존 input 데이터
-            // response [{..., order:1}, {..., order:2}]
             const fetch = async () => {
                 const response = await axios.get(
-                    'http://localhost:3000/api/setting'
+                    `http://localhost:3000/api/setting/${id}`
                 )
-                setForm(response.data)
+                setForms(response.data)
             }
             fetch()
         }
-    }, [])
-
+    }, [router.isReady])
     return (
         <>
             <Header />
@@ -141,11 +130,11 @@ function Setting({ init }: { init: boolean }) {
                     <AgendaForm
                         onSubmit={(e) => {
                             e.preventDefault()
-                            alert('submit')
+                            alert(JSON.stringify(forms))
                             // api start
                         }}
                     >
-                        {Object.entries(form)
+                        {Object.entries(forms)
                             .sort((a, b) => +a[0] - +b[0])
                             .map(([k, form]) => (
                                 <React.Fragment key={form.id}>
@@ -220,7 +209,10 @@ function AgendaInput({
                 <StyledInput
                     type="number"
                     name="duration"
-                    value={form.duration}
+                    placeholder="0"
+                    value={parseInt(
+                        form.duration.toString().replace(/(^0+)/, '')
+                    )}
                     onChange={onChange}
                 />
                 <span
