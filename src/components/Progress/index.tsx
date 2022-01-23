@@ -36,9 +36,7 @@ const TimterContainer = styled.div`
 `
 
 function Progress() {
-    const { data } = useSWR('http://localhost:3000/api/timer', (url) =>
-        axios.get(url)
-    )
+    const { data } = useSWR('/api/timer', (url) => axios.get(url))
     const [soundEffect, setSoundEffect] = useState<any>()
 
     const {

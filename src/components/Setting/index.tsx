@@ -104,9 +104,7 @@ function Setting({ init }: { init: boolean }) {
     useEffect(() => {
         if (!init) {
             const fetch = async () => {
-                const response = await axios.get(
-                    `http://localhost:3000/api/setting/${id}`
-                )
+                const response = await axios.get(`/api/setting/${id}`)
                 setForms(response.data)
             }
             fetch()
