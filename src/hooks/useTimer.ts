@@ -74,9 +74,15 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         const remaining = endTime - currentTime
         if (remaining <= 0) {
             setRemainingTime(0)
-            // if (typeof onEnd === 'function' && duration > 0) {
-            //     onEnd()
-            // }
+            if (
+                typeof onEnd === 'function' &&
+                remainingTime === 0 &&
+                duration > 0 &&
+                overTime == 0 &&
+                isRunning
+            ) {
+                onEnd()
+            }
             if (overTime > 0) {
                 const over = currentTime - endTime
                 setOverTime(over)

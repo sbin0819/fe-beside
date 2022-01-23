@@ -2,9 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import useTimer from '@hooks/useTimer'
 import styled from 'styled-components'
 import useSWR from 'swr'
-
 import axios from 'axios'
-
 interface Timer {
     id: string
     start: boolean
@@ -41,6 +39,8 @@ function Progress() {
     const { data } = useSWR('http://localhost:3000/api/timer', (url) =>
         axios.get(url)
     )
+    const [soundEffect, setSoundEffect] = useState<any>()
+
     const {
         minutes,
         seconds,
@@ -54,7 +54,7 @@ function Progress() {
     } = useTimer({
         duration: data?.data?.duration, // 프리패칭으로 처리해야하나?
         onEnd: () => {
-            console.log('ontime')
+            soundEffect.play()
         },
     })
 
@@ -69,6 +69,8 @@ function Progress() {
     }
     useEffect(() => {
         let timer
+        // ref를 사용해야 할 수 도 있음
+        setSoundEffect(new Audio('/sounds/alaram.mp3'))
         if (isRunning) {
             timer = setTimeout(() => putRemainTime(remainingTime / 100))
         }
@@ -96,7 +98,14 @@ function Progress() {
                 </h1>
                 <div className="timer_btns">
                     <button onClick={() => start()}>Start</button>
-                    <button onClick={() => stop()}>Stop</button>
+                    <button
+                        onClick={() => {
+                            stop()
+                            soundEffect.pause()
+                        }}
+                    >
+                        Stop
+                    </button>
                     <button onClick={() => reset()}>Reset</button>
                 </div>
                 <div className="timer_btns_bottom"></div>

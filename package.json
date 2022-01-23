@@ -63,9 +63,11 @@
         "eslint-plugin-react": "^7.26.1",
         "eslint-plugin-react-hooks": "^4.2.0",
         "eslint-plugin-unused-imports": "^1.1.5",
+        "file-loader": "^6.2.0",
         "husky": "^7.0.0",
         "prettier": "^2.5.1",
-        "typescript": "^4.5.2"
+        "typescript": "^4.5.2",
+        "url-loader": "^4.1.1"
     },
     "config": {
         "commitizen": {
