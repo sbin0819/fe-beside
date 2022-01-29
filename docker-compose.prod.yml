@@ -1,0 +1,5 @@
+version: "3.7" #This denotes that we are using version 3 of Docker Compose
+services: #This section defines all the different containers we will create.
+    web: #This is the name of our Nextjs application.
+        image: node:16-alpine
+        command: "yarn prod" #command to execute

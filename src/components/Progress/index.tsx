@@ -70,7 +70,7 @@ function Progress() {
         // ref를 사용해야 할 수 도 있음
         setSoundEffect(new Audio('/sounds/alaram.mp3'))
         if (isRunning) {
-            timer = setTimeout(() => putRemainTime(remainingTime / 100))
+            timer = setTimeout(() => putRemainTime(seconds))
         }
         if (!isRunning) {
             clearTimeout(timer)
