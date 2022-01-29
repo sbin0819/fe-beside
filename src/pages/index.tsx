@@ -1,11 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
 import UserCard from '@components/UserCard'
-import SampleTimer from '@components/SampleTimer'
 import { apiGetTest } from '@api/index'
 
 const Home = () => {
-    console.log('process.env.APP_ENV', process.env.APP_ENV)
     return (
         <>
             <div

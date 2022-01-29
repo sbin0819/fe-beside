@@ -4,8 +4,8 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "cross-env APP_ENV=local next dev",
-        "dev:2": "cross-env APP_ENV=development next dev",
+        "dev": "cross-env APP_ENV=dev next dev",
+        "prod": "cross-env APP_ENV=prod next dev",
         "build": "next build",
         "export": "next build && next export",
         "start": "next start",
@@ -16,7 +16,10 @@
         "cy:run": "cypress run",
         "test": "jest --watch",
         "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook"
+        "build-storybook": "build-storybook",
+        "build:docker": "docker-compose up -d --build",
+        "dev:up": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+        "prod:up": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.7.1",
