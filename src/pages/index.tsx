@@ -5,6 +5,7 @@ import SampleTimer from '@components/SampleTimer'
 import { apiGetTest } from '@api/index'
 
 const Home = () => {
+    console.log('process.env.APP_ENV', process.env.APP_ENV)
     return (
         <>
             <div
