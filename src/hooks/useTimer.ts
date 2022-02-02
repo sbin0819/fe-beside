@@ -17,6 +17,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     const interval = useRef<any>(null)
 
     const soundTiming = Math.floor(duration * 0.2)
+    const [isSoundRun, setIsSoundRun] = useState(false)
 
     const start = useCallback(() => {
         if (!isRunning && remainingTime > 0) {
@@ -92,11 +93,12 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         } else {
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
-            if (seconds == soundTiming) {
+            if (seconds == soundTiming && !isSoundRun) {
                 onEnd()
+                setIsSoundRun(true)
             }
         }
-    }, [currentTime, endTime, overTime, onEnd])
+    }, [currentTime, endTime, overTime, onEnd, isSoundRun])
 
     // stop and clear timeout when useTimer is expired
     useEffect(() => {

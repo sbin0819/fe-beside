@@ -66,9 +66,11 @@ function Progress() {
         )
     }
     useEffect(() => {
+        setSoundEffect(new Audio('/sounds/alaram.mp3'))
+    }, [])
+    useEffect(() => {
         let timer
         // ref를 사용해야 할 수 도 있음
-        setSoundEffect(new Audio('/sounds/alaram.mp3'))
         if (isRunning) {
             timer = setTimeout(() => putRemainTime(seconds))
         }
@@ -104,7 +106,14 @@ function Progress() {
                     >
                         Stop
                     </button>
-                    <button onClick={() => reset()}>Reset</button>
+                    <button
+                        onClick={() => {
+                            soundEffect.pause()
+                            reset()
+                        }}
+                    >
+                        Reset
+                    </button>
                 </div>
                 <div className="timer_btns_bottom"></div>
             </TimterContainer>
