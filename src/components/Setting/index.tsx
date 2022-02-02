@@ -107,7 +107,14 @@ function Setting({ init }: { init: boolean }) {
                 const response = await axios.get(`/api/setting/${id}`)
                 setForms(response.data)
             }
+            const fetch2 = async () => {
+                const response = await axios.get(
+                    'http://localhost:8000/api/agenda/'
+                )
+                console.log(response)
+            }
             fetch()
+            fetch2()
         }
     }, [router.isReady])
     return (

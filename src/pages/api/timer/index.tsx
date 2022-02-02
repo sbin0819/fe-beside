@@ -11,8 +11,8 @@ interface Timer {
 const data = {
     id: nanoid(),
     start: false,
-    duration: 2,
-    remainingTime: 2,
+    duration: 10,
+    remainingTime: 10,
     level: 1,
 }
 

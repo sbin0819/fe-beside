@@ -16,6 +16,8 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     const [overTime, setOverTime] = useState(0)
     const interval = useRef<any>(null)
 
+    const soundTiming = Math.floor(duration * 0.2)
+
     const start = useCallback(() => {
         if (!isRunning && remainingTime > 0) {
             setRunning(true)
@@ -74,21 +76,25 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         const remaining = endTime - currentTime
         if (remaining <= 0) {
             setRemainingTime(0)
-            if (
-                typeof onEnd === 'function' &&
-                remainingTime === 0 &&
-                duration > 0 &&
-                overTime == 0 &&
-                isRunning
-            ) {
-                onEnd()
-            }
+            // if (
+            //     typeof onEnd === 'function' &&
+            //     remainingTime === 0 &&
+            //     duration > 0 &&
+            //     overTime == 0 &&
+            //     isRunning
+            // ) {
+            //     onEnd()
+            // }
             if (overTime > 0) {
                 const over = currentTime - endTime
                 setOverTime(over)
             }
         } else {
             setRemainingTime(remaining)
+            // 20% 남았을 때 한 번만 울리고 비교 x
+            if (seconds == soundTiming) {
+                onEnd()
+            }
         }
     }, [currentTime, endTime, overTime, onEnd])
 
