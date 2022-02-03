@@ -14,6 +14,11 @@ const app = ({ Component, pageProps }: AppProps) => {
                     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
                 />
                 <link rel="shortcut icon" href="favicon.ico" />
+                <link
+                    rel="stylesheet"
+                    type="text/css"
+                    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
+                />
             </Head>
 
             <GlobalStyle />

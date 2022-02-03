@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body{
         background-color: #ffffff;
-        font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         font-weight: 400;
         overflow: hidden;
     }
@@ -25,13 +25,13 @@ const GlobalStyle = createGlobalStyle`
     }
     body input, body button, body pre {
         background-color: transparent;
-        font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         font-weight: 400;
         border: none;
         outline: none;
     }
     textarea{
-        font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         border: none;
         outline: none;
     }
