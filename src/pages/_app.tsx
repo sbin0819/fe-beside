@@ -1,11 +1,13 @@
 import React from 'react'
+import Head from 'next/head'
 import { AppProps } from 'next/app'
 import GlobalStyle from '@styles/GlobalStyle'
 import { wrapper } from '../store/store'
-
-import Head from 'next/head'
+import { Header } from '@components/common'
+import useHeaderControl from '@hooks/useHeaderControl'
 
 const app = ({ Component, pageProps }: AppProps) => {
+    const { isHeader, desc } = useHeaderControl()
     return (
         <>
             <Head>
@@ -20,8 +22,8 @@ const app = ({ Component, pageProps }: AppProps) => {
                     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
                 />
             </Head>
-
             <GlobalStyle />
+            {isHeader && <Header desc={desc} />}
             <Component {...pageProps} />
         </>
     )
