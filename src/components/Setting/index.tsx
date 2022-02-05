@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Header } from '@common'
 import styled from 'styled-components'
 import { nanoid } from '@reduxjs/toolkit'
 import axios from 'axios'
@@ -111,15 +110,13 @@ function Setting({ init }: { init: boolean }) {
                 const response = await axios.get(
                     'http://localhost:8000/api/agenda/'
                 )
-                console.log(response)
             }
             fetch()
-            fetch2()
+            // fetch2()
         }
     }, [router.isReady])
     return (
         <>
-            <Header />
             <Container>
                 <div style={{ position: 'relative' }}>
                     <h3
