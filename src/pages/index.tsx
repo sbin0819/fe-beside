@@ -33,8 +33,11 @@ const Home = () => {
                     </li>
                 </div>
             </div>
-            <h1 style={{ color: 'blue' }}>
+            <h1 style={{ color: 'blue', fontSize: '40px' }}>
                 <Link href="progress">timer 링크</Link>
+            </h1>
+            <h1 style={{ color: 'blue', fontSize: '40px' }}>
+                <Link href="meeting/1">meeting 페이지 링크</Link>
             </h1>
             {/* <ApiTest /> */}
             <UserCard />
