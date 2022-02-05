@@ -34,8 +34,14 @@ const BodyContainer = styled.div`
     display: flex;
     margin: 0 auto;
     height: 600px;
+    @media only screen and (max-width: 1200px) {
+        flex-direction: column;
+    }
 `
 const MainPannelContainer = styled.div`
+    @media only screen and (max-width: 1200px) {
+        width: 100%;
+    }
     width: 460px;
     border-radius: 24px;
     box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.16);
