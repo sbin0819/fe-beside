@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { AppProps } from 'next/app'
 import GlobalStyle from '@styles/GlobalStyle'
 import { wrapper } from '../store/store'
-import { Header } from '@components/common'
+import { Header, Footer } from '@components/common'
 import useHeaderControl from '@hooks/useHeaderControl'
 
 const app = ({ Component, pageProps }: AppProps) => {
@@ -25,6 +25,7 @@ const app = ({ Component, pageProps }: AppProps) => {
             <GlobalStyle />
             {isHeader && <Header desc={desc} />}
             <Component {...pageProps} />
+            <Footer />
         </>
     )
 }
