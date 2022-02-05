@@ -58,7 +58,7 @@ function Progress() {
 
     const putRemainTime = async (time) => {
         await axios.put(
-            'http://localhost:3000/api/timer',
+            '/api/timer',
             {
                 remainingTime: Math.floor(time),
             },
