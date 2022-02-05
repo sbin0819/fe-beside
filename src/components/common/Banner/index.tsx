@@ -18,7 +18,7 @@ const Container = styled.div`
 `
 
 function Banner() {
-    return <Container />
+    return <Container></Container>
 }
 
 export default Banner
