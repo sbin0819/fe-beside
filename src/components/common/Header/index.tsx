@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+
+import DropdownMenu from './DropdownMenu'
 
 const Container = styled.div`
     display: flex;
@@ -16,8 +18,11 @@ const Container = styled.div`
     );
     .header_logo {
         font-weight: 900;
+        cursor: pointer;
     }
     .header_desc {
+        display: flex;
+        align-items: center;
         .username {
             font-weight: 900;
         }
@@ -26,10 +31,13 @@ const Container = styled.div`
         }
     }
 `
+
 interface HeaderProps {
     desc?: string
 }
 function Header({ desc }: HeaderProps) {
+    const [isOpenModal, setIsOpenModal] = useState(false)
+    const onCloseModal = () => setIsOpenModal(false)
     const mockData = {
         username: '오구민',
         icon: '😊',
@@ -40,17 +48,22 @@ function Header({ desc }: HeaderProps) {
                 <Link href="/">59mins</Link>
             </div>
             <div className="header_desc">
-                <span className="username">{mockData.username}</span>
-                <span className="description">{desc}</span>
-                <span
-                    style={{
-                        padding: '6px',
-                        background: '#fff',
-                        borderRadius: '50%',
-                    }}
-                >
-                    {mockData.icon}
-                </span>
+                <div className="username">{mockData.username}</div>
+                <div className="description">{desc}</div>
+                <div style={{ position: 'relative' }}>
+                    <div
+                        style={{
+                            padding: '6px',
+                            background: '#fff',
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                        }}
+                        onClick={() => setIsOpenModal((prev) => !prev)}
+                    >
+                        {mockData.icon}
+                    </div>
+                    {isOpenModal && <DropdownMenu onClose={onCloseModal} />}
+                </div>
             </div>
         </Container>
     )
