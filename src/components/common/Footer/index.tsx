@@ -9,7 +9,8 @@ const Container = styled.div`
     padding: 0 0 14px;
     color: rgba(60, 60, 67, 0.6);
     font-size: 10px;
-
+    position: fixed;
+    bottom: 0;
     .footer_59mins {
         width: 50%;
         text-align: center;
