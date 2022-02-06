@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Banner, Svg } from '@components/common'
-import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
-import { Next, nextViewBox } from '@svgs/Next'
-import { Dropdown, dropdownViewBox } from '@svgs/Dropdown'
-import { RightSection } from './styles'
+import { Power, powerViewBox } from '@svgs/Power'
+import { TopContainer, RightSection } from './styles'
+import MainPannel from './MainPannel'
+import MeetingSummary from './MeetingSummary'
+import MeetingForm from './MeetingForm'
 
 const Container = styled.div`
     position: relative;
@@ -16,20 +17,7 @@ const InnerContainer = styled.div`
     left: 50%;
     transform: translateX(-50%);
 `
-const TopContainer = styled.div`
-    height: 42px;
-    margin-bottom: 24px;
-    flex-grow: 0;
-    font-family: Pretendard;
-    font-size: 28px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.5;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000;
-`
+
 const BodyContainer = styled.div`
     display: flex;
     margin: 0 auto;
@@ -38,112 +26,35 @@ const BodyContainer = styled.div`
         flex-direction: column;
     }
 `
-const MainPannelContainer = styled.div`
-    @media only screen and (max-width: 1200px) {
-        width: 100%;
-    }
-    width: 460px;
-    border-radius: 24px;
-    box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.16);
-    background: #0c254c;
-    color: white;
-    .main_pannel_top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 94px;
-        border-bottom: 1px solid #fff;
-        padding: 0 32px;
-    }
-    .main_pannel_top_desc {
-        font-family: Pretendard;
-        font-size: 20px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.4;
-        letter-spacing: normal;
-        color: #fff;
-    }
-    .main_pannel_top_desc {
-        padding-right: 4px;
-    }
-`
 
 function Meeting() {
     return (
         <Container>
             <Banner />
             <InnerContainer>
-                <TopContainer>회의 제목</TopContainer>
-                <BodyContainer>
-                    <MainPannelContainer>
-                        <div className="main_pannel_top">
+                <TopContainer>
+                    <div className="meeting_title">회의 제목</div>
+                    <div className="meeting_control">
+                        <div className="meeting_control_info">회의정보</div>
+                        <div className="meeting_control_power">
                             <div>
                                 <Svg
-                                    viewBox={alarmoffViewBox}
+                                    viewBox={powerViewBox}
                                     width={'20'}
                                     height={'20'}
                                 >
-                                    <Alarmoff />
+                                    <Power />
                                 </Svg>
                             </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <span className="main_pannel_top_desc">
-                                    NEXT AGENDA
-                                </span>
-                                <span>
-                                    <Svg
-                                        viewBox={nextViewBox}
-                                        width={'20'}
-                                        height={'20'}
-                                    >
-                                        <Next />
-                                    </Svg>
-                                </span>
-                            </div>
+                            <div>회의종료</div>
                         </div>
-                        <div className="main_paneel_body"></div>
-                    </MainPannelContainer>
+                    </div>
+                </TopContainer>
+                <BodyContainer>
+                    <MainPannel />
                     <RightSection>
-                        <div className="summary">
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div className="agenda_order">AGENDA1</div>
-                                <div className="agenda_desc">
-                                    회의 진행 화면 UI 디자인 시안 발표 및 개발
-                                    구현 관련 논의
-                                </div>
-                            </div>
-                            <div className="summary_progress">
-                                <div className="agenda_type">진행중</div>
-                                <div>
-                                    <Svg
-                                        viewBox={dropdownViewBox}
-                                        width={'20'}
-                                        height={'18'}
-                                    >
-                                        <Dropdown />
-                                    </Svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <li>abcd</li>
-                            <li>abcd</li>
-                            <li>abcd</li>
-                            <li>abcd</li>
-                            <li>abcd</li>
-                        </div>
+                        <MeetingSummary />
+                        <MeetingForm />
                     </RightSection>
                 </BodyContainer>
             </InnerContainer>
