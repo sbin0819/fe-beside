@@ -1,14 +1,8 @@
 import React from 'react'
+import Landing from '@components/Login/landing'
 
 function LandingPage() {
-    return (
-        <>
-            landing
-            <br /> landing <br />
-            landing <br />
-            landing
-        </>
-    )
+    return <Landing />
 }
 
 export default LandingPage
