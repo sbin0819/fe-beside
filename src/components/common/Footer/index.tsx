@@ -33,7 +33,7 @@ function Footer() {
     return (
         <Container>
             <div className="footer_59mins">
-                <p className="footer-text">59mins</p>
+                <p className="footer-text">59mins &nbsp;&nbsp; 2022</p>
             </div>
             <div className="footer_servies">
                 <Link href="/">
