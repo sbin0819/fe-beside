@@ -37,10 +37,11 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
     width: 50%;
     height: 100%;
+    position: relative;
     .servies {
         text-align: center;
-        margin: 23px auto 0 auto;
-        border: 1px solid red;
+        margin: 0 auto;
+
         height: 32px;
         font-size: 20px;
         font-weight: 500;
@@ -50,13 +51,25 @@ const RightContainer = styled.div`
         margin-right: 56px;
     }
     .left-text {
-        // border: 1px solid blue;
-        // margin-top: 100px;
         width: 460px;
         position: absolute;
-        // top: 50%;
+        top: 50%;
         margin-left: 109px;
-        // transform: translateY(50%);
+        transform: translateY(-50%);
+    }
+    .left-text-div {
+        display: flex;
+        align-items: center;
+        margin: 0 8px 20px 0;
+        .hello {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .hello-emoji {
+            font-size: 40px;
+            margin-left: 8px;
+            line-height: 1.5;
+        }
     }
     .left-text h2 {
         font-weight: bold;
@@ -69,16 +82,16 @@ const RightContainer = styled.div`
         text-align: left;
         color: rgba(60, 60, 67, 0.6);
         line-height: 1.6;
+        margin-bottom: 60px;
         // width: 359px;
     }
 `
 const SignInput = styled.div`
-    border: 1px solid red;
     .sign-name {
         // width : 105px;
         height: 20px;
         flex-grow: 0;
-        margin: 52px 69px 8px 0;
+        margin: 0 69px 8px 0;
         font-family: Pretendard;
         font-size: 14px;
         font-weight: 500;
@@ -87,15 +100,20 @@ const SignInput = styled.div`
         line-height: 1.43;
         letter-spacing: normal;
         text-align: left;
-        // color: #3c3c43;
-        color:red
-        border: 1px solid red;
+        color: #3c3c43;
     }
     .input-box {
         width: 364px;
         height: 48px;
         border-radius: 12px;
-        border: 1px solid #0c254c;
+        // border: 1px solid #0c254c;
+
+        padding: 12px 24px;
+    }
+    .nicknameLength {
+        color: #e24646;
+        font-size: 12px;
+        margin-top: 4px;
     }
     .sign-button {
         width: 364px;
@@ -105,6 +123,17 @@ const SignInput = styled.div`
         background-color: #0c254c;
         font-size: 16px;
         color: #fff;
+        cursor: pointer;
+    }
+    .sign-button-err {
+        width: 364px;
+        height: 52px;
+        margin: 40px 96px 16px 0;
+        border-radius: 12px;
+        background-color: #fff;
+        font-size: 16px;
+        border: solid 1px #d6d6d7;
+        color: #87878b;
     }
     .sign-text {
         color: #3c3c43;
@@ -134,7 +163,10 @@ function Login() {
             </LeftContainer>
             <RightContainer>
                 <div className="left-text">
-                    <h2>반가워요 </h2>
+                    <div className="left-text-div">
+                        <div className="hello">반가워요</div>
+                        <div className="hello-emoji">🥳</div>
+                    </div>
                     <p className="sign-welcom">
                         시간내에 끝내지 못한 회의에 지친 모든 <br />
                         오구민씨를 환영합니다.
@@ -143,11 +175,30 @@ function Login() {
                         <p className="sign-name">닉네임 (10자 이내)</p>
                         <input
                             className="input-box"
+                            // className={}
                             value={userName}
-                            maxLength={10}
+                            maxLength={15}
                             onChange={(e) => setUserName(e.target.value)}
                         />
-                        <button className="sign-button">시작할게요</button>
+                        {userName.length > 10 && (
+                            <p className="nicknameLength">
+                                닉네임은 10자 이내만 입력 가능합니다.
+                            </p>
+                        )}
+                        {userName === null ||
+                            (userName.length === 0 && (
+                                <p className="nicknameLength">입력해주세요.</p>
+                            ))}
+                        <button
+                            // className="sign-button"
+                            className={
+                                userName.length > 10 || userName.length === 0
+                                    ? 'sign-button-err'
+                                    : 'sign-button'
+                            }
+                        >
+                            시작할게요
+                        </button>
                         <p className="sign-text">
                             가입시, 59mins의{' '}
                             <span>개인정보처리방침, 서비스 이용약관</span>에

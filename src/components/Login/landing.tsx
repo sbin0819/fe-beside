@@ -39,10 +39,10 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
     width: 50%;
     height: 100%;
+    position: relative;
     .servies {
         text-align: center;
         margin: 23px auto 0 auto;
-        border: 1px solid red;
         height: 32px;
         font-size: 20px;
         font-weight: 500;
@@ -52,32 +52,45 @@ const RightContainer = styled.div`
         margin-right: 56px;
     }
     .left-text {
-        border: 1px solid blue;
-        // margin-top: 100px;
         width: 460px;
         position: absolute;
         top: 50%;
         margin-left: 109px;
-        transform: translateY(50%);
+        transform: translateY(-50%);
     }
-    .left-text h2 {
-        font-weight: bold;
-        font-size: 48px;
-        margin: 0 8px 12px 0;
+    .left-text-div {
+        display: flex;
+        align-items: center;
+        margin: 0 8px 20px 0;
+        .hello {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .hello-emoji {
+            font-size: 40px;
+            margin-left: 8px;
+            line-height: 1.5;
+        }
     }
-    .left-text p {
+    .left-text-p {
         font-size: 20px;
         font-weight: 500;
         text-align: left;
+        margin-bottom: 60px;
         color: rgba(60, 60, 67, 0.6);
         line-height: 1.6;
         // width: 359px;
     }
 `
-const GoogleBtn = styled.div`
-    // width: 359px;
-    height: 100px;
-    border: 1px solid red;
+const GoogleBtn = styled(GoogleLogin)`
+    width: 359px;
+    height: 52px;
+    text-algin: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: red;
+    border: solid 1px #d6d6d7;
+    object-fit: contain;
 `
 
 function Landing() {
@@ -107,12 +120,15 @@ function Landing() {
                     <span>팀 소개</span>
                 </div>
                 <div className="left-text">
-                    <h2>안녕하세요 </h2>
-                    <p>
+                    <div className="left-text-div">
+                        <div className="hello">안녕하세요</div>
+                        <div className="hello-emoji">👋</div>
+                    </div>
+                    <p className="left-text-p">
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
                         로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    <GoogleLogin
+                    <GoogleBtn
                         clientId={clientId}
                         className="GoogleBtn"
                         responseType={'id_token'}
