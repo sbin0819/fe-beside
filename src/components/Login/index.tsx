@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
-
+import Router from 'next/router'
+import axios from 'axios'
+import GoogleLogin from 'react-google-login'
+const clientId =
+    '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
     width: 100%;
     height: 100%;
@@ -40,8 +43,7 @@ const RightContainer = styled.div`
     position: relative;
     .servies {
         text-align: center;
-        margin: 0 auto;
-
+        margin: 23px auto 0 auto;
         height: 32px;
         font-size: 20px;
         font-weight: 500;
@@ -71,90 +73,79 @@ const RightContainer = styled.div`
             line-height: 1.5;
         }
     }
-    .left-text h2 {
-        font-weight: bold;
-        font-size: 48px;
-        margin: 0 8px 12px 0;
-    }
-    .sign-welcom {
+    .left-text-p {
         font-size: 20px;
         font-weight: 500;
         text-align: left;
+        margin-bottom: 60px;
         color: rgba(60, 60, 67, 0.6);
         line-height: 1.6;
-        margin-bottom: 60px;
         // width: 359px;
     }
 `
-const SignInput = styled.div`
-    .sign-name {
-        // width : 105px;
-        height: 20px;
-        flex-grow: 0;
-        margin: 0 69px 8px 0;
-        font-family: Pretendard;
-        font-size: 14px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.43;
-        letter-spacing: normal;
-        text-align: left;
-        color: #3c3c43;
-    }
-    .input-box {
-        width: 364px;
-        height: 48px;
-        border-radius: 12px;
-        // border: 1px solid #0c254c;
-
-        padding: 12px 24px;
-    }
-    .nicknameLength {
-        color: #e24646;
-        font-size: 12px;
-        margin-top: 4px;
-    }
-    .sign-button {
-        width: 364px;
-        height: 52px;
-        margin: 40px 96px 16px 0;
-        border-radius: 12px;
-        background-color: #0c254c;
-        font-size: 16px;
-        color: #fff;
-        cursor: pointer;
-    }
-    .sign-button-err {
-        width: 364px;
-        height: 52px;
-        margin: 40px 96px 16px 0;
-        border-radius: 12px;
-        background-color: #fff;
-        font-size: 16px;
-        border: solid 1px #d6d6d7;
-        color: #87878b;
-    }
-    .sign-text {
-        color: #3c3c43;
-        font-size: 12px;
-    }
-    .sign-text span {
-        color: #0c254c;
-        font-size: 12px;
-        font-weight: bold;
-    }
+const GoogleBtn = styled(GoogleLogin)`
+    width: 359px;
+    height: 52px;
+    text-algin: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: red;
+    border: solid 1px #d6d6d7;
+    object-fit: contain;
 `
 interface UserProps {
-    name: string
+    username?: string
+    email?: string
+    password?: string
+    nickname?: string
+    provider?: string
+    img?: string
 }
 function Login() {
-    const router = useRouter()
-    const userDataName: any = router.query.userName
-    const [userName, setUserName] = useState('')
+    const onSuccess = async (response) => {
+        console.log('구글 로그인 -- ', response)
+        // console.log('username', response.Ju.sf)
+        // console.log('email', response.profileObj.email)
+        // console.log('password', response.profileObj.googleId)
+        // console.log('nickname', response.Ju.hY)
+        // console.log('img', response.profileObj.imageUrl)
+        const userData: any = {
+            username: response.Ju.sf,
+            email: response.profileObj.email,
+            password: response.profileObj.googleId,
+            provider: 'GOOGLE',
+            img: response.profileObj.imageUrl,
+        }
+        let googleUserName = userData.userName
+        console.log('=======', userData.username)
+
+        // await axios
+        //     .post('http://127.0.0.1:8000/api/login/', {
+        //         username: response.Ju.sf,
+        //         email: response.profileObj.email,
+        //         password: response.profileObj.googleId,
+        //         provider: 'GOOGLE',
+        //         img: response.profileObj.imageUrl,
+        //     })
+        //     .then((res) => {
+        //         console.log('res', res)
+        //         // console.log('데이터 확인', userData)
+        //     })
+
+        // Router.push({
+        //     pathname: '/login/join',
+        //     query: { userName: googleUserName },
+        // })
+        Router.push(`/login/join?userName=${userData.username}`)
+    }
+    const onFailure = (error) => {
+        console.log(error)
+    }
     useEffect(() => {
-        console.log('ddd', userDataName)
-        setUserName(userDataName)
+        // axios.get('http://127.0.0.1:8000/api/meet').then((res) => {
+        // console.log('meet list', res)
+        // })
+        // console.log('---', userData.userName)
     }, [])
     return (
         <Container>
@@ -162,49 +153,27 @@ function Login() {
                 <h2 className="mins">59mins</h2>
             </LeftContainer>
             <RightContainer>
+                <div className="servies">
+                    <span>서비스 소개</span>
+                    <span>팀 소개</span>
+                </div>
                 <div className="left-text">
                     <div className="left-text-div">
-                        <div className="hello">반가워요</div>
-                        <div className="hello-emoji">🥳</div>
+                        <div className="hello">안녕하세요</div>
+                        <div className="hello-emoji">👋</div>
                     </div>
-                    <p className="sign-welcom">
-                        시간내에 끝내지 못한 회의에 지친 모든 <br />
-                        오구민씨를 환영합니다.
+                    <p className="left-text-p">
+                        늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
+                        로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    <SignInput>
-                        <p className="sign-name">닉네임 (10자 이내)</p>
-                        <input
-                            className="input-box"
-                            // className={}
-                            value={userName}
-                            maxLength={15}
-                            onChange={(e) => setUserName(e.target.value)}
-                        />
-                        {userName.length > 10 && (
-                            <p className="nicknameLength">
-                                닉네임은 10자 이내만 입력 가능합니다.
-                            </p>
-                        )}
-                        {userName === null ||
-                            (userName.length === 0 && (
-                                <p className="nicknameLength">입력해주세요.</p>
-                            ))}
-                        <button
-                            // className="sign-button"
-                            className={
-                                userName.length > 10 || userName.length === 0
-                                    ? 'sign-button-err'
-                                    : 'sign-button'
-                            }
-                        >
-                            시작할게요
-                        </button>
-                        <p className="sign-text">
-                            가입시, 59mins의{' '}
-                            <span>개인정보처리방침, 서비스 이용약관</span>에
-                            동의합니다.
-                        </p>
-                    </SignInput>
+                    <GoogleBtn
+                        clientId={clientId}
+                        className="GoogleBtn"
+                        responseType={'id_token'}
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
                 </div>
             </RightContainer>
         </Container>

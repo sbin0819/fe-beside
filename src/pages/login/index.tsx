@@ -1,7 +1,8 @@
 import React from 'react'
 import Login from '@components/Login/index'
-function LoginPage() {
+
+function LogingPage() {
     return <Login />
 }
 
-export default LoginPage
+export default LogingPage
