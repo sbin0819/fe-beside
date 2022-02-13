@@ -10,6 +10,7 @@ function useIsHeader() {
         '/': '님의 회의 리스트 목록입니다.',
         '/setting': '님! 목표시간내로 팀원들과 함께 회의를 끝내보아요!',
         '/meeting': '님! 목표시간내로 팀원들과 함께 회의를 끝내보아요!',
+        '/home': '님의 회의 리스트 목록입니다. ',
     }
     const [isHeader, setIsHeader] = useState(false)
     const [descListKey, setDescListKey] = useState('')
