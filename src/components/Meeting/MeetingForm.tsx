@@ -6,6 +6,8 @@ import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
 import styled from 'styled-components'
 
+import { nanoid } from '@reduxjs/toolkit'
+
 const Container = styled.div`
     margin-top: 20px;
     padding-right: 28px;
@@ -48,6 +50,17 @@ const Item = styled.div`
     padding: 16px 16px 17px 20px;
     border: solid 1px #f1f1f1;
     background-color: #fff;
+    input[type='date']::before {
+        content: attr(data-placeholder);
+        width: 100%;
+        color: gray;
+    }
+    input[type='date']:focus::before {
+        display: none;
+    }
+    input[type='date']:valid::before {
+        display: none;
+    }
 `
 
 const AddButton = styled.div`
@@ -62,12 +75,39 @@ const AddButton = styled.div`
 
 function MeetingForm() {
     const [areaForm, setAreaForm] = useState({ text1: '', text2: '' })
+    const actionInitId = nanoid()
+    const [actionsForm, setActionsForm] = useState({
+        [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
+    })
 
     const onChange = (e) => {
         const { value, name } = e.target
-        // replace - to ·
-        const newValue = value.replace(/\- /gi, '· ')
-        setAreaForm((prev) => ({ ...prev, [name]: newValue }))
+        let rValue = value.replace(/\- /gi, ' · ')
+        setAreaForm((prev) => ({ ...prev, [name]: rValue }))
+    }
+
+    const addActionItems = () => {
+        const id = nanoid()
+        setActionsForm((prev) => ({
+            ...prev,
+            [id]: {
+                id: id,
+                title: '',
+                authors: '',
+                date: '',
+            },
+        }))
+    }
+
+    const onChangeActionItems = (id) => (e) => {
+        const { value, name } = e.target
+        setActionsForm((prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [name]: value,
+            },
+        }))
     }
 
     return (
@@ -123,30 +163,39 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <ItemList>
-                        <Item>
-                            <div>
-                                <input placeholder="액션 아이템을 작성해주세요" />
-                            </div>
-                            <div>
-                                <input placeholder="A 담당자" />
-                            </div>
-                            <div>
-                                <input placeholder="B 마감기한" />
-                            </div>
-                        </Item>
-                        <Item>
-                            <div>
-                                <input placeholder="액션 아이템을 작성해주세요" />
-                            </div>
-                            <div>
-                                <input placeholder="A 담당자" />
-                            </div>
-                            <div>
-                                <input placeholder="B 마감기한" />
-                            </div>
-                        </Item>
+                        {Object.entries(actionsForm).map(([key, value]) => (
+                            <Item key={key}>
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder="액션 아이템을 작성해주세요"
+                                        value={value.title}
+                                        name="title"
+                                        onChange={onChangeActionItems(key)}
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder="A 담당자"
+                                        value={value.authors}
+                                        name="authors"
+                                        onChange={onChangeActionItems(key)}
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="date"
+                                        data-placeholder="B 마감기한"
+                                        value={value.date}
+                                        name="date"
+                                        readOnly
+                                    />
+                                </div>
+                            </Item>
+                        ))}
                     </ItemList>
-                    <AddButton>
+                    <AddButton onClick={() => addActionItems()}>
                         <div>
                             <Svg
                                 viewBox={addViewBox}
