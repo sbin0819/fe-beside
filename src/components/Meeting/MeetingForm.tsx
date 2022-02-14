@@ -1,5 +1,5 @@
-import React from 'react'
-import { Svg } from '@components/common'
+import React, { useState } from 'react'
+import { Svg, TextArea } from '@components/common'
 import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Pin, pinViewBox } from '@svgs/Pin'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
@@ -61,6 +61,15 @@ const AddButton = styled.div`
 `
 
 function MeetingForm() {
+    const [areaForm, setAreaForm] = useState({ text1: '', text2: '' })
+
+    const onChange = (e) => {
+        const { value, name } = e.target
+        // replace - to ·
+        const newValue = value.replace(/\- /gi, '· ')
+        setAreaForm((prev) => ({ ...prev, [name]: newValue }))
+    }
+
     return (
         <Container>
             <MenuContainer height={150}>
@@ -73,7 +82,12 @@ function MeetingForm() {
                     <div>논의 내용</div>
                 </Header>
                 <Body>
-                    <input placeholder="논의할 내용에 대해 작성해주세요" />
+                    <TextArea
+                        name="text1"
+                        value={areaForm.text1}
+                        placeholder="논의할 내용에 대해 작성해주세요."
+                        onChange={onChange}
+                    />
                 </Body>
             </MenuContainer>
             <MenuContainer height={140}>
@@ -86,7 +100,12 @@ function MeetingForm() {
                     <div>결정된 사항</div>
                 </Header>
                 <Body>
-                    <input placeholder="결정된 사항을 작성해주세요" />
+                    <TextArea
+                        name="text2"
+                        value={areaForm.text2}
+                        placeholder="결정된 사항을 작성해주세요"
+                        onChange={onChange}
+                    />
                 </Body>
             </MenuContainer>
             <MenuContainer>
