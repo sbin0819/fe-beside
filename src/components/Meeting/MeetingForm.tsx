@@ -1,10 +1,12 @@
-import React from 'react'
-import { Svg } from '@components/common'
+import React, { useState } from 'react'
+import { Svg, TextArea } from '@components/common'
 import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Pin, pinViewBox } from '@svgs/Pin'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
 import styled from 'styled-components'
+
+import { nanoid } from '@reduxjs/toolkit'
 
 const Container = styled.div`
     margin-top: 20px;
@@ -48,6 +50,17 @@ const Item = styled.div`
     padding: 16px 16px 17px 20px;
     border: solid 1px #f1f1f1;
     background-color: #fff;
+    input[type='date']::before {
+        content: attr(data-placeholder);
+        width: 100%;
+        color: gray;
+    }
+    input[type='date']:focus::before {
+        display: none;
+    }
+    input[type='date']:valid::before {
+        display: none;
+    }
 `
 
 const AddButton = styled.div`
@@ -61,6 +74,42 @@ const AddButton = styled.div`
 `
 
 function MeetingForm() {
+    const [areaForm, setAreaForm] = useState({ text1: '', text2: '' })
+    const actionInitId = nanoid()
+    const [actionsForm, setActionsForm] = useState({
+        [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
+    })
+
+    const onChange = (e) => {
+        const { value, name } = e.target
+        let rValue = value.replace(/\- /gi, ' · ')
+        setAreaForm((prev) => ({ ...prev, [name]: rValue }))
+    }
+
+    const addActionItems = () => {
+        const id = nanoid()
+        setActionsForm((prev) => ({
+            ...prev,
+            [id]: {
+                id: id,
+                title: '',
+                authors: '',
+                date: '',
+            },
+        }))
+    }
+
+    const onChangeActionItems = (id) => (e) => {
+        const { value, name } = e.target
+        setActionsForm((prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [name]: value,
+            },
+        }))
+    }
+
     return (
         <Container>
             <MenuContainer height={150}>
@@ -73,7 +122,12 @@ function MeetingForm() {
                     <div>논의 내용</div>
                 </Header>
                 <Body>
-                    <input placeholder="논의할 내용에 대해 작성해주세요" />
+                    <TextArea
+                        name="text1"
+                        value={areaForm.text1}
+                        placeholder="논의할 내용에 대해 작성해주세요."
+                        onChange={onChange}
+                    />
                 </Body>
             </MenuContainer>
             <MenuContainer height={140}>
@@ -86,7 +140,12 @@ function MeetingForm() {
                     <div>결정된 사항</div>
                 </Header>
                 <Body>
-                    <input placeholder="결정된 사항을 작성해주세요" />
+                    <TextArea
+                        name="text2"
+                        value={areaForm.text2}
+                        placeholder="결정된 사항을 작성해주세요"
+                        onChange={onChange}
+                    />
                 </Body>
             </MenuContainer>
             <MenuContainer>
@@ -104,30 +163,39 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <ItemList>
-                        <Item>
-                            <div>
-                                <input placeholder="액션 아이템을 작성해주세요" />
-                            </div>
-                            <div>
-                                <input placeholder="A 담당자" />
-                            </div>
-                            <div>
-                                <input placeholder="B 마감기한" />
-                            </div>
-                        </Item>
-                        <Item>
-                            <div>
-                                <input placeholder="액션 아이템을 작성해주세요" />
-                            </div>
-                            <div>
-                                <input placeholder="A 담당자" />
-                            </div>
-                            <div>
-                                <input placeholder="B 마감기한" />
-                            </div>
-                        </Item>
+                        {Object.entries(actionsForm).map(([key, value]) => (
+                            <Item key={key}>
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder="액션 아이템을 작성해주세요"
+                                        value={value.title}
+                                        name="title"
+                                        onChange={onChangeActionItems(key)}
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder="A 담당자"
+                                        value={value.authors}
+                                        name="authors"
+                                        onChange={onChangeActionItems(key)}
+                                    />
+                                </div>
+                                <div>
+                                    <input
+                                        type="date"
+                                        data-placeholder="B 마감기한"
+                                        value={value.date}
+                                        name="date"
+                                        readOnly
+                                    />
+                                </div>
+                            </Item>
+                        ))}
                     </ItemList>
-                    <AddButton>
+                    <AddButton onClick={() => addActionItems()}>
                         <div>
                             <Svg
                                 viewBox={addViewBox}
