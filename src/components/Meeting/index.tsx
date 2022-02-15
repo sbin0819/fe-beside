@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Banner } from '@components/common'
 import { RightSection } from './styles'
-import MainPannel from './MainPannel'
+import LeftPannel from './LeftPannel'
 import MeetingSummary from './MeetingSummary'
 import MeetingBody from './MeetingBody'
 import Header from './Header'
@@ -35,7 +35,7 @@ function Meeting() {
             <OffsetPositionContainer>
                 <Header />
                 <BodyContainer>
-                    <MainPannel />
+                    <LeftPannel />
                     <RightSection>
                         <MeetingSummary />
                         <MeetingBody />

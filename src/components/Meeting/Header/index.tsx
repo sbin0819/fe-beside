@@ -44,10 +44,13 @@ export const Container = styled.div`
 
 function Header() {
     const [isCloseMeeting, setIsCloseMeeting] = useState(false)
-    const handleCloseMeeting = () => {}
+    const handleCloseMeeting = () => setIsCloseMeeting(false)
 
     return (
         <>
+            {isCloseMeeting && (
+                <CloseMeetingModal onClose={handleCloseMeeting} />
+            )}
             <Container>
                 <div className="meeting_title">회의 제목</div>
                 <div className="meeting_control">
@@ -62,11 +65,12 @@ function Header() {
                                 <Power />
                             </Svg>
                         </div>
-                        <div>회의종료</div>
+                        <div onClick={() => setIsCloseMeeting(true)}>
+                            회의종료
+                        </div>
                     </div>
                 </div>
             </Container>
-            <CloseMeetingModal />
         </>
     )
 }

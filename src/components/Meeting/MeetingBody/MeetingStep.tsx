@@ -1,4 +1,5 @@
 import React from 'react'
+import { nanoid } from '@reduxjs/toolkit'
 import styled from 'styled-components'
 
 const MenulSteps = styled.div`
@@ -22,14 +23,23 @@ const MenulSteps = styled.div`
         color: #fff;
     }
 `
-
+const mockData = [
+    { id: nanoid(), title: 'AGENDA 1', cursor: false },
+    { id: nanoid(), title: 'AGENDA 2', cursor: true },
+    { id: nanoid(), title: 'AGENDA 3', cursor: false },
+    { id: nanoid(), title: 'AGENDA 4', cursor: false },
+]
 function MeetingStep(props) {
     return (
         <MenulSteps>
-            <div className="menu_step">AGENDA 1</div>
-            <div className="menu_step active">AGENDA 2</div>
-            <div className="menu_step">AGENDA 3</div>
-            <div className="menu_step">AGENDA 4</div>
+            {mockData.map((data) => (
+                <div
+                    className={`menu_step ${data.cursor ? 'active' : ''}`}
+                    key={data.id}
+                >
+                    {data.title}
+                </div>
+            ))}
         </MenulSteps>
     )
 }
