@@ -8,17 +8,17 @@ import styled from 'styled-components'
 
 import { nanoid } from '@reduxjs/toolkit'
 
-const Container = styled.div`
-    margin-top: 20px;
-    padding-right: 28px;
-    /* border: 1px solid teal; */
-    height: 508px;
-    overflow: scroll;
+const MenuTopContainer = styled.div`
+    height: 24px;
     font-family: Pretendard;
+    font-size: 16px;
+    font-weight: bold;
     font-stretch: normal;
     font-style: normal;
-    line-height: normal;
+    line-height: 1.5;
     letter-spacing: normal;
+    text-align: left;
+    color: #000;
 `
 
 const MenuContainer = styled.div<{ height?: number }>`
@@ -111,7 +111,8 @@ function MeetingForm() {
     }
 
     return (
-        <Container>
+        <>
+            <MenuTopContainer>아젠다 2의 내용은 무엇이다.</MenuTopContainer>
             <MenuContainer height={150}>
                 <Header>
                     <div>
@@ -209,7 +210,7 @@ function MeetingForm() {
                     </AddButton>
                 </Body>
             </MenuContainer>
-        </Container>
+        </>
     )
 }
 

@@ -1,14 +1,11 @@
-import React from 'react'
 import { Svg } from '@components/common'
 import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
-import {
-    MainPannelContainer,
-    MainPannelTop,
-    MainPannelBody,
-} from './MainPannel.style'
+import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
+import styled from 'styled-components'
 
-function MainPannel() {
+const Footer = styled.div``
+function LeftPannel() {
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -32,14 +29,19 @@ function MainPannel() {
                 </div>
             </MainPannelTop>
             <MainPannelBody>
-                <div className="main_pannel_body_progress">AGENDA 2</div>
-                <div className="main_pannel_body_sub_title">
-                    회의 진행 화면 UI 디자인 시안 발표 및 개발 구현 관련 논의를
-                    해봅시다
+                <div className="main_pannel_top">
+                    <div className="main_pannel_body_progress">AGENDA 2</div>
+                    <div className="main_pannel_body_sub_title">
+                        회의 진행 화면 UI 디자인 시안 발표 및 개발 구현 관련
+                        논의를 해봅시다
+                    </div>
+                </div>
+                <div className="main_pannel_footer">
+                    🔥 결정사항을 정리할 시간이에요!
                 </div>
             </MainPannelBody>
         </MainPannelContainer>
     )
 }
 
-export default MainPannel
+export default LeftPannel
