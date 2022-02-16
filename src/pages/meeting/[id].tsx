@@ -22,12 +22,10 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
     const { id } = params
     const resMeet = await fetch(`http://125.6.40.68/api/meet/${id}`)
-    const resAgenda = await fetch(`http://125.6.40.68/api/agenda/`)
+    const resAgenda = await fetch(`http://125.6.40.68/api/agenda?search=${id}`)
     const meet = await resMeet.json()
     const agendas = await resAgenda.json()
-    const filteredAgenda = agendas.filter((el) => el.meet_id == id)
-
-    return { props: { meet, agendas: filteredAgenda } }
+    return { props: { meet, agendas } }
 }
 
 export default MeetingPage
