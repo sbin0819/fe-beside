@@ -19,7 +19,7 @@ const MenulSteps = styled.div`
         color: #0c254c;
     }
     .menu_step.active {
-        background: #748298;
+        background: #384c6c;
         color: #fff;
     }
 `
