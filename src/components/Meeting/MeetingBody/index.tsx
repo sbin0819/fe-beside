@@ -7,7 +7,6 @@ import MeetingForm from './MeetingForm'
 const Container = styled.div`
     margin-top: 20px;
     padding-right: 28px;
-    /* border: 1px solid teal; */
     height: 508px;
     overflow: scroll;
     font-family: Pretendard;

@@ -5,11 +5,17 @@ import GlobalStyle from '@styles/GlobalStyle'
 import { wrapper } from '../store/store'
 import { Header, Footer } from '@components/common'
 import useHeaderControl from '@hooks/useHeaderControl'
+import { SWRConfig } from 'swr'
 
 const app = ({ Component, pageProps }: AppProps) => {
     const { isHeader, desc } = useHeaderControl()
     return (
-        <>
+        <SWRConfig
+            value={{
+                fetcher: (url: string) =>
+                    fetch(url).then((response) => response.json()),
+            }}
+        >
             <Head>
                 <meta
                     name="viewport"
@@ -26,7 +32,7 @@ const app = ({ Component, pageProps }: AppProps) => {
             {isHeader && <Header desc={desc} />}
             <Component {...pageProps} />
             <Footer />
-        </>
+        </SWRConfig>
     )
 }
 
