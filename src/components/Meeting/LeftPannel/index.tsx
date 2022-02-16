@@ -2,9 +2,7 @@ import { Svg } from '@components/common'
 import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
-import styled from 'styled-components'
 
-const Footer = styled.div``
 function LeftPannel() {
     return (
         <MainPannelContainer>
@@ -36,7 +34,7 @@ function LeftPannel() {
                         논의를 해봅시다
                     </div>
                 </div>
-                <div className="main_pannel_footer">
+                <div className="main_pannel_toast">
                     🔥 결정사항을 정리할 시간이에요!
                 </div>
             </MainPannelBody>

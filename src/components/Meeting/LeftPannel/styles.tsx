@@ -59,7 +59,7 @@ export const MainPannelBody = styled.div`
         }
     }
 
-    .main_pannel_footer {
+    .main_pannel_toast {
         display: flex;
         justify-content: center;
         align-items: center;
