@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Banner } from '@components/common'
 import { RightSection } from './styles'

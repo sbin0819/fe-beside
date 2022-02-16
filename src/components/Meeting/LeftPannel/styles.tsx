@@ -8,13 +8,14 @@ export const MainPannelContainer = styled.div`
     color: white;
     display: flex;
     flex-direction: column;
+    height: 100%;
 `
 
 export const MainPannelTop = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 94px;
+    height: 92px;
     border-bottom: 1px solid #fff;
     padding: 0 32px;
     .main_pannel_top_desc {
@@ -38,7 +39,6 @@ export const MainPannelBody = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
     .main_pannel_top {
         padding-right: 50px;
         .main_pannel_body_progress {
@@ -60,6 +60,8 @@ export const MainPannelBody = styled.div`
     }
 
     .main_pannel_toast {
+        position: absolute;
+        bottom: 32px;
         display: flex;
         justify-content: center;
         align-items: center;

@@ -1,6 +1,8 @@
 import React from 'react'
 import { nanoid } from '@reduxjs/toolkit'
 import styled from 'styled-components'
+import useMeeting from '@store/meeting/useMeeting'
+import useMeetingActions from '@store/meeting/useMeetingActions'
 
 const MenulSteps = styled.div`
     display: flex;
@@ -17,27 +19,28 @@ const MenulSteps = styled.div`
         background-color: #fff;
         font-size: 12px;
         color: #0c254c;
+        cursor: pointer;
     }
     .menu_step.active {
         background: #384c6c;
         color: #fff;
     }
 `
-const mockData = [
-    { id: nanoid(), title: 'AGENDA 1', cursor: false },
-    { id: nanoid(), title: 'AGENDA 2', cursor: true },
-    { id: nanoid(), title: 'AGENDA 3', cursor: false },
-    { id: nanoid(), title: 'AGENDA 4', cursor: false },
-]
-function MeetingStep(props) {
+
+function MeetingStep() {
+    const { agendas, agendaCursor } = useMeeting()
+    const { setAgendaCursor } = useMeetingActions()
     return (
         <MenulSteps>
-            {mockData.map((data) => (
+            {agendas.map((data, idx) => (
                 <div
-                    className={`menu_step ${data.cursor ? 'active' : ''}`}
-                    key={data.id}
+                    className={`menu_step ${
+                        agendaCursor === idx ? 'active' : ''
+                    }`}
+                    key={data.agenda_id}
+                    onClick={() => setAgendaCursor({ agendaCursor: idx })}
                 >
-                    {data.title}
+                    AGENDA {idx + 1}
                 </div>
             ))}
         </MenulSteps>

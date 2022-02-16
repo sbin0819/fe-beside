@@ -1,9 +1,12 @@
 import { Svg } from '@components/common'
+import useMeeting from '@store/meeting/useMeeting'
 import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 
 function LeftPannel() {
+    const { agendas } = useMeeting()
+    const mockActive = agendas[0]
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -28,10 +31,9 @@ function LeftPannel() {
             </MainPannelTop>
             <MainPannelBody>
                 <div className="main_pannel_top">
-                    <div className="main_pannel_body_progress">AGENDA 2</div>
+                    <div className="main_pannel_body_progress">AGENDA 1</div>
                     <div className="main_pannel_body_sub_title">
-                        회의 진행 화면 UI 디자인 시안 발표 및 개발 구현 관련
-                        논의를 해봅시다
+                        {mockActive?.agenda_title}
                     </div>
                 </div>
                 <div className="main_pannel_toast">

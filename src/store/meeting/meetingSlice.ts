@@ -23,11 +23,13 @@ interface Agenda {
 interface IState {
     meet?: Meet
     agendas?: Agenda[]
+    agendaCursor: number
 }
 
 const initialState = {
     meet: {},
     agendas: [],
+    agendaCursor: 0,
 }
 
 export const meetingSlice = createSlice({
@@ -40,6 +42,9 @@ export const meetingSlice = createSlice({
         },
         getMeeting: (state) => {
             return state
+        },
+        setAgendaCursor: (state, { payload: { agendaCursor } }) => {
+            state.agendaCursor = agendaCursor
         },
     },
 })
