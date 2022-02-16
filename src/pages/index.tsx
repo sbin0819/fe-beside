@@ -41,6 +41,7 @@ const Home = () => {
             </h1>
             <h1 style={{ color: 'blue', fontSize: '40px' }}>
                 <Link href="/ui">물결 타이머 페이지 링크</Link>
+                <Link href="/ui">물결 타이머 페이지 링크</Link>
             </h1>
             {/* <ApiTest /> */}
             <UserCard />
