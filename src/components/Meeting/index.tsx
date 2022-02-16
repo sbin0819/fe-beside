@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Banner } from '@components/common'
 import { RightSection } from './styles'
@@ -7,15 +7,15 @@ import MeetingSummary from './MeetingSummary'
 import MeetingBody from './MeetingBody'
 import Header from './Header'
 
+import useSWR from 'swr'
+
+import useMeetingActions from './useMeetingActions'
+
 const Container = styled.div`
     position: relative;
 `
 
 const OffsetPositionContainer = styled.div`
-    /* position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%); */
     position: relative;
     top: -160px;
     width: 1100px;
@@ -29,6 +29,27 @@ const BodyContainer = styled.div`
 `
 
 function Meeting() {
+    const { setMeeting } = useMeetingActions()
+    const {
+        data: meetData,
+        error: meetError,
+        isValidating: meetIsValidating,
+    } = useSWR('http://125.6.40.68/api/meet/1')
+    const {
+        data: agendaData,
+        error: agendaError,
+        isValidating: agendaIsValidating,
+    } = useSWR('http://125.6.40.68/api/agenda/')
+
+    useEffect(() => {
+        if (meetError || agendaError) {
+        }
+        if (!meetIsValidating && !agendaIsValidating) {
+            // agendaData 필터 필요함
+            setMeeting({ meet: meetData, agendas: agendaData })
+        }
+    }, [meetData, agendaData])
+
     return (
         <Container>
             <Banner />
