@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Svg, TextArea } from '@components/common'
 import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Pin, pinViewBox } from '@svgs/Pin'
@@ -7,6 +7,7 @@ import { Add, addViewBox } from '@svgs/Add'
 import styled from 'styled-components'
 
 import { nanoid } from '@reduxjs/toolkit'
+import useMeeting from '@store/meeting/useMeeting'
 
 const MenuTopContainer = styled.div`
     height: 24px;
@@ -74,11 +75,19 @@ const AddButton = styled.div`
 `
 
 function MeetingForm() {
-    const [areaForm, setAreaForm] = useState({ text1: '', text2: '' })
+    const { agendas, agendaCursor } = useMeeting()
+    const [activeAgenda, setActiveAgenda] = useState<any>()
+    const [areaForm, setAreaForm] = useState({ discussion: '', decisions: '' })
     const actionInitId = nanoid()
     const [actionsForm, setActionsForm] = useState({
         [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
     })
+
+    useEffect(() => {
+        if (Array.isArray(agendas)) {
+            setActiveAgenda(agendas[agendaCursor])
+        }
+    }, [agendaCursor])
 
     const onChange = (e) => {
         const { value, name } = e.target
@@ -112,7 +121,7 @@ function MeetingForm() {
 
     return (
         <>
-            <MenuTopContainer>아젠다 2의 내용은 무엇이다.</MenuTopContainer>
+            <MenuTopContainer>{activeAgenda?.agenda_title}</MenuTopContainer>
             <MenuContainer height={150}>
                 <Header>
                     <div>
@@ -124,8 +133,8 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <TextArea
-                        name="text1"
-                        value={areaForm.text1}
+                        name="discussion"
+                        value={areaForm?.discussion}
                         placeholder="논의할 내용에 대해 작성해주세요."
                         onChange={onChange}
                     />
@@ -142,8 +151,8 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <TextArea
-                        name="text2"
-                        value={areaForm.text2}
+                        name="decisions"
+                        value={areaForm?.decisions}
                         placeholder="결정된 사항을 작성해주세요"
                         onChange={onChange}
                     />
