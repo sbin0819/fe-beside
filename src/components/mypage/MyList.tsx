@@ -7,21 +7,23 @@ import axios from 'axios'
 import moment from 'moment'
 
 const TabContainer = styled.div`
-    border: 1px solid blue;
     width: 1000px;
     height: 500px;
     border-radius: 24px;
-    background-color: #fff;
+    // background-color: #fff;
     display: flex;
     flex-direction: row;
     // position: relative;
 `
 const BoxContainer = styled.div`
-    border: 1px solid red;
-    width: 30%;
-    height: 30%;
+    border: 1px solid #f1f1f1;
+    width: 390px;
+    height: 200px;
     margin: 10px;
+    background-color: #fff;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
     position: relative;
+    border-radius: 24px;
     .status-name {
         position: absolute;
         right: 10px;
@@ -64,10 +66,42 @@ const DataNullBox = styled.div`
         color: #fff;
     }
 `
-const pMargin = {
-    margin: '5px',
-    border: '1px solid green',
-}
+const InputPStype = styled.p`
+    flex-grow: 0;
+    margin: 48px 27px 2px 32px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+`
+const Boxstatus = styled.p`
+    border-radius: 8px;
+    background-color: #fef4ee;
+    color: #f79058;
+    text-align: center;
+    width: 72px;
+    height: 26px;
+    line-height: 26px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 12px;
+`
+const TimeStyle = styled.p`
+    flex-grow: 0;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #87878b;
+    margin-left: 32px;
+`
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
@@ -77,36 +111,32 @@ function MyList() {
         fetcher,
         { revalidateOnFocus: true }
     )
-    {
-        /* <div>
-                        <p>
-                            아직 회의록을 작성하지 않으셨나요? <br /> 팀원들과
-                            함께 효율적인 회의를 진행해보세요!
-                        </p>
-                        <button>회의 시작하기</button>
-                    </div> */
-    }
+
     React.useEffect(() => {
         console.log('겟 미트 api', meetDatas)
     }, [])
     return (
         <TabContainer>
             {/* {meetDatas} */}
+            <BoxContainer>
+                <InputPStype>회의추가하기</InputPStype>
+            </BoxContainer>
             {meetDatas ? (
                 meetDatas.map((meetData: any) => {
                     return (
                         <BoxContainer key={meetData.meet_id}>
-                            <p style={pMargin} className="status-name">
-                                {meetData.status}
-                            </p>
-                            <p style={pMargin} className="meet_title-name">
+                            <Boxstatus>
+                                {/* {meetData.status} */}
+                                회의진행중
+                            </Boxstatus>
+                            <InputPStype className="meet_title-name">
                                 {meetData.meet_title}
-                            </p>
-                            <p style={pMargin} className="last_time-name">
+                            </InputPStype>
+                            <TimeStyle className="last_time-name">
                                 {moment(meetData.last_time).format(
-                                    'YYYY-MM-DD hh:mm'
+                                    'YYYY-MM-DD hh시 mm분'
                                 )}
-                            </p>
+                            </TimeStyle>
                         </BoxContainer>
                     )
                 })

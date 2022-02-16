@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useDebugValue, useEffect } from 'react'
 import styled from 'styled-components'
-import Router from 'next/router'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
+import Router from 'next/router'
+import { useRouter } from 'next/router'
+
 const clientId =
     '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
@@ -102,41 +104,44 @@ interface UserProps {
     img?: string
 }
 function Login() {
+    const router = useRouter()
     const onSuccess = async (response) => {
         console.log('구글 로그인 -- ', response)
-        // console.log('username', response.Ju.sf)
-        // console.log('email', response.profileObj.email)
-        // console.log('password', response.profileObj.googleId)
-        // console.log('nickname', response.Ju.hY)
-        // console.log('img', response.profileObj.imageUrl)
         const userData: any = {
-            username: response.Ju.sf,
+            name: response.Ju.sf,
+            nickname: response.Ju.hY,
             email: response.profileObj.email,
             password: response.profileObj.googleId,
             provider: 'GOOGLE',
             img: response.profileObj.imageUrl,
         }
-        let googleUserName = userData.userName
-        console.log('=======', userData.username)
 
-        // await axios
-        //     .post('http://127.0.0.1:8000/api/login/', {
-        //         username: response.Ju.sf,
-        //         email: response.profileObj.email,
-        //         password: response.profileObj.googleId,
-        //         provider: 'GOOGLE',
-        //         img: response.profileObj.imageUrl,
-        //     })
-        //     .then((res) => {
-        //         console.log('res', res)
-        //         // console.log('데이터 확인', userData)
-        //     })
+        await axios
+            .post('http://127.0.0.1:8000/api/login/', [userData])
+            .then((res) => {
+                console.log(res)
+                if (res.data.db === 'None') {
+                    Router.push({
+                        pathname: '/login/join',
+                        query: {
+                            email: userData.email,
+                            nickname: userData.nickname,
+                            name: userData.name,
+                            password: userData.password,
+                            img: userData.img,
+                        },
+                    })
+                    console.log('확인')
+                } else {
+                    router.push('/home')
+                }
+            })
 
         // Router.push({
         //     pathname: '/login/join',
         //     query: { userName: googleUserName },
         // })
-        Router.push(`/login/join?userName=${userData.username}`)
+        // Router.push(`/login/join?userName=${userData.username}`)
     }
     const onFailure = (error) => {
         console.log(error)

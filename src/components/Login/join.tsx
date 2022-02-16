@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import Router from 'next/router'
+import { withRouter } from 'next/router'
+import { setCookie, getCookie } from '../utils/Cookie'
+import axios from 'axios'
 
 const Container = styled.div`
     width: 100%;
@@ -150,14 +154,36 @@ interface UserProps {
 }
 function Join() {
     const router = useRouter()
-    // const { userNameData } = router.query.userName
-    // const { router } = props;
-    // const userDataName: any = router.query.userName
+    let email = router.query.email
+    let name = router.query.name
+    let nickname = router.query.nickname
+    let password = router.query.password
+    let img = router.query.img
 
-    const [userName, setUserName] = useState(router.query.userName)
-    useEffect(() => {
-        console.log('ggg', router.query.userName)
-    }, [])
+    const [inputName, setInputName] = useState(nickname)
+    const loginBtn = () => {
+        const userData: any = {
+            name: name,
+            nickname: inputName,
+            email: email,
+            password: password,
+            provider: 'google',
+            img: img,
+        }
+        axios
+            .post('http://127.0.0.1:8000/api/login/', [userData])
+            .then((res) => {
+                let token = res.data['token']
+                setCookie('Authorization', token, {
+                    path: '/',
+                    secure: true,
+                    SameSite: 'None',
+                })
+                if (res.data['success'] === true) {
+                    router.push('/home')
+                }
+            })
+    }
     return (
         <Container>
             <LeftContainer>
@@ -178,23 +204,25 @@ function Join() {
                         <input
                             className="input-box"
                             // className={}
-                            value={userName}
+                            value={inputName}
                             maxLength={15}
-                            onChange={(e) => setUserName(e.target.value)}
+                            onChange={(e) => setInputName(e.target.value)}
                         />
-                        {userName.length > 10 && (
+                        {name.length > 10 && (
                             <p className="nicknameLength">
                                 닉네임은 10자 이내만 입력 가능합니다.
                             </p>
                         )}
-                        {userName === null ||
-                            (userName.length === 0 && (
+                        {name === null ||
+                            (name.length === 0 && (
                                 <p className="nicknameLength">입력해주세요.</p>
                             ))}
                         <button
-                            // className="sign-button"
+                            onClick={() => {
+                                loginBtn()
+                            }}
                             className={
-                                userName.length > 10 || userName.length === 0
+                                name.length > 10 || name.length === 0
                                     ? 'sign-button-err'
                                     : 'sign-button'
                             }
@@ -213,4 +241,4 @@ function Join() {
     )
 }
 
-export default Join
+export default withRouter(Join)
