@@ -1,10 +1,14 @@
 import { useEffect } from 'react'
 import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
+import useMeeting from '@store/meeting/useMeeting'
 function MeetingPage({ meet, agendas }: { meet: any; agendas: any }) {
     const { setMeeting } = useMeetingActions()
+    const { meet: isInit } = useMeeting()
     useEffect(() => {
-        setMeeting({ meet, agendas })
+        if (!isInit) {
+            setMeeting({ meet, agendas })
+        }
     }, [])
     return <Meeting />
 }

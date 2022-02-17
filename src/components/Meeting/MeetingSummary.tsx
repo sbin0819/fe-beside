@@ -2,6 +2,7 @@ import React from 'react'
 import { Svg } from '@components/common'
 import { Dropdown, dropdownViewBox } from '@svgs/Dropdown'
 import styled from 'styled-components'
+import useMeeting from '@store/meeting/useMeeting'
 
 const Container = styled.div`
     display: flex;
@@ -54,6 +55,7 @@ const Container = styled.div`
     }
 `
 function MeetingSummary() {
+    const { agendas } = useMeeting()
     return (
         <Container>
             <div
