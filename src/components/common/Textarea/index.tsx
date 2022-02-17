@@ -25,35 +25,37 @@ const TextArea = ({
         if (ref === null || ref.current === null) {
             return
         }
-        ref.current.style.height = '38px'
+        ref.current.style.height = `38px`
         ref.current.style.height = ref.current.scrollHeight + 'px'
-    }, [])
+    }, [row])
 
     const handleResizeHeight = useCallback(() => {
         if (ref === null || ref.current === null) {
             return
         }
-        ref.current.style.height = '38px'
+        ref.current.style.height = `38px`
         ref.current.style.height = ref.current.scrollHeight + 'px'
     }, [])
 
     return (
-        <AutoResizeTextArea
-            className={className}
-            name={name}
-            value={value}
-            onChange={onChange}
-            rows={row}
-            placeholder={placeholder}
-            ref={ref}
-            onInput={handleResizeHeight}
-        />
+        <>
+            <AutoResizeTextArea
+                className={className}
+                name={name}
+                value={value}
+                onChange={onChange}
+                rows={row}
+                placeholder={placeholder}
+                ref={ref}
+                onInput={handleResizeHeight}
+            />
+        </>
     )
 }
 
 const AutoResizeTextArea = styled.textarea`
     resize: none;
-    overflow: hidden;
+    /* overflow: hidden; */
     display: block;
     outline: none;
     padding: 12px 0;
@@ -63,6 +65,7 @@ const AutoResizeTextArea = styled.textarea`
     box-sizing: border-box;
     line-height: 20px;
     width: 100%;
+    height: 100%;
     &:focus {
         background: azure;
     }
