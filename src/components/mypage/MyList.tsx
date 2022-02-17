@@ -39,6 +39,29 @@ const BoxContainer = styled.div`
         left: 10px;
         bottom: 20px;
     }
+    .circle {
+        width: 40px;
+        height: 40px;
+        flex-grow: 0;
+        margin: 0 auto 20px auto;
+        padding: 10px;
+        background-color: #0c254c;
+        border-radius: 50%;
+    }
+    .meetCraete {
+        height: 92px;
+        width: 40%;
+        border: 1px solid red;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.6;
+        text-align: center;
+        margin: 0 auto;
+        // position: absolute;
+        // top: 50%;
+        // letf: 50%;
+        // transtion: translate(50%, 50%);
+    }
 `
 const DataNullBox = styled.div`
     // background-color: yellow;
@@ -107,7 +130,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
     const [testData, setTestData] = useState(undefined)
     const { data: meetDatas, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/',
+        'http://127.0.0.1:8000/api/meet/?search=Y',
         fetcher,
         { revalidateOnFocus: true }
     )
@@ -119,7 +142,10 @@ function MyList() {
         <TabContainer>
             {/* {meetDatas} */}
             <BoxContainer>
-                <InputPStype>회의추가하기</InputPStype>
+                <div className="meetCraete">
+                    <div className="circle"></div>
+                    <p>회의추가하기</p>
+                </div>
             </BoxContainer>
             {meetDatas ? (
                 meetDatas.map((meetData: any) => {
@@ -134,7 +160,7 @@ function MyList() {
                             </InputPStype>
                             <TimeStyle className="last_time-name">
                                 {moment(meetData.last_time).format(
-                                    'YYYY-MM-DD hh시 mm분'
+                                    `YYYY-MM-DD HH시 mm분`
                                 )}
                             </TimeStyle>
                         </BoxContainer>

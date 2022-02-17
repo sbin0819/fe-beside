@@ -90,6 +90,13 @@ const RightContainer = styled.div`
         // width: 359px;
     }
 `
+const Input = styled.input`
+    width: 364px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid #0c254c;
+    padding: 12px 24px;
+`
 const SignInput = styled.div`
     .sign-name {
         // width : 105px;
@@ -106,14 +113,7 @@ const SignInput = styled.div`
         text-align: left;
         color: #3c3c43;
     }
-    .input-box {
-        width: 364px;
-        height: 48px;
-        border-radius: 12px;
-        // border: 1px solid #0c254c;
 
-        padding: 12px 24px;
-    }
     .nicknameLength {
         color: #e24646;
         font-size: 12px;
@@ -149,6 +149,13 @@ const SignInput = styled.div`
         font-weight: bold;
     }
 `
+const blackBorder = {
+    border: '1px solid #0c254c',
+}
+const redBorder = {
+    border: '1px solid #e24646',
+}
+
 interface UserProps {
     name: string
 }
@@ -160,7 +167,8 @@ function Join() {
     let password = router.query.password
     let img = router.query.img
 
-    const [inputName, setInputName] = useState(nickname)
+    const [inputName, setInputName] = useState('nickname')
+    const inputBorder = inputName.length === 0
     const loginBtn = () => {
         const userData: any = {
             name: name,
@@ -201,20 +209,20 @@ function Join() {
                     </p>
                     <SignInput>
                         <p className="sign-name">닉네임 (10자 이내)</p>
-                        <input
+                        <Input
                             className="input-box"
-                            // className={}
                             value={inputName}
                             maxLength={15}
+                            style={inputBorder ? redBorder : blackBorder}
                             onChange={(e) => setInputName(e.target.value)}
                         />
-                        {name.length > 10 && (
+                        {inputName.length > 10 && (
                             <p className="nicknameLength">
                                 닉네임은 10자 이내만 입력 가능합니다.
                             </p>
                         )}
-                        {name === null ||
-                            (name.length === 0 && (
+                        {inputName === null ||
+                            (inputName.length === 0 && (
                                 <p className="nicknameLength">입력해주세요.</p>
                             ))}
                         <button
@@ -222,7 +230,7 @@ function Join() {
                                 loginBtn()
                             }}
                             className={
-                                name.length > 10 || name.length === 0
+                                inputName.length > 10 || inputName.length === 0
                                     ? 'sign-button-err'
                                     : 'sign-button'
                             }
