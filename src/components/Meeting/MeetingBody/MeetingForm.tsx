@@ -175,6 +175,7 @@ function MeetingForm() {
                         value={areaForm?.discussion}
                         placeholder="논의할 내용에 대해 작성해주세요."
                         onChange={onChange}
+                        row={areaForm?.discussion.split('\n').length + 1}
                     />
                 </Body>
             </MenuContainer>
@@ -193,6 +194,7 @@ function MeetingForm() {
                         value={areaForm?.decisions}
                         placeholder="결정된 사항을 작성해주세요"
                         onChange={onChange}
+                        row={areaForm?.decisions.split('\n').length + 1}
                     />
                 </Body>
             </MenuContainer>
