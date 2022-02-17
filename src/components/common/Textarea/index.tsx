@@ -8,6 +8,7 @@ export interface TextAreaProp {
     placeholder?: string
     onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
     onKeyDown?: any
+    row?: number
 }
 
 const TextArea = ({
@@ -17,9 +18,9 @@ const TextArea = ({
     onChange,
     placeholder,
     onKeyDown,
+    row = 1,
 }: TextAreaProp) => {
     const ref = useRef<HTMLTextAreaElement>(null)
-
     useEffect(() => {
         if (ref === null || ref.current === null) {
             return
@@ -42,7 +43,7 @@ const TextArea = ({
             name={name}
             value={value}
             onChange={onChange}
-            rows={1}
+            rows={row}
             placeholder={placeholder}
             ref={ref}
             onInput={handleResizeHeight}

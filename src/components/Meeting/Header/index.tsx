@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Svg } from '@components/common'
 import { Power, powerViewBox } from '@svgs/Power'
 import CloseMeetingModal from './CloseMeetingModal'
+import useMeeting from '@store/meeting/useMeeting'
 export const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -43,6 +44,7 @@ export const Container = styled.div`
 `
 
 function Header() {
+    const { meet } = useMeeting()
     const [isCloseMeeting, setIsCloseMeeting] = useState(false)
     const handleCloseMeeting = () => setIsCloseMeeting(false)
 
@@ -52,7 +54,7 @@ function Header() {
                 <CloseMeetingModal onClose={handleCloseMeeting} />
             )}
             <Container>
-                <div className="meeting_title">회의 제목</div>
+                <div className="meeting_title">{meet?.meet_title}</div>
                 <div className="meeting_control">
                     <div className="meeting_control_info">회의정보</div>
                     <div className="meeting_control_power">

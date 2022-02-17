@@ -1,40 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-interface Meet {
+export interface MeetState {
     email: string
     meet_id: string
     meet_title: string
     meet_date: string
-    status: string
+    meet_status: string
+    rm_status: string
     participants: string
     goal: string
     last_time: String
 }
-interface Agenda {
-    meet_id: String
-    agenda_id: string
-    agenda_title: string
-    discussion: string
-    decisions: string
-    setting_time: number
-    progress_time: number
+export interface AgendaState {
+    meet_id?: String
+    agenda_id?: string
+    agenda_title?: string
+    discussion?: string
+    decisions?: string
+    agenda_status?: string
+    setting_time?: number
+    progress_time?: number
 }
 
-interface IState {
-    meet?: Meet
-    agendas?: Agenda[]
-    agendaCursor: number
+export interface MeetingState {
+    meet?: MeetState
+    agendas?: AgendaState[]
+    agendaCursor?: number
 }
 
 const initialState = {
-    meet: {},
+    meet: null,
     agendas: [],
     agendaCursor: 0,
 }
 
 export const meetingSlice = createSlice({
     name: 'meeting',
-    initialState: initialState as IState,
+    initialState: initialState as MeetingState,
     reducers: {
         setMeeting: (state, { payload: { meet, agendas } }) => {
             state.meet = meet
@@ -45,6 +47,11 @@ export const meetingSlice = createSlice({
         },
         setAgendaCursor: (state, { payload: { agendaCursor } }) => {
             state.agendaCursor = agendaCursor
+        },
+        setForm: (state, { payload: { agendaCursor, newAgenda } }) => {
+            if (state.agendas[agendaCursor]) {
+                state.agendas[agendaCursor] = { ...newAgenda }
+            }
         },
     },
 })

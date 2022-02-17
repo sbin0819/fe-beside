@@ -8,6 +8,9 @@ import styled from 'styled-components'
 
 import { nanoid } from '@reduxjs/toolkit'
 import useMeeting from '@store/meeting/useMeeting'
+import { AgendaState } from '@store/meeting/meetingSlice'
+import useMeetingActions from '@store/meeting/useMeetingActions'
+import axios from 'axios'
 
 const MenuTopContainer = styled.div`
     height: 24px;
@@ -76,23 +79,59 @@ const AddButton = styled.div`
 
 function MeetingForm() {
     const { agendas, agendaCursor } = useMeeting()
-    const [activeAgenda, setActiveAgenda] = useState<any>()
+    const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
     const [areaForm, setAreaForm] = useState({ discussion: '', decisions: '' })
     const actionInitId = nanoid()
     const [actionsForm, setActionsForm] = useState({
         [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
     })
 
+    const { setForm } = useMeetingActions()
+
     useEffect(() => {
         if (Array.isArray(agendas)) {
             setActiveAgenda(agendas[agendaCursor])
         }
-    }, [agendaCursor])
+    }, [agendaCursor, activeAgenda])
+
+    useEffect(() => {
+        if (activeAgenda) {
+            setAreaForm({
+                discussion: activeAgenda?.discussion || '',
+                decisions: activeAgenda?.decisions || '',
+            })
+        }
+    }, [activeAgenda])
+
+    const onPatchAgenda = async () => {
+        await axios.patch(
+            `http://125.6.40.68/api/agenda/${activeAgenda?.agenda_id}/`,
+            {
+                ...activeAgenda,
+                discussion: areaForm.discussion,
+                decisions: areaForm.decisions,
+            }
+        )
+    }
+
+    useEffect(() => {
+        const cleanTime = setTimeout(() => {
+            onPatchAgenda()
+        }, 500)
+        return () => {
+            clearTimeout(cleanTime)
+        }
+    }, [areaForm.discussion, areaForm.decisions])
 
     const onChange = (e) => {
         const { value, name } = e.target
         let rValue = value.replace(/\- /gi, ' · ')
         setAreaForm((prev) => ({ ...prev, [name]: rValue }))
+        const newAgenda = {
+            ...activeAgenda,
+            [name]: rValue,
+        }
+        setForm({ agendaCursor, newAgenda })
     }
 
     const addActionItems = () => {
@@ -118,7 +157,6 @@ function MeetingForm() {
             },
         }))
     }
-
     return (
         <>
             <MenuTopContainer>{activeAgenda?.agenda_title}</MenuTopContainer>
