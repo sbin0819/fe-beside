@@ -117,7 +117,7 @@ function MeetingForm() {
     useEffect(() => {
         const cleanTime = setTimeout(() => {
             onPatchAgenda()
-        }, 500)
+        }, 800)
         return () => {
             clearTimeout(cleanTime)
         }

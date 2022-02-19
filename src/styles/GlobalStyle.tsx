@@ -16,7 +16,8 @@ const GlobalStyle = createGlobalStyle`
         background-color: #ffffff;
         font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         font-weight: 400;
-        overflow: hidden;
+        /* overflow: hidden; */
+        overflow: scroll;
     }
     a, a:hover, a:active {
         color: inherit;
