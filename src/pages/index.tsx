@@ -104,7 +104,10 @@ const Home = ({ meets }: { meets: Meet[] }) => {
                         <Card
                             key={el.meet_id}
                             onClick={() => {
-                                router.push(`/meeting/${el.meet_id}`)
+                                router.push({
+                                    pathname: '/meeting/[id]',
+                                    query: { id: '' + el.meet_id },
+                                })
                             }}
                         >
                             {el.meet_title}
