@@ -133,6 +133,9 @@ function Login() {
                     })
                     console.log('확인')
                 } else {
+                    // console.log('홈')
+                    // console.log(res.data)
+                    // console.log(res.data.db)
                     router.push('/home')
                 }
             })

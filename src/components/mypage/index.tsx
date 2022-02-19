@@ -12,9 +12,8 @@ const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
     left: 50%;
-
+    // font-algin: left;
     top: 70px;
-    border: 1px solid yellow;
 `
 const TabContainer = styled.div`
     border: 1px solid blue;
@@ -30,7 +29,11 @@ const TitleMenu = styled.li`
     margin-right: 28px;
     padding: 11px 10px;
 `
-
+const TabMemu = styled.p`
+    color: blue;
+    // position: absolute;
+    // left: 0;
+`
 function MyPageList() {
     const [activeIndex, setActiveIndex] = useState(0)
     const tabClickHandler = (index) => {
@@ -66,11 +69,11 @@ function MyPageList() {
         <Container>
             <Banner />
             <BoxContainer>
-                <ul style={{ display: 'flex', marginBottom: '19px' }}>
+                <p style={{ display: 'flex', marginBottom: '19px' }}>
                     {tabContArr.map((section, index) => {
                         return section.tabTitle
                     })}
-                </ul>
+                </p>
                 <div>{tabContArr[activeIndex].tabCont}</div>
             </BoxContainer>
         </Container>
