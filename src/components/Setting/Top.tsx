@@ -41,11 +41,30 @@ const TagsInputContainer = styled.div`
     display: flex;
     align-items: center;
     .tag-item {
-        padding: 2px 4px;
-        background: #eee;
+        flex: 0 0 73px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f1f1f1;
         display: inline-block;
         margin-left: 3px;
-        border-radius: 2px;
+        padding: 2px 8px;
+        border-radius: 8px;
+        .text {
+            font-size: 14px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            text-align: left;
+            color: #000;
+            margin-right: 10px;
+        }
+        .close {
+            height: 8px;
+            color: #c0c0c2;
+        }
     }
     input {
         padding: 20px 14px;
@@ -57,16 +76,17 @@ function Top() {
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [tags, setTags] = useState([])
-
+    const [tag, setTag] = useState('')
     const onChange = (e) => {
         const { value } = e.target
         setTitle(value)
     }
     const handleKeyDown = (e) => {
-        if (e.key !== 'Enter') return
-        const value = e.target.value
-        setTags([...tags, value])
-        e.target.value = ''
+        if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
+        if (tag) {
+            setTags([...tags, tag])
+            setTag('')
+        }
     }
     return (
         <Container>
@@ -119,6 +139,12 @@ function Top() {
                         onKeyPress={handleKeyDown}
                         type="text"
                         className="tags-input"
+                        onChange={(e) => {
+                            const { value } = e.target
+                            const trim = value.replace(/[, ]/gim, '')
+                            setTag(trim)
+                        }}
+                        value={tag.replace(/[, ]/gim, '')}
                     />
                 </TagsInputContainer>
             </div>
