@@ -1,4 +1,5 @@
-import React from 'react'
+import { nanoid } from '@reduxjs/toolkit'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 
@@ -55,11 +56,13 @@ const StyledButton = styled.button`
     border: solid 1px #d6d6d7;
     background-color: #fff;
     margin-top: 28px;
+    cursor: pointer;
 `
 
 const AgendaAddContainer = styled.div`
+    display: inline-block;
     margin: 16px 0 32px;
-    padding-left: 8px;
+    padding-left: 20px;
     height: 20px;
     font-family: Pretendard;
     font-size: 14px;
@@ -70,6 +73,7 @@ const AgendaAddContainer = styled.div`
     letter-spacing: normal;
     text-align: left;
     color: rgba(60, 60, 67, 0.6);
+    cursor: pointer;
 `
 
 const InfoSection = styled.div`
@@ -80,21 +84,42 @@ const InfoSection = styled.div`
     border-radius: 12px;
     padding: 0 24px;
     background-color: #fbfbfb;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #000;
 `
 
-function Body(props) {
+export interface Form {
+    agenda_id: string
+    agenda_title: string
+    setting_time: number
+    order_number: number
+}
+export interface Forms {
+    [key: string]: Form
+}
+
+function Body() {
     return (
         <Container>
             <div>
                 <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
                 <GoalConatiner>
                     <SubTitleContainer>회의 목표</SubTitleContainer>
-                    <StyledInput />
+                    <StyledInput placeholder="회의 목료를 입력하세요" />
                 </GoalConatiner>
-                <AgendaInputs />
+                <div style={{ marginTop: '32px' }}>
+                    <SubTitleContainer>AGENDA</SubTitleContainer>
+                    <AgendaInputs />
+                </div>
             </div>
             <InfoSection>
-                지금부터 59분안에 회의를 완료할 수 있도록 Agenda를 설정해보세요!
+                ✏️ 지금부터 59분안에 회의를 완료할 수 있도록 Agenda를
+                설정해보세요!
             </InfoSection>
             <ButtonContainer>
                 <StyledButton className="cancel_btn">
@@ -109,27 +134,101 @@ function Body(props) {
 }
 
 function AgendaInputs() {
+    const formOrderRef = useRef(1)
+    const [agendaForms, setAgendaagendaForms] = useState<Forms>({
+        1: {
+            agenda_id: nanoid(),
+            agenda_title: '',
+            setting_time: 0,
+            order_number: 1,
+        },
+    })
+
+    const onChange = (e, order_number) => {
+        const { name, value, type } = e.target
+        setAgendaagendaForms((prev) => ({
+            ...prev,
+            [order_number]: {
+                ...prev[order_number],
+                [name]: type === 'text' ? value : value === '' ? '' : +value,
+            },
+        }))
+    }
+    const onDelete = (order_number) => () => {
+        const newForm = Object.entries(agendaForms).reduce((acc, curr) => {
+            const [key, obj] = curr
+            if (obj.order_number == order_number) {
+                return acc
+            }
+            if (+key > +order_number) {
+                const newOrder = +key - 1
+                obj.order_number = newOrder
+                acc[newOrder] = obj
+                return acc
+            }
+            acc[key] = obj
+            return acc
+        }, {})
+        // formOrderRef 초기화
+        formOrderRef.current = Object.keys(agendaForms).length - 1
+        setAgendaagendaForms(newForm)
+    }
+
+    const addAgendaInput = () => {
+        // next order_number
+        formOrderRef.current = Object.keys(agendaForms).length + 1
+        setAgendaagendaForms((prev) => ({
+            ...prev,
+            [formOrderRef.current]: {
+                agenda_id: nanoid(),
+                agenda_title: '',
+                setting_time: 0,
+                order_number: formOrderRef.current,
+            },
+        }))
+    }
+
     return (
         <>
-            <SubTitleContainer style={{ marginTop: '32px' }}>
-                AGENDA
-            </SubTitleContainer>
-            <AgendaContainer>
-                <div className="agenda_inputs">
-                    <StyledInput className="agenda_input" />
-                    <StyledInput
-                        className="time_input"
-                        type="number"
-                        name="duration"
-                        placeholder="0"
-                        // value={parseInt(
-                        //     form.duration.toString().replace(/(^0+)/, '')
-                        // )}
-                        // onChange={onChange}
-                    />
-                </div>
-            </AgendaContainer>
-            <AgendaAddContainer>+ 액션 아이템 추가</AgendaAddContainer>
+            {Object.entries(agendaForms)
+                .sort((a, b) => +a[0] - +b[0])
+                .map(([k, form]) => (
+                    <React.Fragment key={form.agenda_id}>
+                        <AgendaContainer>
+                            <div className="agenda_inputs">
+                                <StyledInput
+                                    type="text"
+                                    className="agenda_input"
+                                    name="agenda_title"
+                                    placeholder="AGENDA"
+                                    value={form.agenda_title}
+                                    onChange={(e) =>
+                                        onChange(e, form.order_number)
+                                    }
+                                />
+                                <StyledInput
+                                    className="time_input"
+                                    type="text"
+                                    name="setting_time"
+                                    placeholder="목표시간"
+                                    value={
+                                        parseInt(
+                                            form.setting_time
+                                                .toString()
+                                                .replace(/(^0+)/, '')
+                                        ) || ''
+                                    }
+                                    onChange={(e) =>
+                                        onChange(e, form.order_number)
+                                    }
+                                />
+                            </div>
+                        </AgendaContainer>
+                        <AgendaAddContainer onClick={addAgendaInput}>
+                            + 액션 아이템 추가
+                        </AgendaAddContainer>
+                    </React.Fragment>
+                ))}
         </>
     )
 }
