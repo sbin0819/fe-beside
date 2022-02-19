@@ -27,7 +27,7 @@ export async function getStaticProps({ params }) {
     const { id } = params
     const resMeet = await fetch(`http://125.6.40.68/api/meet/${id.toString()}`)
     const resAgenda = await fetch(
-        `http://125.6.40.68/api/agenda?search=${id.toString()}`
+        `http://125.6.40.68/api/agendas/${id.toString()}/`
     )
     const meet = await resMeet.json()
     const agendas = await resAgenda.json()
