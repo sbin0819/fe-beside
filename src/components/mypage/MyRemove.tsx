@@ -1,181 +1,197 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import { Banner, Svg } from '@components/common'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
 import moment from 'moment'
+import {
+    TabContainer,
+    BoxContainer,
+    BoxstatusX,
+    DataNullBox,
+    InputPStype,
+    BoxstatusY,
+    BoxstatusW,
+    BoxstatusE,
+    TimeStyle,
+    ImgStatus,
+    HoverBoxContainer,
+    HoverImgStatus,
+    HoverDiv,
+} from './styles'
+import { Svg } from '@components/common'
+import { Power, powerViewBox } from '@svgs/Power'
+import { Add, addViewBox } from '@svgs/Add'
+import { mutate } from 'swr'
 
-const TabContainer = styled.div`
-    width: 1000px;
-    height: 500px;
-    border-radius: 24px;
-    // background-color: #fff;
-    display: flex;
-    flex-direction: row;
-    // position: relative;
-`
-const BoxContainer = styled.div`
-    border: 1px solid #f1f1f1;
-    width: 390px;
-    height: 200px;
-    margin: 10px;
-    background-color: #fff;
-    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
-    position: relative;
-    border-radius: 24px;
-    .status-name {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-    }
-    .meet_title-name {
-        position: absolute;
-        left: 10px;
-        bottom: 50px;
-    }
-    .last_time-name {
-        position: absolute;
-        left: 10px;
-        bottom: 20px;
-    }
-    .circle {
-        width: 40px;
-        height: 40px;
-        flex-grow: 0;
-        margin: 0 auto 20px auto;
-        padding: 10px;
-        background-color: #0c254c;
-        border-radius: 50%;
-    }
-    .meetCraete {
-        height: 92px;
-        width: 40%;
-        border: 1px solid red;
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 1.6;
-        text-align: center;
-        margin: 0 auto;
-        // position: absolute;
-        // top: 50%;
-        // letf: 50%;
-        // transtion: translate(50%, 50%);
-    }
-`
-const DataNullBox = styled.div`
-    // background-color: yellow;
-    margin: 0 auto;
-    text-align: center;
-    color: 387878b;
-    font-size: 16px;
-    line-height: 1.5;
-    font-weight: 500;
-    .dataNullBtn {
-        // width: 170px;
-        height: 52px;
-        flex-grow: 0;
-        margin: 36px 97px 0;
-        padding: 14px 40px;
-        border-radius: 12px;
-        background-color: #0c254c;
-        font-size: 16px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.5;
-        letter-spacing: normal;
-        text-align: center;
-        color: #fff;
-    }
-`
-const InputPStype = styled.p`
-    flex-grow: 0;
-    margin: 48px 27px 2px 32px;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.6;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000;
-`
-const Boxstatus = styled.p`
-    border-radius: 8px;
-    background-color: #f1f1f1;
-    color: #c0c0c2;
-    text-align: center;
-    width: 72px;
-    height: 26px;
-    line-height: 26px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: 12px;
-`
-const TimeStyle = styled.p`
-    flex-grow: 0;
-    font-family: Pretendard;
-    font-size: 12px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #87878b;
-    margin-left: 32px;
-`
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyRemove() {
-    const [testData, setTestData] = useState(undefined)
+    const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
     const { data: meetDatas, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?search=Y',
+        'http://127.0.0.1:8000/api/meet/?search=W',
         fetcher,
         { revalidateOnFocus: true }
     )
-
-    React.useEffect(() => {
-        console.log('겟 미트 api', meetDatas)
+    const stateData = [
+        {
+            id: 0,
+            state: 'Y',
+            stateDiv: <BoxstatusX>회의진행중</BoxstatusX>,
+            stateImg: (
+                <ImgStatus>
+                    <Svg viewBox={addViewBox} width={'32'} height={'32'}>
+                        <Add />
+                    </Svg>
+                </ImgStatus>
+            ),
+        },
+        {
+            id: 1,
+            state: 'W',
+            stateDiv: <BoxstatusX>회의예정</BoxstatusX>,
+            stateImg: (
+                <ImgStatus>
+                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
+                        <Power />
+                    </Svg>
+                </ImgStatus>
+            ),
+        },
+        {
+            id: 2,
+            state: 'E',
+            stateDiv: <BoxstatusX>회의완료</BoxstatusX>,
+            stateImg: (
+                <ImgStatus>
+                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
+                        <Power />
+                    </Svg>
+                </ImgStatus>
+            ),
+        },
+    ]
+    useEffect(() => {
+        console.log('remove', meetDatas)
     }, [])
+    const removeBtn = useCallback(
+        async (meet_id: number) => {
+            if (window.confirm('회의록을 삭제하시겠습니까?')) {
+                mutate(
+                    'http://127.0.0.1:8000/api/meet/?search=W',
+                    async (todos) => {
+                        const updateList = await axios.patch(
+                            `http://127.0.0.1:8000/api/meet/${meet_id}/`,
+                            { meet_status: 'N' }
+                        )
+                        console.log('result', updateList)
+                        const filterList = todos.filter(
+                            (todo) => todo.meet_id !== '1'
+                        )
+                        return [...filterList, updateList]
+                    }
+                )
+            }
+        },
+        [meetDatas]
+    )
+    const updateBtn = useCallback(
+        async (meet_id: number) => {
+            if (window.confirm('회의록을 복구하시겠습니까?')) {
+                mutate(
+                    'http://127.0.0.1:8000/api/meet/?search=W',
+                    async (todos) => {
+                        const updateList = await axios.patch(
+                            `http://127.0.0.1:8000/api/meet/${meet_id}/`,
+                            { meet_status: 'Y' }
+                        )
+                        console.log('result', updateList)
+                        const filterList = todos.filter(
+                            (todo) => todo.meet_id !== '1'
+                        )
+                        return [...filterList, updateList]
+                    }
+                )
+            }
+        },
+        [meetDatas]
+    )
     return (
         <TabContainer>
-            {meetDatas ? (
-                meetDatas.map((meetData: any) => {
-                    return (
-                        <BoxContainer key={meetData.meet_id}>
-                            <Boxstatus>
-                                {/* {meetData.status} */}
-                                회의진행중
-                            </Boxstatus>
+            {meetDatas.map((meetData: any) => {
+                return (
+                    <BoxContainer key={meetData.meet_id}>
+                        <div className="box-class">
+                            {meetData.rm_status === 'Y' && [
+                                stateData[0].stateDiv,
+                                stateData[0].stateImg,
+                            ]}
+                            {meetData.rm_status === 'W' && [
+                                stateData[1].stateDiv,
+                                stateData[1].stateImg,
+                            ]}
+                            {meetData.rm_status === 'E' && [
+                                stateData[2].stateDiv,
+                                stateData[2].stateImg,
+                            ]}
                             <InputPStype className="meet_title-name">
                                 {meetData.meet_title}
                             </InputPStype>
                             <TimeStyle className="last_time-name">
                                 {moment(meetData.last_time).format(
-                                    'YYYY-MM-DD hh시 mm분'
+                                    `YYYY-MM-DD HH시 mm분`
                                 )}
                             </TimeStyle>
-                        </BoxContainer>
-                    )
-                })
-            ) : (
-                <DataNullBox>
-                    <div
-                        style={{
-                            width: '100px',
-                            height: '100px',
-                            backgroundColor: 'yellow',
-                        }}
-                    >
-                        데이터 없는 이미지
-                    </div>
-                    <p className="nullPstyle">
-                        아직 회의록을 작성하지 않으셨나요? <br /> 팀원들과 함께
-                        효율적인 회의를 진행해보세요!
-                    </p>
-                    <button className="dataNullBtn">회의 시작하기</button>
-                </DataNullBox>
-            )}
+                        </div>
+
+                        <HoverBoxContainer
+                            onMouseEnter={(e) => {
+                                setHoverStyle({ opacity: 0.8 })
+                            }}
+                            onMouseLeave={(e) => {
+                                setHoverStyle({ opacity: 0 })
+                            }}
+                            style={hoverStyle}
+                        >
+                            <HoverDiv
+                                onClick={() => updateBtn(meetData.meet_id)}
+                                style={{
+                                    position: 'absolute',
+                                    left: '96px',
+                                    bottom: '67px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                <Svg
+                                    viewBox={powerViewBox}
+                                    width={'32'}
+                                    height={'32'}
+                                >
+                                    <Power />
+                                </Svg>
+                                <p style={{ fontSize: '16px' }}>복구하기</p>
+                            </HoverDiv>
+                            <HoverDiv
+                                onClick={() => removeBtn(meetData.meet_id)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '96px',
+                                    bottom: '67px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                <Svg
+                                    viewBox={powerViewBox}
+                                    width={'32'}
+                                    height={'32'}
+                                >
+                                    <Power />
+                                </Svg>
+                                <p style={{ fontSize: '16px' }}>삭제하기</p>
+                            </HoverDiv>
+                        </HoverBoxContainer>
+                    </BoxContainer>
+                )
+            })}
         </TabContainer>
     )
 }
