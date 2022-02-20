@@ -71,7 +71,9 @@ const Home = ({ meets }: { meets: Meet[] }) => {
                         <li>
                             <Link href="setting">setting 페이지</Link>
                         </li>
-
+                        <li>
+                            <Link href="result">자가진단 checklist 링크</Link>
+                        </li>
                         <li>
                             <Link href="progress">timer 링크</Link>
                         </li>
