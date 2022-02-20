@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         /* overflow: hidden; */
         overflow: scroll;
+        min-width: 1250px;
     }
     a, a:hover, a:active {
         color: inherit;

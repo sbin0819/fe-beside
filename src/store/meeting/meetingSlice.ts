@@ -1,25 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface MeetState {
-    email: string
-    meet_id: string
-    meet_title: string
-    meet_date: string
-    meet_status: string
-    rm_status: string
-    participants: string
-    goal: string
-    last_time: String
+    email?: string
+    meet_id?: string | number
+    meet_title?: string
+    meet_date?: string
+    meet_status?: string
+    rm_status?: string
+    participants?: string
+    goal?: string
+    last_time?: String
 }
 export interface AgendaState {
-    meet_id?: String
-    agenda_id?: string
+    meet_id?: String | number
+    agenda_id?: string | number
     agenda_title?: string
+    agenda_status?: string
     discussion?: string
     decisions?: string
-    agenda_status?: string
     setting_time?: number
     progress_time?: number
+    order_number?: number
 }
 
 export interface MeetingState {

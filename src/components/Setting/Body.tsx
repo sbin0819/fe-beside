@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 
+import { AgendaState } from '@store/meeting/meetingSlice'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -93,14 +94,12 @@ const InfoSection = styled.div`
     color: #000;
 `
 
-export interface Form {
-    agenda_id: string
-    agenda_title: string
-    setting_time: number
-    order_number: number
-}
-export interface Forms {
-    [key: string]: Form
+type PickedAgenda = Pick<
+    AgendaState,
+    'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
+>
+export interface AgendaForms {
+    [key: string]: PickedAgenda
 }
 
 function Body() {
@@ -135,7 +134,7 @@ function Body() {
 
 function AgendaInputs() {
     const formOrderRef = useRef(1)
-    const [agendaForms, setAgendaagendaForms] = useState<Forms>({
+    const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
         1: {
             agenda_id: nanoid(),
             agenda_title: '',
