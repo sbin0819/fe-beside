@@ -40,6 +40,7 @@ const TagsInputContainer = styled.div`
     background-color: #fff;
     display: flex;
     align-items: center;
+    overflow: scroll;
     .tag-item {
         flex: 0 0 73px;
         display: flex;
@@ -69,6 +70,7 @@ const TagsInputContainer = styled.div`
     input {
         padding: 20px 14px;
         width: 100%;
+        min-width: 150px;
     }
 `
 
