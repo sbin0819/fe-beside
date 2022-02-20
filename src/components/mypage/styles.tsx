@@ -54,7 +54,7 @@ export const BoxContainer = styled.div`
     .meetCraete {
         height: 92px;
         width: 40%;
-        border: 1px solid red;
+        // border: 1px solid red;
         font-size: 20px;
         font-weight: 500;
         line-height: 1.6;
@@ -69,17 +69,45 @@ export const BoxContainer = styled.div`
         border: 1px solid red;
         color: red;
     }
+    .box-class {
+        width: 390px;
+        height: 200px;
+    }
+    // .HoverBoxContainer {
+    //     border: 1px solid #f1f1f1;
+    //     width: 390px;
+    //     height: 200px;
+    //     margin: 10px;
+    //     background-color: rgba(12, 37, 76, 1);
+    //     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
+    //     position: relative;
+    //     border-radius: 24px;
+    //     color: #fff;
+    //     opacity: 1;
+    //     position: absolute;
+    //     left: 0;
+    //     top: 0;
+    //     transition: all 0.3s ease-in-out;
+    // }
+    // .box-class:hover .HoverBoxContainer {
+    //     opacity: 0;
+    // }
 `
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
     width: 390px;
     height: 200px;
-    margin: 10px;
+    // margin: 10px;
     background-color: rgba(12, 37, 76, 0.9);
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
-    position: relative;
+    // position: relative;
     border-radius: 24px;
     color: #fff;
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease-in-out;
 `
 export const DataNullBox = styled.div`
     // background-color: yellow;
@@ -156,6 +184,19 @@ export const BoxstatusE = styled.p`
     top: 10px;
     font-size: 12px;
 `
+export const BoxstatusX = styled.p`
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #c0c0c2;
+    text-align: center;
+    width: 72px;
+    height: 26px;
+    line-height: 26px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 12px;
+`
 export const TimeStyle = styled.p`
     flex-grow: 0;
     font-family: Pretendard;
@@ -170,26 +211,46 @@ export const TimeStyle = styled.p`
     margin-left: 32px;
 `
 export const ImgStatus = styled.div`
-    width: 36px;
+    width: 66px;
     height: 36px;
     position: absolute;
     left: 32px;
     top: 32px;
-    border: 1px solid yellow;
+    // border: 1px solid yellow;
 `
 export const HoverImgStatus = styled.div`
-    width: 36px;
+    width: 66px;
     height: 36px;
     position: absolute;
     left: 32px;
     top: 32px;
-    border: 1px solid yellow;
+    // border: 1px solid yellow;
     color: #fff;
+    font-align: center;
 `
 export const HoverDiv = styled.div`
-    border: 1px solid yellow;
-    width: 56px;
+    width: 66px;
     height: 72px;
     font-size: 16px;
     color: #fff;
+    font-align: center;
+
+    p {
+        margin-top: 10px;
+    }
+`
+export const ModalContainer = styled.div`
+    width: 954px;
+    height: 760px;
+    flex-grow: 0;
+    padding: 32px 36px;
+    border-radius: 24px;
+    box-shadow: 4px 4px 32px 0 rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 32px 36px;
 `
