@@ -117,81 +117,82 @@ function MyRemove() {
     )
     return (
         <TabContainer>
-            {meetDatas.map((meetData: any) => {
-                return (
-                    <BoxContainer key={meetData.meet_id}>
-                        <div className="box-class">
-                            {meetData.rm_status === 'Y' && [
-                                stateData[0].stateDiv,
-                                stateData[0].stateImg,
-                            ]}
-                            {meetData.rm_status === 'W' && [
-                                stateData[1].stateDiv,
-                                stateData[1].stateImg,
-                            ]}
-                            {meetData.rm_status === 'E' && [
-                                stateData[2].stateDiv,
-                                stateData[2].stateImg,
-                            ]}
-                            <InputPStype className="meet_title-name">
-                                {meetData.meet_title}
-                            </InputPStype>
-                            <TimeStyle className="last_time-name">
-                                {moment(meetData.last_time).format(
-                                    `YYYY-MM-DD HH시 mm분`
-                                )}
-                            </TimeStyle>
-                        </div>
+            {meetDatas &&
+                meetDatas.map((meetData: any) => {
+                    return (
+                        <BoxContainer key={meetData.meet_id}>
+                            <div className="box-class">
+                                {meetData.rm_status === 'Y' && [
+                                    stateData[0].stateDiv,
+                                    stateData[0].stateImg,
+                                ]}
+                                {meetData.rm_status === 'W' && [
+                                    stateData[1].stateDiv,
+                                    stateData[1].stateImg,
+                                ]}
+                                {meetData.rm_status === 'E' && [
+                                    stateData[2].stateDiv,
+                                    stateData[2].stateImg,
+                                ]}
+                                <InputPStype className="meet_title-name">
+                                    {meetData.meet_title}
+                                </InputPStype>
+                                <TimeStyle className="last_time-name">
+                                    {moment(meetData.last_time).format(
+                                        `YYYY-MM-DD HH시 mm분`
+                                    )}
+                                </TimeStyle>
+                            </div>
 
-                        <HoverBoxContainer
-                            onMouseEnter={(e) => {
-                                setHoverStyle({ opacity: 0.8 })
-                            }}
-                            onMouseLeave={(e) => {
-                                setHoverStyle({ opacity: 0 })
-                            }}
-                            style={hoverStyle}
-                        >
-                            <HoverDiv
-                                onClick={() => updateBtn(meetData.meet_id)}
-                                style={{
-                                    position: 'absolute',
-                                    left: '96px',
-                                    bottom: '67px',
-                                    cursor: 'pointer',
+                            <HoverBoxContainer
+                                onMouseEnter={(e) => {
+                                    setHoverStyle({ opacity: 0.8 })
                                 }}
-                            >
-                                <Svg
-                                    viewBox={powerViewBox}
-                                    width={'32'}
-                                    height={'32'}
-                                >
-                                    <Power />
-                                </Svg>
-                                <p style={{ fontSize: '16px' }}>복구하기</p>
-                            </HoverDiv>
-                            <HoverDiv
-                                onClick={() => removeBtn(meetData.meet_id)}
-                                style={{
-                                    position: 'absolute',
-                                    right: '96px',
-                                    bottom: '67px',
-                                    cursor: 'pointer',
+                                onMouseLeave={(e) => {
+                                    setHoverStyle({ opacity: 0 })
                                 }}
+                                style={hoverStyle}
                             >
-                                <Svg
-                                    viewBox={powerViewBox}
-                                    width={'32'}
-                                    height={'32'}
+                                <HoverDiv
+                                    onClick={() => updateBtn(meetData.meet_id)}
+                                    style={{
+                                        position: 'absolute',
+                                        left: '96px',
+                                        bottom: '67px',
+                                        cursor: 'pointer',
+                                    }}
                                 >
-                                    <Power />
-                                </Svg>
-                                <p style={{ fontSize: '16px' }}>삭제하기</p>
-                            </HoverDiv>
-                        </HoverBoxContainer>
-                    </BoxContainer>
-                )
-            })}
+                                    <Svg
+                                        viewBox={powerViewBox}
+                                        width={'32'}
+                                        height={'32'}
+                                    >
+                                        <Power />
+                                    </Svg>
+                                    <p style={{ fontSize: '16px' }}>복구하기</p>
+                                </HoverDiv>
+                                <HoverDiv
+                                    onClick={() => removeBtn(meetData.meet_id)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '96px',
+                                        bottom: '67px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    <Svg
+                                        viewBox={powerViewBox}
+                                        width={'32'}
+                                        height={'32'}
+                                    >
+                                        <Power />
+                                    </Svg>
+                                    <p style={{ fontSize: '16px' }}>삭제하기</p>
+                                </HoverDiv>
+                            </HoverBoxContainer>
+                        </BoxContainer>
+                    )
+                })}
         </TabContainer>
     )
 }

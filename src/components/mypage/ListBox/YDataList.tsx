@@ -43,7 +43,7 @@ export const HoverBoxContainer = styled.div`
 function YDataList(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
     let meetDatas = props.data
-
+    console.log(meetDatas)
     const stateData = [
         {
             id: 0,
@@ -142,6 +142,7 @@ function YDataList(props: any) {
                             </div>
 
                             <HoverBoxContainer
+                                onChange={() => setHoverStyle(meetData.meet_id)}
                                 onMouseEnter={(e) => {
                                     setHoverStyle({ opacity: 0.8 })
                                 }}

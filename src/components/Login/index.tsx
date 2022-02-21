@@ -112,7 +112,7 @@ function Login() {
             nickname: response.Ju.hY,
             email: response.profileObj.email,
             password: response.profileObj.googleId,
-            provider: 'GOOGLE',
+            provider: 'google',
             img: response.profileObj.imageUrl,
         }
 
@@ -120,24 +120,27 @@ function Login() {
             .post('http://127.0.0.1:8000/api/login/', [userData])
             .then((res) => {
                 console.log(res)
-                if (res.data.db === 'None') {
-                    Router.push({
-                        pathname: '/login/join',
-                        query: {
-                            email: userData.email,
-                            nickname: userData.nickname,
-                            name: userData.name,
-                            password: userData.password,
-                            img: userData.img,
-                        },
-                    })
-                    console.log('확인')
-                } else {
-                    // console.log('홈')
-                    // console.log(res.data)
-                    // console.log(res.data.db)
-                    router.push('/home')
-                }
+                console.log(res.data)
+                console.log(res.data.db)
+
+                // if (res.data.db === 'None') {
+                //     Router.push({
+                //         pathname: '/login/join',
+                //         query: {
+                //             email: userData.email,
+                //             nickname: userData.nickname,
+                //             name: userData.name,
+                //             password: userData.password,
+                //             img: userData.img,
+                //         },
+                //     })
+                //     console.log('확인')
+                // } else {
+                //     console.log('홈')
+                //     // console.log(res.data)
+                //     // console.log(res.data.db)
+                //     // router.push('/home')
+                // }
             })
 
         // Router.push({
