@@ -5,6 +5,7 @@ import {
     BoxContainer,
     DataNullBox,
     InputPStype,
+    ListBoxContainer,
     TimeStyle,
 } from './styles'
 import { Banner, Svg } from '@components/common'
@@ -29,7 +30,9 @@ function MyList() {
     }, [])
     return (
         <React.Fragment>
-            {data ? <YDataList data={data} /> : <NullDataList />}
+            <ListBoxContainer>
+                {data ? <YDataList data={data} /> : <NullDataList />}
+            </ListBoxContainer>
         </React.Fragment>
     )
 }

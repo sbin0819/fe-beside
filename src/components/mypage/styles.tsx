@@ -18,6 +18,9 @@ export const NullTabContainer = styled.div`
     flex-direction: row;
     // position: relative;
 `
+export const ListBoxContainer = styled.div`
+    border: 1px solid blue;
+`
 export const BoxContainer = styled.div`
     border: 1px solid #f1f1f1;
     width: 390px;
@@ -26,6 +29,8 @@ export const BoxContainer = styled.div`
     background-color: #fff;
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
     position: relative;
+    display: flex;
+    flex-wrap: nowrap;
     border-radius: 24px;
     .status-name {
         position: absolute;

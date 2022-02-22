@@ -167,7 +167,7 @@ function Join() {
     let password = router.query.password
     let img = router.query.img
 
-    const [inputName, setInputName] = useState('nickname')
+    const [inputName, setInputName] = useState(name)
     const inputBorder = inputName.length === 0
     const loginBtn = () => {
         const userData: any = {
