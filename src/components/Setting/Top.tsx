@@ -5,6 +5,8 @@ import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import useMeetingActions from '@store/meeting/useMeetingActions'
+import useMeeting from '@store/meeting/useMeeting'
+import moment from 'moment'
 
 const Container = styled.div`
     height: 316px;
@@ -76,15 +78,15 @@ const TagsInputContainer = styled.div`
 `
 
 function Top() {
+    const {
+        meet: { meet_title, meet_date, participants },
+    } = useMeeting()
     const { setMeetTitle, setMeetDate, setMeetParticipants } =
         useMeetingActions()
-    const [title, setTitle] = useState('')
-    const [date, setDate] = useState('')
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
     const onChange = (e) => {
         const { value } = e.target
-        setTitle(value)
         setMeetTitle({ meet_title: value })
     }
     const handlekeyPress = (e) => {
@@ -95,10 +97,16 @@ function Top() {
         }
     }
     useEffect(() => {
+        if (participants) {
+            setTags(participants.split(','))
+        }
+    }, [participants])
+    useEffect(() => {
         if (tags.length > 0) {
             setMeetParticipants({ participants: tags.join(',') })
         }
     }, [tags])
+
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>
@@ -111,7 +119,7 @@ function Top() {
                     <StyledInput
                         type="text"
                         className="title_input"
-                        value={title}
+                        value={meet_title}
                         onChange={onChange}
                     />
                     <div style={{ position: 'relative' }}>
@@ -121,10 +129,9 @@ function Top() {
                             onChange={(e) => {
                                 const { value } = e.target
                                 const prefix = 'T16:20:00+09:00'
-                                setDate(value)
                                 setMeetDate({ meet_date: value + prefix })
                             }}
-                            value={date}
+                            value={moment(meet_date).format('YYYY-MM-DD')}
                         />
                         {/* <Svg
                             style={{
