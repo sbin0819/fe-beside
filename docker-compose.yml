@@ -1,16 +1,15 @@
 version: "3"
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: web
-    restart: always
-    volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/.next
+  nextjs:
     ports:
       - 3000:3000
-   
+    build:
+      context: packages/landingpage
+      dockerfile: Dockerfile
+    volumes:
+      - ./packages/landingpage:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    env_file:
+      - .env
