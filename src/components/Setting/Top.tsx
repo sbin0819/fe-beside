@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import useMeetingActions from '@store/meeting/useMeetingActions'
 
 const Container = styled.div`
     height: 316px;
@@ -75,6 +76,8 @@ const TagsInputContainer = styled.div`
 `
 
 function Top() {
+    const { setMeetTitle, setMeetDate, setMeetParticipants } =
+        useMeetingActions()
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [tags, setTags] = useState([])
@@ -82,14 +85,20 @@ function Top() {
     const onChange = (e) => {
         const { value } = e.target
         setTitle(value)
+        setMeetTitle({ meet_title: value })
     }
-    const handleKeyDown = (e) => {
+    const handlekeyPress = (e) => {
         if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
         if (tag) {
-            setTags([...tags, tag])
             setTag('')
+            setTags([...tags, tag])
         }
     }
+    useEffect(() => {
+        if (tags.length > 0) {
+            setMeetParticipants({ participants: tags.join(',') })
+        }
+    }, [tags])
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>
@@ -109,9 +118,15 @@ function Top() {
                         <StyledInput
                             type="date"
                             className="date_input"
-                            readOnly
+                            onChange={(e) => {
+                                const { value } = e.target
+                                const prefix = 'T16:20:00+09:00'
+                                setDate(value)
+                                setMeetDate({ meet_date: value + prefix })
+                            }}
+                            value={date}
                         />
-                        <Svg
+                        {/* <Svg
                             style={{
                                 position: 'absolute',
                                 top: '50%',
@@ -123,7 +138,7 @@ function Top() {
                             height={'18'}
                         >
                             <Calendar />
-                        </Svg>
+                        </Svg> */}
                     </div>
                 </div>
             </TitleFormContainer>
@@ -138,7 +153,7 @@ function Top() {
                     ))}
 
                     <input
-                        onKeyPress={handleKeyDown}
+                        onKeyPress={handlekeyPress}
                         type="text"
                         className="tags-input"
                         onChange={(e) => {

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Banner } from '@components/common'
 import Top from './Top'
 import Body from './Body'
+import useMeetingActions from '@store/meeting/useMeetingActions'
 
 const Container = styled.div`
     position: relative;
@@ -28,6 +29,8 @@ const Title = styled.div`
 `
 
 function Meeting() {
+    const { ressetMeeting } = useMeetingActions()
+    ressetMeeting()
     return (
         <Container>
             <Banner />
