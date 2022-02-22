@@ -7,6 +7,7 @@ import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import useMeeting from '@store/meeting/useMeeting'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 const Container = styled.div`
     height: 316px;
@@ -96,16 +97,18 @@ function Top() {
             setTags([...tags, tag])
         }
     }
-    useEffect(() => {
-        if (participants) {
-            setTags(participants.split(','))
-        }
-    }, [participants])
+
     useEffect(() => {
         if (tags.length > 0) {
             setMeetParticipants({ participants: tags.join(',') })
         }
     }, [tags])
+
+    useEffect(() => {
+        if (participants) {
+            // setTags(participants.split(','))
+        }
+    }, [participants])
 
     return (
         <Container>

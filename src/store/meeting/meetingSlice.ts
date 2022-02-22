@@ -44,7 +44,12 @@ export const meetingSlice = createSlice({
     initialState: initialState as MeetingState,
     reducers: {
         ressetMeeting: (state) => {
-            state = initialState
+            state.meet = {
+                meet_title: '',
+                meet_date: '',
+                participants: '',
+            }
+            state.agendas = []
         },
         setMeeting: (state, { payload: { meet, agendas } }) => {
             state.meet = meet
