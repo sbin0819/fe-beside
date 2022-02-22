@@ -102,6 +102,15 @@ const Home = ({ meets }: { meets: Meet[] }) => {
             <CardContainer>
                 <h1>미팅 페이지 링크</h1>
                 <div className="cards">
+                    <Card
+                        onClick={() =>
+                            router.push({
+                                pathname: '/setting',
+                            })
+                        }
+                    >
+                        미팅 세팅 하기
+                    </Card>
                     {meets?.map((el, i) => (
                         <Card
                             key={el.meet_id}

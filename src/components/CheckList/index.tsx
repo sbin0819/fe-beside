@@ -1,7 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-
 import useOnClickOutside from '@hooks/useOnClickOutside'
+
+import RadarChart from '@components/RadarChart'
 
 const Container = styled.div`
     position: fixed;
@@ -94,14 +95,16 @@ const CheckListContainer = styled.div`
 `
 const ResultContainer = styled.div`
     width: 429px;
-    height: 503px;
     border-radius: 12px;
     background-color: #fbfbfb;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.43;
-    letter-spacing: normal;
+    padding: 28px 41px;
+`
+
+const CheckListReslutBeforeContainer = styled.div`
     .result_info {
         margin-top: 206px;
         margin-bottom: 28px;
@@ -130,6 +133,44 @@ const ResultContainer = styled.div`
     }
 `
 
+const CheckListReslutAfterContainer = styled.div`
+    font-family: Pretendard;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    .checklist_after_header {
+        text-align: center;
+        letter-spacing: normal;
+        color: #3c3c43;
+        .checklist_after_header_title {
+            font-family: Pretendard;
+            font-size: 16px;
+            color: #3c3c43;
+        }
+        .checklist_after_header_description {
+            font-size: 60px;
+            font-weight: 800;
+            color: #000;
+        }
+    }
+
+    .checklist_after_footer {
+        font-size: 14px;
+        font-style: normal;
+        line-height: 1.43;
+        text-align: center;
+        color: #000;
+    }
+`
+
+const ChartContainer = styled.div`
+    width: 300px;
+    height: 280px;
+    background-color: rgba(255, 0, 0, 0.04);
+    margin: 11px auto 12px;
+`
+
 const FooterContainer = styled.div`
     margin-top: 32px;
     height: 40px;
@@ -152,6 +193,7 @@ interface Props {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
+    const [checklistReslut, setChecklistResult] = useState(true)
     useOnClickOutside(ref, () => {
         onClose()
     })
@@ -181,6 +223,7 @@ function CheckListModal({ onClose }: Props) {
                                     <input
                                         className="checkcomm"
                                         type="checkbox"
+                                        readOnly
                                         value=""
                                         checked
                                     />
@@ -188,12 +231,12 @@ function CheckListModal({ onClose }: Props) {
                                     내려야하는지 명확히 알고 있었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     나는, 이 회의에서 목적에 부합하는 이야기
                                     흐름을 유지되도록 노력했어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     나는, 모든 참여자가 회의 목적이 무엇인지
                                     알게하려고 노력했어요.
                                 </label>
@@ -205,12 +248,12 @@ function CheckListModal({ onClose }: Props) {
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     참여자들은, 경직되지 않은 분위기에서 회의에
                                     참여할 수 있었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     참여자들은, 모두 골고루 발언의 기회를
                                     가졌어요.
                                 </label>
@@ -222,12 +265,12 @@ function CheckListModal({ onClose }: Props) {
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     회의가, 제 시간에 결과물을 도출하고
                                     끝났어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     회의가, 대체로 맴돌거나 주제에서 벗어나지
                                     않고 진행되었어요.
                                 </label>
@@ -239,29 +282,62 @@ function CheckListModal({ onClose }: Props) {
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     결정사항(또는 next action item)이
                                     도출되었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     결정사항의 실행 주체가 정해졌어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="" />
+                                    <input type="checkbox" readOnly value="" />
                                     결정사항의 실행 일정이 정해졌어요.
                                 </label>
                             </div>
                         </div>
                     </CheckListContainer>
                     <ResultContainer>
-                        <div className="result_info">
-                            Checklist 선택이 완료되었다면 아래 버튼을
-                            클릭해주세요!
-                        </div>
-                        <button className="result_btn">
-                            자가진단 결과보기
-                        </button>
+                        {!checklistReslut ? (
+                            <CheckListReslutBeforeContainer>
+                                <div className="result_info">
+                                    Checklist 선택이 완료되었다면 아래 버튼을
+                                    클릭해주세요!
+                                </div>
+                                <button
+                                    className="result_btn"
+                                    onClick={() => {
+                                        setChecklistResult(true)
+                                    }}
+                                >
+                                    자가진단 결과보기
+                                </button>
+                            </CheckListReslutBeforeContainer>
+                        ) : (
+                            <CheckListReslutAfterContainer>
+                                <div className="checklist_after_header">
+                                    <p className="checklist_after_header_title">
+                                        이번 회의 자가진단 결과는?
+                                    </p>
+                                    <p className="checklist_after_header_description">
+                                        75점
+                                    </p>
+                                </div>
+                                <ChartContainer>
+                                    <RadarChart />
+                                </ChartContainer>
+                                <div className="checklist_after_footer">
+                                    <div>
+                                        그럭저럭 효율적인 회의였네요! 부족한
+                                        부분이 무엇이었는지
+                                    </div>
+                                    <div>
+                                        그래프에서 확인해보고 다음 번 회의 때 그
+                                        부분을 개선해보아요!
+                                    </div>
+                                </div>
+                            </CheckListReslutAfterContainer>
+                        )}
                     </ResultContainer>
                 </BodyContainer>
                 <FooterContainer>
