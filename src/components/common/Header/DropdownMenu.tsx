@@ -53,6 +53,7 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
     return (
         <div ref={ref}>
             <DropDownContainer>
+                {MyisOpenModal && <MyInfo />}
                 <div
                     className="item"
                     onClick={() => setMyIsOpenModal((prev) => !prev)}
@@ -71,7 +72,6 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
                     </Svg>
                     로그아웃
                 </div>
-                {MyisOpenModal && <MyInfo />}
             </DropDownContainer>
         </div>
     )

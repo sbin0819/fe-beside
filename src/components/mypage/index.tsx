@@ -11,6 +11,7 @@ const Container = styled.div`
 const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
+    // width: 1200px;
     left: 50%;
     // font-algin: left;
     top: 70px;
@@ -67,15 +68,17 @@ function MyPageList() {
     ]
     return (
         <Container>
-            <Banner />
-            <BoxContainer>
-                <p style={{ display: 'flex', marginBottom: '19px' }}>
-                    {tabContArr.map((section, index) => {
-                        return section.tabTitle
-                    })}
-                </p>
-                <div>{tabContArr[activeIndex].tabCont}</div>
-            </BoxContainer>
+            <div>
+                <Banner />
+                <BoxContainer>
+                    <p style={{ display: 'flex', marginBottom: '19px' }}>
+                        {tabContArr.map((section, index) => {
+                            return section.tabTitle
+                        })}
+                    </p>
+                    <div>{tabContArr[activeIndex].tabCont}</div>
+                </BoxContainer>
+            </div>
         </Container>
     )
 }

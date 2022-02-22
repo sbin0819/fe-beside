@@ -4,7 +4,7 @@ import axios from 'axios'
 import GoogleLogin from 'react-google-login'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
-
+import { setCookie, getCookie } from '../utils/Cookie'
 const clientId =
     '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
@@ -109,38 +109,36 @@ function Login() {
         console.log('구글 로그인 -- ', response)
         const userData: any = {
             name: response.Ju.sf,
-            nickname: response.Ju.hY,
+            // nickname: response.Ju.hY,
             email: response.profileObj.email,
             password: response.profileObj.googleId,
             provider: 'google',
             img: response.profileObj.imageUrl,
         }
-
         await axios
             .post('http://127.0.0.1:8000/api/login/', [userData])
             .then((res) => {
-                console.log(res)
-                console.log(res.data)
-                console.log(res.data.db)
-
-                // if (res.data.db === 'None') {
-                //     Router.push({
-                //         pathname: '/login/join',
-                //         query: {
-                //             email: userData.email,
-                //             nickname: userData.nickname,
-                //             name: userData.name,
-                //             password: userData.password,
-                //             img: userData.img,
-                //         },
-                //     })
-                //     console.log('확인')
-                // } else {
-                //     console.log('홈')
-                //     // console.log(res.data)
-                //     // console.log(res.data.db)
-                //     // router.push('/home')
-                // }
+                if (res.data.db === 'None') {
+                    Router.push({
+                        pathname: '/login/join',
+                        query: {
+                            email: userData.email,
+                            nickname: userData.nickname,
+                            name: userData.name,
+                            password: userData.password,
+                            img: userData.img,
+                        },
+                    })
+                } else {
+                    let token = res.data['token']
+                    console.log('token', token)
+                    setCookie('Authorization', token, {
+                        path: '/',
+                        secure: true,
+                        SameSite: 'None',
+                    })
+                    router.push('/home')
+                }
             })
 
         // Router.push({
