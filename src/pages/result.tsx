@@ -14,7 +14,7 @@ const StyledButton = styled.div`
 `
 
 function ResultPage() {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
     const handleClose = () => setIsOpen(false)
     return (
         <div>
