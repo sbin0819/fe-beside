@@ -3,3 +3,5 @@ services: #This section defines all the different containers we will create.
     web: #This is the name of our Nextjs application.
         image: node:16-alpine
         command: "yarn prod" #command to execute
+        ports:
+            - "3000:3000"
