@@ -30,7 +30,11 @@ export interface MeetingState {
 }
 
 const initialState = {
-    meet: null,
+    meet: {
+        meet_title: '',
+        meet_date: '',
+        participants: '',
+    },
     agendas: [],
     agendaCursor: 0,
 }
@@ -39,9 +43,26 @@ export const meetingSlice = createSlice({
     name: 'meeting',
     initialState: initialState as MeetingState,
     reducers: {
+        ressetMeeting: (state) => {
+            state.meet = {
+                meet_title: '',
+                meet_date: '',
+                participants: '',
+            }
+            state.agendas = []
+        },
         setMeeting: (state, { payload: { meet, agendas } }) => {
             state.meet = meet
             state.agendas = agendas
+        },
+        setMeetTitle: (state, { payload: { meet_title } }) => {
+            state.meet.meet_title = meet_title
+        },
+        setMeetDate: (state, { payload: { meet_date } }) => {
+            state.meet.meet_date = meet_date
+        },
+        setMeetParticipants: (state, { payload: { participants } }) => {
+            state.meet.participants = participants
         },
         getMeeting: (state) => {
             return state

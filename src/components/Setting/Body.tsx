@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 
 import { AgendaState } from '@store/meeting/meetingSlice'
+import useMeeting from '@store/meeting/useMeeting'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -103,6 +104,7 @@ export interface AgendaForms {
 }
 
 function Body() {
+    const { agendas } = useMeeting()
     return (
         <Container>
             <div>
