@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
 import { Signout, signoutViewBox } from '@svgs/Signout'
@@ -44,8 +44,12 @@ interface DropdownMenuProps {
     onClose: () => void
 }
 function DropdownMenu({ onClose }: DropdownMenuProps) {
-    const [MyisOpenModal, setMyIsOpenModal] = useState(false)
-    const MyonCloseModal = () => setMyIsOpenModal(false)
+    const [isOpenModal, setOpenModal] = useState<boolean>(false)
+
+    const onClickToggleModal = useCallback(() => {
+        setOpenModal(!isOpenModal)
+    }, [isOpenModal])
+
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
         onClose()
@@ -53,11 +57,10 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
     return (
         <div ref={ref}>
             <DropDownContainer>
-                {MyisOpenModal && <MyInfo />}
-                <div
-                    className="item"
-                    onClick={() => setMyIsOpenModal((prev) => !prev)}
-                >
+                {isOpenModal && (
+                    <MyInfo onClickToggleModal={onClickToggleModal} />
+                )}
+                <div className="item" onClick={onClickToggleModal}>
                     <Svg viewBox={profileViewBox} width={'20'} height={'18'}>
                         <Profile />
                     </Svg>
