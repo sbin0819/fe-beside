@@ -108,8 +108,10 @@ function MeetingForm() {
             `http://125.6.40.68/api/agenda/${activeAgenda?.agenda_id}/`,
             {
                 ...activeAgenda,
-                discussion: areaForm.discussion,
-                decisions: areaForm.decisions,
+                discussion:
+                    areaForm.discussion === '' ? null : areaForm.discussion,
+                decisions:
+                    areaForm.decisions === '' ? null : areaForm.decisions,
             }
         )
     }

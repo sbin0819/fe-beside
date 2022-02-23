@@ -131,8 +131,8 @@ function Top() {
                             className="date_input"
                             onChange={(e) => {
                                 const { value } = e.target
-                                const prefix = 'T16:20:00+09:00'
-                                setMeetDate({ meet_date: value + prefix })
+                                const offset = 'T16:20:00+09:00'
+                                setMeetDate({ meet_date: value + offset })
                             }}
                             value={moment(meet_date).format('YYYY-MM-DD')}
                         />
