@@ -20,7 +20,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
     const [testData, setTestData] = useState(undefined)
     const { data, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?search=Y',
+        'http://127.0.0.1:8000/api/meet/?search=O',
         fetcher,
         { revalidateOnFocus: true }
     )
