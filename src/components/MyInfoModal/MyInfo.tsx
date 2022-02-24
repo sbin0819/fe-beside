@@ -15,7 +15,6 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     }, [isOpenModal])
     return (
         <div>
-            {isOpenModal && <UserCancel ClickToggleModal={ClickToggleModal} />}
             <ModalContainer>
                 <DialogBox>
                     <InfoBox>
@@ -106,10 +105,12 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                         }}
                     >
                         <ModalBtn
+                            onClick={() => onClickToggleModal()}
                             style={{
                                 border: '1px solid #d6d6d7',
                                 color: '#87878b',
                                 marginRight: '12px',
+                                cursor: 'pointer',
                             }}
                         >
                             취소
@@ -135,6 +136,7 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     }}
                 />
             </ModalContainer>
+            {isOpenModal && <UserCancel ClickToggleModal={ClickToggleModal} />}
         </div>
     )
 }
@@ -148,7 +150,6 @@ const ModalContainer = styled.div`
     position: fixed;
     left: 0;
     top: 0;
-    border: 1px solid red;
 `
 
 const DialogBox = styled.dialog`
@@ -162,7 +163,7 @@ const DialogBox = styled.dialog`
     box-shadow: 0 0 30px rgba(30, 30, 30, 0.185);
     box-sizing: border-box;
     background-color: white;
-    z-index: 1010;
+    z-index: 190;
     border-radius: 24px;
     padding: 32px 36px;
 `

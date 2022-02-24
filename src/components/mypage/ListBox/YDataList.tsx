@@ -19,6 +19,7 @@ import moment from 'moment'
 import { Svg } from '@components/common'
 import { Power, powerViewBox } from '@svgs/Power'
 import { Add, addViewBox } from '@svgs/Add'
+import { Progress, progressViewBox } from '@svgs/Progress'
 import { mutate } from 'swr'
 import axios from 'axios'
 
@@ -52,8 +53,8 @@ function YDataList(props: any) {
             stateDiv: <BoxstatusY>회의진행중</BoxstatusY>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={addViewBox} width={'32'} height={'32'}>
-                        <Add />
+                    <Svg viewBox={progressViewBox} width={'32'} height={'32'}>
+                        <Progress />
                     </Svg>
                 </ImgStatus>
             ),
