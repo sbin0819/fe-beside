@@ -2,8 +2,7 @@ import styled from 'styled-components'
 import { Banner } from '@components/common'
 import Top from './Top'
 import Body from './Body'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import useSetting from './useSetting'
 
 const Container = styled.div`
     position: relative;
@@ -29,34 +28,21 @@ const Title = styled.div`
     position: relative;
 `
 
-interface Form {
-    value: string
-    error: boolean
-    message: string
-}
-
-interface MeetForm {
-    meet_title: Form
-    meet_date: Form
-    participants: Form
-    goal: Form
-}
-
 function Meeting() {
-    // redux를 사용하지 않는 것이 나을 거 같다
-    const [meetForm, setMeetForm] = useState<MeetForm>({
-        meet_title: { value: '', error: false, message: '' },
-        meet_date: { value: '', error: false, message: '' },
-        participants: { value: '', error: false, message: '' },
-        goal: { value: '', error: false, message: '' },
-    })
+    const { meetForm, setMeetForm, agendaForms, setAgendagendaForms } =
+        useSetting()
     return (
         <Container>
             <Banner />
             <OffsetPositionContainer>
                 <Title>회의 정보 설정</Title>
                 <Top form={meetForm} setForm={setMeetForm} />
-                <Body meetForm={meetForm} setMeetForm={setMeetForm} />
+                <Body
+                    meetForm={meetForm}
+                    agendaForms={agendaForms}
+                    setMeetForm={setMeetForm}
+                    setAgendagendaForms={setAgendagendaForms}
+                />
             </OffsetPositionContainer>
         </Container>
     )

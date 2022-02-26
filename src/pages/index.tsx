@@ -69,9 +69,6 @@ const Home = ({ meets }: { meets: Meet[] }) => {
                         }}
                     >
                         <li>
-                            <Link href="setting">setting 페이지</Link>
-                        </li>
-                        <li>
                             <Link href="result">자가진단 checklist 링크</Link>
                         </li>
                         <li>
@@ -124,6 +121,23 @@ const Home = ({ meets }: { meets: Meet[] }) => {
                             {el.meet_title}
                         </Card>
                     ))}
+                </div>
+            </CardContainer>
+            <CardContainer>
+                <h1>기존 미팅 페이지 수정하기</h1>
+                <h2 style={{ marginTop: '12px', color: 'darkblue' }}>
+                    (나중에 할래요 클릭시?)
+                </h2>
+                <div className="cards">
+                    <Card
+                        onClick={() =>
+                            router.push({
+                                pathname: '/setting/1/',
+                            })
+                        }
+                    >
+                        기존 미팅
+                    </Card>
                 </div>
             </CardContainer>
         </div>

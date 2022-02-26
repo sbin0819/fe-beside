@@ -114,20 +114,17 @@ interface TopForm {
 
 function Body({
     meetForm,
+    agendaForms,
     setMeetForm,
+    setAgendagendaForms,
 }: {
     meetForm: TopForm
+    agendaForms: AgendaForms
     setMeetForm: any
+    setAgendagendaForms: any
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-    const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
-        1: {
-            ...defaultAgendaForm,
-            order_number: 1,
-            agenda_id: nanoid(),
-        },
-    })
 
     // 중복이 많기 때문에 줄이자
     const checkValidMeetForms = () => {
@@ -189,7 +186,7 @@ function Body({
                 return [key, value]
             }
         )
-        setAgendaagendaForms(
+        setAgendagendaForms(
             vaildEmptyAgendaInputs.reduce((acc, [key, value]) => {
                 acc[key as string] = value
                 return acc
@@ -270,7 +267,7 @@ function Body({
                     <SubTitleContainer>AGENDA</SubTitleContainer>
                     <AgendaInputs
                         agendaForms={agendaForms}
-                        setAgendaagendaForms={setAgendaagendaForms}
+                        setAgendagendaForms={setAgendagendaForms}
                     />
                 </div>
             </div>
