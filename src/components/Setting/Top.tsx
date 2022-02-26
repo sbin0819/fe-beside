@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 
@@ -84,15 +84,15 @@ interface Form {
     message: string
 }
 
-interface TopForm {
+interface MeetForm {
     meet_title: Form
     meet_date: Form
     participants: Form
 }
 
-function Top({ form, setForm }: { form: TopForm; setForm: any }) {
+function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
+    const initRef = useRef(-1)
     const { meet_title, meet_date, participants } = form
-
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
     const onChange = (e) => {
@@ -109,7 +109,6 @@ function Top({ form, setForm }: { form: TopForm; setForm: any }) {
             setTags([...tags, tag])
         }
     }
-
     useEffect(() => {
         if (tags.length > 0) {
             setForm((prev) => ({
@@ -119,6 +118,13 @@ function Top({ form, setForm }: { form: TopForm; setForm: any }) {
         }
     }, [tags])
 
+    useEffect(() => {
+        // only once
+        if (participants.value && initRef.current == -1) {
+            initRef.current += 1
+            setTags(participants.value.split(','))
+        }
+    }, [participants])
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>

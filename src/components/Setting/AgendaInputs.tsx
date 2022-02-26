@@ -72,16 +72,16 @@ const defaultAgendaForm = {
 
 function AgendaInputs({
     agendaForms,
-    setAgendaagendaForms,
+    setAgendagendaForms,
 }: {
     agendaForms: AgendaForms
-    setAgendaagendaForms: any
+    setAgendagendaForms: any
 }) {
     const formOrderRef = useRef(1)
 
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target
-        setAgendaagendaForms((prev) => ({
+        setAgendagendaForms((prev) => ({
             ...prev,
             [order_number]: {
                 ...prev[order_number],
@@ -106,13 +106,12 @@ function AgendaInputs({
         }, {})
         // formOrderRef 초기화
         formOrderRef.current = Object.keys(agendaForms).length - 1
-        setAgendaagendaForms(newForm)
+        setAgendagendaForms(newForm)
     }
 
     const addAgendaInput = () => {
-        // next order_number
         formOrderRef.current = Object.keys(agendaForms).length + 1
-        setAgendaagendaForms((prev) => ({
+        setAgendagendaForms((prev) => ({
             ...prev,
             [formOrderRef.current]: {
                 ...defaultAgendaForm,
@@ -155,7 +154,12 @@ function AgendaInputs({
                                         ) || ''
                                     }
                                     onChange={(e) =>
-                                        onChange(e, form.order_number)
+                                        onChange(
+                                            e,
+                                            form.order_number
+                                                .toString()
+                                                .replace(/(^0+)/, '')
+                                        )
                                     }
                                     isInValid={
                                         form?.validation?.setting_time?.error
