@@ -4,7 +4,13 @@ import { useRouter } from 'next/router'
 function useIsHeader() {
     const router = useRouter()
     const { pathname } = router
-    const headerOmitList = ['/login', '/login/join', '/signup', '/randing']
+    const headerOmitList = [
+        '/login',
+        '/login/join',
+        '/signup',
+        '/randing',
+        '/404',
+    ]
     // 추후수정
     const descList = {
         '/': '님의 회의 리스트 목록입니다.',

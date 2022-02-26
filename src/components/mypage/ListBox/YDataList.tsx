@@ -18,8 +18,11 @@ import {
 import moment from 'moment'
 import { Svg } from '@components/common'
 import { Power, powerViewBox } from '@svgs/Power'
-import { Add, addViewBox } from '@svgs/Add'
+import { Schedule, scheduleViewBox } from '@svgs/Schedule'
+import { End, endViewBox } from '@svgs/End'
 import { Progress, progressViewBox } from '@svgs/Progress'
+import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import { Add, addViewBox } from '@svgs/Add'
 import { mutate } from 'swr'
 import axios from 'axios'
 
@@ -65,8 +68,8 @@ function YDataList(props: any) {
             stateDiv: <BoxstatusW>회의예정</BoxstatusW>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
-                        <Power />
+                    <Svg viewBox={scheduleViewBox} width={'32'} height={'32'}>
+                        <Schedule />
                     </Svg>
                 </ImgStatus>
             ),
@@ -77,8 +80,8 @@ function YDataList(props: any) {
             stateDiv: <BoxstatusE>회의완료</BoxstatusE>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
-                        <Power />
+                    <Svg viewBox={endViewBox} width={'32'} height={'32'}>
+                        <End />
                     </Svg>
                 </ImgStatus>
             ),
@@ -111,8 +114,29 @@ function YDataList(props: any) {
         <React.Fragment>
             <TabContainer>
                 <BoxContainer>
-                    <div className="meetCraete" style={{ width: '390px' }}>
-                        <div className="circle"></div>
+                    <div
+                        className="meetCraete"
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            border: '1px solid red',
+                            width: '390px',
+                        }}
+                    >
+                        <div className="circle">
+                            <Svg
+                                viewBox={addViewBox}
+                                width={'30'}
+                                height={'30'}
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Add />
+                            </Svg>
+                        </div>
                         <p>회의추가하기</p>
                     </div>
                 </BoxContainer>
@@ -138,6 +162,14 @@ function YDataList(props: any) {
                                         {meetData.meet_title}
                                     </InputPStype>
                                     <TimeStyle className="last_time-name">
+                                        <Svg
+                                            viewBox={calendarViewBox}
+                                            width={'13'}
+                                            height={'13'}
+                                            style={{ marginRight: '5.6px' }}
+                                        >
+                                            <Calendar />
+                                        </Svg>
                                         {moment(meetData.last_time).format(
                                             `YYYY-MM-DD HH시 mm분`
                                         )}
