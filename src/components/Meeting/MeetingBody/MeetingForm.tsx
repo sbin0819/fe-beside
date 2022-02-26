@@ -97,8 +97,8 @@ function MeetingForm() {
     useEffect(() => {
         if (activeAgenda) {
             setAreaForm({
-                discussion: activeAgenda?.discussion || '',
-                decisions: activeAgenda?.decisions || '',
+                discussion: activeAgenda?.discussion || null,
+                decisions: activeAgenda?.decisions || null,
             })
         }
     }, [activeAgenda])
@@ -177,7 +177,7 @@ function MeetingForm() {
                         value={areaForm?.discussion}
                         placeholder="논의할 내용에 대해 작성해주세요."
                         onChange={onChange}
-                        row={areaForm?.discussion.split('\n').length + 1}
+                        row={areaForm?.discussion?.split('\n').length + 1}
                     />
                 </Body>
             </MenuContainer>
