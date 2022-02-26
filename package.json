@@ -15,11 +15,8 @@
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "test": "jest --watch",
-        "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook",
-        "build:docker": "docker-compose up -d --build",
-        "dev:up": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
-        "prod:up": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up"
+        "docker:build": "docker build --tag mynextjs .",
+        "docker:run": "docker run -d -p 3000:3000 mynextjs"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.7.1",
