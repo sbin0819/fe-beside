@@ -33,8 +33,11 @@ function Meeting() {
             <Banner />
             <OffsetPositionContainer>
                 <Title>회의 정보 설정</Title>
-                <Top />
-                <Body />
+                {/* BODY 부분 수정할 듯  */}
+                <form>
+                    <Top />
+                    <Body />
+                </form>
             </OffsetPositionContainer>
         </Container>
     )

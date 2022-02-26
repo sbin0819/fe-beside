@@ -105,6 +105,7 @@ export interface AgendaForms {
 
 function Body() {
     const { meet } = useMeeting()
+    const [meetGoal, setMeetGoal] = useState('')
     const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
         1: {
             agenda_id: nanoid(),
@@ -118,26 +119,32 @@ function Body() {
         // meet validation 문제가 발생할 수 있음
         // meet 과 agenda api 가 따로 놀기 때문에 전체적인 filter가 필요함
         e.preventDefault()
-        try {
-            const meetResponse = await axios.post(
-                'http://125.6.40.68/api/meet/',
-                {
-                    email: 1,
-                    meet_title: '테스트  2',
-                    meet_date: '2022-02-21T16:20:00+09:00',
-                    meet_status: '0',
-                    rm_status: 'N',
-                    participants: '인범,수빈,다현,대영',
-                    goal: '맛난걸 고르자',
-                    last_time: '2022-02-19T16:19:34.730678+09:00',
-                },
-                { withCredentials: true }
-            )
-            // validation 처리 해야함
-            const { data } = meetResponse
-            const agendas = Object.entries(agendaForms)
-                .sort((a, b) => +a[0] - +b[0])
-                .map(([_, form]) => ({
+        // meet 에 필수 값이 없는 경우
+        // agendas 에 필수 값이 없는 경우
+        const sortedAgendas = Object.entries(agendaForms).sort(
+            (a, b) => +a[0] - +b[0]
+        )
+        const vaildEmptyAgendaInputs = sortedAgendas
+            .slice()
+            .filter(([_, el]) => el.order_number == 0 || el.agenda_title == '')
+
+        // agenda관련 임시 validation
+        if (vaildEmptyAgendaInputs.length == 0) {
+            try {
+                const meetResponse = await axios.post(
+                    'http://125.6.40.68/api/meet/',
+                    {
+                        ...meet,
+                        goal: meetGoal,
+                        email: 1,
+                        meet_status: '0',
+                        rm_status: 'N',
+                    },
+                    { withCredentials: true }
+                )
+                // validation 처리 해야함
+                const { data } = meetResponse
+                const agendas = sortedAgendas.slice().map(([_, form]) => ({
                     meet_id: data.meet_id,
                     agenda_title: form.agenda_title,
                     setting_time: form.setting_time,
@@ -145,16 +152,17 @@ function Body() {
                     agenda_status: '0',
                 }))
 
-            let agendasReqests = agendas.map((agenda) =>
-                axios.post(
-                    'http://125.6.40.68/api/agenda/',
-                    { ...agenda },
-                    { withCredentials: true }
+                let agendasReqests = agendas.map((agenda) =>
+                    axios.post(
+                        'http://125.6.40.68/api/agenda/',
+                        { ...agenda },
+                        { withCredentials: true }
+                    )
                 )
-            )
-            // validation 처리
-            Promise.all(agendasReqests).then((res) => console.log(res))
-        } catch (error) {}
+                // validation 처리
+                Promise.all(agendasReqests).then((res) => console.log(res))
+            } catch (error) {}
+        }
     }
 
     return (
@@ -163,7 +171,13 @@ function Body() {
                 <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
                 <GoalConatiner>
                     <SubTitleContainer>회의 목표</SubTitleContainer>
-                    <StyledInput placeholder="회의 목료를 입력하세요" />
+                    <StyledInput
+                        placeholder="회의 목료를 입력하세요"
+                        value={meetGoal}
+                        onChange={(e) => {
+                            setMeetGoal(e.target.value)
+                        }}
+                    />
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
                     <SubTitleContainer>AGENDA</SubTitleContainer>
