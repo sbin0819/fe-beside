@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { Banner } from '@components/common'
 import Top from './Top'
 import Body from './Body'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const Container = styled.div`
     position: relative;
@@ -28,16 +30,18 @@ const Title = styled.div`
 `
 
 function Meeting() {
+    const [topValidFields, setTopValidFields] = useState({
+        meet_title: { error: false, message: '' },
+        meet_date: { error: false, message: '' },
+        participants: { error: false, message: '' },
+    })
     return (
         <Container>
             <Banner />
             <OffsetPositionContainer>
                 <Title>회의 정보 설정</Title>
-                {/* BODY 부분 수정할 듯  */}
-                <form>
-                    <Top />
-                    <Body />
-                </form>
+                <Top />
+                <Body />
             </OffsetPositionContainer>
         </Container>
     )

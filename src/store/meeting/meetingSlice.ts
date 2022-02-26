@@ -23,6 +23,10 @@ export interface AgendaState {
     order_number?: number
 }
 
+export interface MeetStateWithValidation extends MeetState {
+    validation: any
+}
+
 export interface MeetingState {
     meet?: MeetState
     agendas?: AgendaState[]

@@ -5,6 +5,7 @@ import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 import axios from 'axios'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeeting from '@store/meeting/useMeeting'
+import AgendaInputs from './AgendaInputs'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -20,21 +21,7 @@ const Container = styled.div`
 const GoalConatiner = styled.div`
     margin-top: 36px;
 `
-const AgendaContainer = styled.div`
-    /* margin-top: 32px; */
-    gap: 24px;
-    .agenda_inputs {
-        display: flex;
-        /* justify-content: space-between; */
-        .agenda_input {
-            width: 832px;
-            margin-right: 24px;
-        }
-        .time_input {
-            width: 168px;
-        }
-    }
-`
+
 const ButtonContainer = styled.div`
     display: flex;
     gap: 24px;
@@ -61,23 +48,6 @@ const StyledButton = styled.button`
     cursor: pointer;
 `
 
-const AgendaAddContainer = styled.div`
-    display: inline-block;
-    margin: 16px 0 32px;
-    padding-left: 20px;
-    height: 20px;
-    font-family: Pretendard;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.43;
-    letter-spacing: normal;
-    text-align: left;
-    color: rgba(60, 60, 67, 0.6);
-    cursor: pointer;
-`
-
 const InfoSection = styled.div`
     height: 72px;
     flex-grow: 0;
@@ -99,69 +69,162 @@ type PickedAgenda = Pick<
     AgendaState,
     'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
 >
+
+interface AgendaWithValidation extends PickedAgenda {
+    validation: {
+        agenda_title?: { error?: boolean; message?: string }
+        setting_time?: { error?: boolean; message?: string }
+    }
+}
+
 export interface AgendaForms {
-    [key: string]: PickedAgenda
+    [key: string]: AgendaWithValidation
+}
+
+const defaultAgendaForm = {
+    // agenda_id: nanoid(),
+    // order_number: 1,
+    agenda_title: '',
+    setting_time: 0,
+    validation: {
+        agenda_title: {
+            error: false,
+            message: '',
+        },
+        setting_time: {
+            error: false,
+            message: '',
+        },
+    },
 }
 
 function Body() {
-    const { meet } = useMeeting()
-    const [meetGoal, setMeetGoal] = useState('')
+    const {
+        meet: { meet_title, meet_date, participants },
+    } = useMeeting()
+    const [meetGoal, setMeetGoal] = useState({
+        goal: '',
+        validation: {
+            error: false,
+            message: '',
+        },
+    })
     const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
         1: {
-            agenda_id: nanoid(),
-            agenda_title: '',
-            setting_time: 0,
+            ...defaultAgendaForm,
             order_number: 1,
+            agenda_id: nanoid(),
         },
     })
 
+    const checkTopVaild = () => {
+        return true
+    }
+
+    const checkMeetGoal = () => {
+        if (meetGoal.goal.length == 0) {
+            setMeetGoal((prev) => ({
+                ...prev,
+                validation: { ...prev.validation, error: true },
+            }))
+            return false
+        }
+        return true
+    }
+
+    const checkValidAgendaForms = (forms: [string, AgendaWithValidation][]) => {
+        const isValid =
+            forms.filter(
+                ([_, value]) =>
+                    value.agenda_title === '' || value.setting_time === 0
+            ).length > 0
+                ? false
+                : true
+        if (!isValid) {
+            changeInvalidAgendaStatus(forms)
+            return isValid
+        } else {
+            return isValid
+        }
+    }
+
+    const changeInvalidAgendaStatus = (
+        forms: [string, AgendaWithValidation][]
+    ) => {
+        // Deep copy 해야 함
+        const vaildEmptyAgendaInputs = JSON.parse(JSON.stringify(forms)).map(
+            ([key, value]: [key: string, value: AgendaWithValidation]) => {
+                if (value.agenda_title.length == 0) {
+                    value.validation.agenda_title.error = true
+                }
+                if (value.agenda_title.length > 0) {
+                    value.validation.agenda_title.error = false
+                }
+                if (value.setting_time == 0) {
+                    value.validation.setting_time.error = true
+                }
+                if (value.setting_time > 0) {
+                    value.validation.setting_time.error = false
+                }
+                return [key, value]
+            }
+        )
+        setAgendaagendaForms(
+            vaildEmptyAgendaInputs.reduce((acc, [key, value]) => {
+                acc[key as string] = value
+                return acc
+            }, {})
+        )
+    }
+
+    const fetchPostMeet = async (
+        sortedAgendas: [string, AgendaWithValidation][]
+    ) => {
+        try {
+            const meetResponse = await axios.post(
+                'http://125.6.40.68/api/meet/',
+                {
+                    meet_title,
+                    meet_date,
+                    participants,
+                    goal: meetGoal,
+                    email: 1, // 임시
+                    meet_status: '0', // default
+                    rm_status: 'N', // default
+                },
+                { withCredentials: true }
+            )
+            // validation 처리 해야함
+            const { data } = meetResponse
+            const agendas = sortedAgendas.slice().map(([_, form]) => ({
+                meet_id: data.meet_id,
+                agenda_title: form.agenda_title,
+                setting_time: form.setting_time,
+                order_number: form.order_number,
+                agenda_status: '0',
+            }))
+            const agendasReqests = agendas.map((agenda) =>
+                axios.post(
+                    'http://125.6.40.68/api/agenda/',
+                    { ...agenda },
+                    { withCredentials: true }
+                )
+            )
+            // validation 처리
+            Promise.all(agendasReqests).then((res) => console.log(res))
+        } catch (error) {}
+    }
     const onSubmit = async (e) => {
-        // meet validation 문제가 발생할 수 있음
-        // meet 과 agenda api 가 따로 놀기 때문에 전체적인 filter가 필요함
         e.preventDefault()
-        // meet 에 필수 값이 없는 경우
-        // agendas 에 필수 값이 없는 경우
         const sortedAgendas = Object.entries(agendaForms).sort(
             (a, b) => +a[0] - +b[0]
         )
-        const vaildEmptyAgendaInputs = sortedAgendas
-            .slice()
-            .filter(([_, el]) => el.order_number == 0 || el.agenda_title == '')
+        const isCheckTopInputsValid = checkTopVaild()
+        const isGoalValid = checkMeetGoal()
+        const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
-        // agenda관련 임시 validation
-        if (vaildEmptyAgendaInputs.length == 0) {
-            try {
-                const meetResponse = await axios.post(
-                    'http://125.6.40.68/api/meet/',
-                    {
-                        ...meet,
-                        goal: meetGoal,
-                        email: 1,
-                        meet_status: '0',
-                        rm_status: 'N',
-                    },
-                    { withCredentials: true }
-                )
-                // validation 처리 해야함
-                const { data } = meetResponse
-                const agendas = sortedAgendas.slice().map(([_, form]) => ({
-                    meet_id: data.meet_id,
-                    agenda_title: form.agenda_title,
-                    setting_time: form.setting_time,
-                    order_number: form.order_number,
-                    agenda_status: '0',
-                }))
-
-                let agendasReqests = agendas.map((agenda) =>
-                    axios.post(
-                        'http://125.6.40.68/api/agenda/',
-                        { ...agenda },
-                        { withCredentials: true }
-                    )
-                )
-                // validation 처리
-                Promise.all(agendasReqests).then((res) => console.log(res))
-            } catch (error) {}
+        if (isCheckTopInputsValid && isGoalValid && isAgendaFormsValid) {
+            fetchPostMeet(sortedAgendas)
         }
     }
 
@@ -173,10 +236,14 @@ function Body() {
                     <SubTitleContainer>회의 목표</SubTitleContainer>
                     <StyledInput
                         placeholder="회의 목료를 입력하세요"
-                        value={meetGoal}
+                        value={meetGoal.goal}
                         onChange={(e) => {
-                            setMeetGoal(e.target.value)
+                            setMeetGoal((prev) => ({
+                                ...prev,
+                                goal: e.target.value,
+                            }))
                         }}
+                        isInValid={meetGoal?.validation?.error}
                     />
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
@@ -200,104 +267,6 @@ function Body() {
                 </StyledButton>
             </ButtonContainer>
         </Container>
-    )
-}
-
-function AgendaInputs({
-    agendaForms,
-    setAgendaagendaForms,
-}: {
-    agendaForms: AgendaForms
-    setAgendaagendaForms: any
-}) {
-    const formOrderRef = useRef(1)
-
-    const onChange = (e, order_number) => {
-        const { name, value, type } = e.target
-        setAgendaagendaForms((prev) => ({
-            ...prev,
-            [order_number]: {
-                ...prev[order_number],
-                [name]: type === 'text' ? value : value === '' ? '' : +value,
-            },
-        }))
-    }
-    const onDelete = (order_number) => () => {
-        const newForm = Object.entries(agendaForms).reduce((acc, curr) => {
-            const [key, obj] = curr
-            if (obj.order_number == order_number) {
-                return acc
-            }
-            if (+key > +order_number) {
-                const newOrder = +key - 1
-                obj.order_number = newOrder
-                acc[newOrder] = obj
-                return acc
-            }
-            acc[key] = obj
-            return acc
-        }, {})
-        // formOrderRef 초기화
-        formOrderRef.current = Object.keys(agendaForms).length - 1
-        setAgendaagendaForms(newForm)
-    }
-
-    const addAgendaInput = () => {
-        // next order_number
-        formOrderRef.current = Object.keys(agendaForms).length + 1
-        setAgendaagendaForms((prev) => ({
-            ...prev,
-            [formOrderRef.current]: {
-                agenda_id: nanoid(),
-                agenda_title: '',
-                setting_time: 0,
-                order_number: formOrderRef.current,
-            },
-        }))
-    }
-
-    return (
-        <>
-            {Object.entries(agendaForms)
-                .sort((a, b) => +a[0] - +b[0])
-                .map(([k, form]) => (
-                    <React.Fragment key={form.agenda_id}>
-                        <AgendaContainer>
-                            <div className="agenda_inputs">
-                                <StyledInput
-                                    type="text"
-                                    className="agenda_input"
-                                    name="agenda_title"
-                                    placeholder="AGENDA"
-                                    value={form.agenda_title}
-                                    onChange={(e) =>
-                                        onChange(e, form.order_number)
-                                    }
-                                />
-                                <StyledInput
-                                    className="time_input"
-                                    type="text"
-                                    name="setting_time"
-                                    placeholder="목표시간"
-                                    value={
-                                        parseInt(
-                                            form.setting_time
-                                                .toString()
-                                                .replace(/(^0+)/, '')
-                                        ) || ''
-                                    }
-                                    onChange={(e) =>
-                                        onChange(e, form.order_number)
-                                    }
-                                />
-                            </div>
-                        </AgendaContainer>
-                        <AgendaAddContainer onClick={addAgendaInput}>
-                            + 액션 아이템 추가
-                        </AgendaAddContainer>
-                    </React.Fragment>
-                ))}
-        </>
     )
 }
 
