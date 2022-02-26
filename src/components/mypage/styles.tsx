@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 export const TabContainer = styled.div`
-    width: 1000px;
-    height: 500px;
+    width: 1140px;
+    height: 704px;
     border-radius: 24px;
     // background-color: #fff;
     display: flex;
@@ -10,8 +10,8 @@ export const TabContainer = styled.div`
     // position: relative;
 `
 export const NullTabContainer = styled.div`
-    width: 1000px;
-    height: 500px;
+    width: 1140px;
+    height: 704px;
     border-radius: 24px;
     background-color: #fff;
     display: flex;
@@ -19,18 +19,29 @@ export const NullTabContainer = styled.div`
     // position: relative;
 `
 export const ListBoxContainer = styled.div`
-    border: 1px solid blue;
+    width: 1140px;
+    height: 704px;
+
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(364px, 24px));
+    // grid-template-columns: 1fr 1fr 1fr;
+    align-content: start;
+
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: space-evenly;
+    // flex: 1 1 40%;
 `
 export const BoxContainer = styled.div`
     border: 1px solid #f1f1f1;
-    width: 390px;
+    width: 364px;
     height: 200px;
-    margin: 10px;
+    // margin: 10px;
     background-color: #fff;
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
     position: relative;
-    display: flex;
-    flex-wrap: nowrap;
+
     border-radius: 24px;
     .status-name {
         position: absolute;
@@ -100,7 +111,7 @@ export const BoxContainer = styled.div`
 `
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
-    width: 390px;
+    width: 364px;
     height: 200px;
     // margin: 10px;
     background-color: rgba(12, 37, 76, 0.9);

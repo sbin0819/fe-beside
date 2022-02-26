@@ -28,7 +28,7 @@ import axios from 'axios'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
-    width: 390px;
+    width: 364px;
     height: 200px;
     background-color: rgb(12, 37, 76);
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
@@ -44,11 +44,17 @@ export const HoverBoxContainer = styled.div`
         opacity: 0.8;
     }
 `
+export const HoverBox = styled.div`
+    justify-content: center;
+    align-item: center;
+    display: flex;
+    margin-top: 71px;
+`
 
 function YDataList(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
     let meetDatas = props.data
-    console.log(meetDatas)
+    console.log('props', props)
     const stateData = [
         {
             id: 0,
@@ -113,124 +119,131 @@ function YDataList(props: any) {
     return (
         <React.Fragment>
             <TabContainer>
-                <BoxContainer>
-                    <div
-                        className="meetCraete"
-                        style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            border: '1px solid red',
-                            width: '390px',
-                        }}
-                    >
-                        <div className="circle">
-                            <Svg
-                                viewBox={addViewBox}
-                                width={'30'}
-                                height={'30'}
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                <Add />
-                            </Svg>
-                        </div>
-                        <p>회의추가하기</p>
-                    </div>
-                </BoxContainer>
+                <ListBoxContainer>
+                    <BoxContainer>
+                        <div
+                            className="meetCraete"
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
 
-                {meetDatas &&
-                    meetDatas.map((meetData: any) => {
-                        return (
-                            <BoxContainer key={meetData.meet_id}>
-                                <div className="box-class">
-                                    {meetData.rm_status === 'Y' && [
-                                        stateData[0].stateDiv,
-                                        stateData[0].stateImg,
-                                    ]}
-                                    {meetData.rm_status === 'W' && [
-                                        stateData[1].stateDiv,
-                                        stateData[1].stateImg,
-                                    ]}
-                                    {meetData.rm_status === 'E' && [
-                                        stateData[2].stateDiv,
-                                        stateData[2].stateImg,
-                                    ]}
-                                    <InputPStype className="meet_title-name">
-                                        {meetData.meet_title}
-                                    </InputPStype>
-                                    <TimeStyle className="last_time-name">
-                                        <Svg
-                                            viewBox={calendarViewBox}
-                                            width={'13'}
-                                            height={'13'}
-                                            style={{ marginRight: '5.6px' }}
-                                        >
-                                            <Calendar />
-                                        </Svg>
-                                        {moment(meetData.last_time).format(
-                                            `YYYY-MM-DD HH시 mm분`
-                                        )}
-                                    </TimeStyle>
-                                </div>
-
-                                <HoverBoxContainer
-                                    onChange={() =>
-                                        setHoverStyle(meetData.meet_id)
-                                    }
-                                    onMouseEnter={(e) => {
-                                        setHoverStyle({ opacity: 0.8 })
+                                width: '390px',
+                                marginTop: '60px',
+                            }}
+                        >
+                            <div className="circle">
+                                <Svg
+                                    viewBox={addViewBox}
+                                    width={'30'}
+                                    height={'30'}
+                                    style={{
+                                        // justifyContent: 'center',
+                                        // alignItems: 'center',
+                                        // textAlign: 'center',
+                                        marginLeft: '-5px',
+                                        marginTop: '-4px',
                                     }}
-                                    onMouseLeave={(e) => {
-                                        setHoverStyle({ opacity: 0 })
-                                    }}
-                                    style={hoverStyle}
                                 >
-                                    <HoverDiv
-                                        style={{
-                                            position: 'absolute',
-                                            left: '96px',
-                                            bottom: '67px',
-                                        }}
-                                    >
-                                        <Svg
-                                            viewBox={powerViewBox}
-                                            width={'32'}
-                                            height={'32'}
-                                        >
-                                            <Power />
-                                        </Svg>
-                                        <p style={{ fontSize: '16px' }}>
-                                            회의세팅
-                                        </p>
-                                    </HoverDiv>
-                                    <HoverDiv
-                                        onClick={() =>
-                                            removeBtn(meetData.meet_id)
+                                    <Add />
+                                </Svg>
+                            </div>
+                            <p>회의추가하기</p>
+                        </div>
+                    </BoxContainer>
+
+                    {meetDatas &&
+                        meetDatas.map((meetData: any) => {
+                            return (
+                                <BoxContainer key={meetData.meet_id}>
+                                    <div className="box-class">
+                                        {meetData.rm_status === 'Y' && [
+                                            stateData[0].stateDiv,
+                                            stateData[0].stateImg,
+                                        ]}
+                                        {meetData.rm_status === 'W' && [
+                                            stateData[1].stateDiv,
+                                            stateData[1].stateImg,
+                                        ]}
+                                        {meetData.rm_status === 'E' && [
+                                            stateData[2].stateDiv,
+                                            stateData[2].stateImg,
+                                        ]}
+                                        <InputPStype className="meet_title-name">
+                                            {meetData.meet_title}
+                                        </InputPStype>
+                                        <TimeStyle className="last_time-name">
+                                            <Svg
+                                                viewBox={calendarViewBox}
+                                                width={'13'}
+                                                height={'13'}
+                                                style={{ marginRight: '5.6px' }}
+                                            >
+                                                <Calendar />
+                                            </Svg>
+                                            {moment(meetData.last_time).format(
+                                                `YYYY-MM-DD HH시 mm분`
+                                            )}
+                                        </TimeStyle>
+                                    </div>
+
+                                    <HoverBoxContainer
+                                        onChange={() =>
+                                            setHoverStyle(meetData.meet_id)
                                         }
-                                        style={{
-                                            position: 'absolute',
-                                            right: '96px',
-                                            bottom: '67px',
+                                        onMouseEnter={(e) => {
+                                            setHoverStyle({ opacity: 0.8 })
                                         }}
+                                        onMouseLeave={(e) => {
+                                            setHoverStyle({ opacity: 0 })
+                                        }}
+                                        style={hoverStyle}
                                     >
-                                        <Svg
-                                            viewBox={powerViewBox}
-                                            width={'32'}
-                                            height={'32'}
-                                        >
-                                            <Power />
-                                        </Svg>
-                                        <p style={{ fontSize: '16px' }}>
-                                            삭제하기
-                                        </p>
-                                    </HoverDiv>
-                                </HoverBoxContainer>
-                            </BoxContainer>
-                        )
-                    })}
+                                        <HoverBox>
+                                            <HoverDiv
+                                            // style={{
+                                            //     position: 'absolute',
+                                            //     left: '96px',
+                                            //     bottom: '67px',
+                                            // }}
+                                            >
+                                                <Svg
+                                                    viewBox={powerViewBox}
+                                                    width={'32'}
+                                                    height={'32'}
+                                                >
+                                                    <Power />
+                                                </Svg>
+                                                <p style={{ fontSize: '16px' }}>
+                                                    회의세팅
+                                                </p>
+                                            </HoverDiv>
+                                            <HoverDiv
+                                                onClick={() =>
+                                                    removeBtn(meetData.meet_id)
+                                                }
+                                                // style={{
+                                                //     position: 'absolute',
+                                                //     right: '96px',
+                                                //     bottom: '67px',
+                                                // }}
+                                            >
+                                                <Svg
+                                                    viewBox={powerViewBox}
+                                                    width={'32'}
+                                                    height={'32'}
+                                                >
+                                                    <Power />
+                                                </Svg>
+                                                <p style={{ fontSize: '16px' }}>
+                                                    삭제하기
+                                                </p>
+                                            </HoverDiv>
+                                        </HoverBox>
+                                    </HoverBoxContainer>
+                                </BoxContainer>
+                            )
+                        })}
+                </ListBoxContainer>
             </TabContainer>
         </React.Fragment>
     )

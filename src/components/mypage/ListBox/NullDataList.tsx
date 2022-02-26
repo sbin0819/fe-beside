@@ -7,6 +7,7 @@ import {
     TimeStyle,
     NullTabContainer,
 } from '../styles'
+import styled from 'styled-components'
 
 function NullDataList() {
     return (
@@ -14,24 +15,28 @@ function NullDataList() {
             {' '}
             <NullTabContainer>
                 <DataNullBox>
-                    <div
-                        style={{
-                            width: '300px',
-                            height: '300px',
-                            backgroundColor: 'yellow',
-                        }}
-                    >
-                        데이터 없는 이미지
-                    </div>
-                    <p className="nullPstyle">
+                    <ImageNull src="/image/img_first.png" />
+                    <p className="nullPstyle" style={{ marginTop: '34px' }}>
                         아직 회의록을 작성하지 않으셨나요? <br /> 팀원들과 함께
                         효율적인 회의를 진행해보세요!
                     </p>
-                    <button className="dataNullBtn">회의 시작하기</button>
+                    <button
+                        className="dataNullBtn"
+                        style={{ marginTop: '36px' }}
+                    >
+                        회의 시작하기
+                    </button>
                 </DataNullBox>
             </NullTabContainer>
         </div>
     )
 }
-
+const ImageNull = styled.img`
+    justify-content: center;
+    align-item: center;
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    margin: 104px auto 0 auto;
+`
 export default NullDataList

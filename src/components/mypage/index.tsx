@@ -12,14 +12,15 @@ const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
     // width: 1200px;
+
     left: 50%;
     // font-algin: left;
     top: 70px;
 `
 const TabContainer = styled.div`
     border: 1px solid blue;
-    width: 1000px;
-    height: 500px;
+    width: 1140px;
+    height: 704px;
     border-radius: 24px;
     background-color: #fff;
 `
@@ -48,7 +49,13 @@ function MyPageList() {
                     onClick={() => tabClickHandler(0)}
                     style={{ cursor: 'pointer' }}
                 >
-                    전체 회의록
+                    <p
+                        style={{
+                            color: activeIndex === 1 ? '#87878b' : '#000',
+                        }}
+                    >
+                        전체 회의록
+                    </p>
                 </TitleMenu>
             ),
             tabCont: <MyList />,
@@ -60,7 +67,13 @@ function MyPageList() {
                     onClick={() => tabClickHandler(1)}
                     style={{ cursor: 'pointer' }}
                 >
-                    삭제된 회의록
+                    <p
+                        style={{
+                            color: activeIndex === 1 ? '#000' : '#87878b',
+                        }}
+                    >
+                        삭제된 회의록
+                    </p>
                 </TitleMenu>
             ),
             tabCont: <MyRemove />,
