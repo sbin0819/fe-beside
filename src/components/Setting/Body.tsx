@@ -1,11 +1,12 @@
 import { nanoid } from '@reduxjs/toolkit'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 import axios from 'axios'
 import { AgendaState } from '@store/meeting/meetingSlice'
-import useMeeting from '@store/meeting/useMeeting'
 import AgendaInputs from './AgendaInputs'
+
+import { useRouter } from 'next/router'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -98,17 +99,28 @@ const defaultAgendaForm = {
     },
 }
 
-function Body() {
-    const {
-        meet: { meet_title, meet_date, participants },
-    } = useMeeting()
-    const [meetGoal, setMeetGoal] = useState({
-        goal: '',
-        validation: {
-            error: false,
-            message: '',
-        },
-    })
+interface Form {
+    value: string
+    error: boolean
+    message: string
+}
+
+interface TopForm {
+    meet_title: Form
+    meet_date: Form
+    participants: Form
+    goal: Form
+}
+
+function Body({
+    meetForm,
+    setMeetForm,
+}: {
+    meetForm: TopForm
+    setMeetForm: any
+}) {
+    const router = useRouter()
+    const { meet_title, meet_date, participants, goal } = meetForm
     const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
         1: {
             ...defaultAgendaForm,
@@ -116,17 +128,24 @@ function Body() {
             agenda_id: nanoid(),
         },
     })
-
-    const checkTopVaild = () => {
-        return true
-    }
-
-    const checkMeetGoal = () => {
-        if (meetGoal.goal.length == 0) {
-            setMeetGoal((prev) => ({
-                ...prev,
-                validation: { ...prev.validation, error: true },
-            }))
+    // 중복이 많기 때문에 줄이자
+    const checkValidMeetForms = () => {
+        const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
+            if (v.value === '') {
+                v.error = true
+            } else {
+                v.error = false
+            }
+            return [k, v]
+        })
+        const isValid =
+            meetFormsArr.filter(([_, v]) => v.error).length > 0 ? false : true
+        if (!isValid) {
+            const newMeetForms = meetFormsArr.reduce((acc, curr) => {
+                acc[curr[0]] = curr[1]
+                return acc
+            }, {})
+            setMeetForm(newMeetForms)
             return false
         }
         return true
@@ -184,10 +203,10 @@ function Body() {
             const meetResponse = await axios.post(
                 'http://125.6.40.68/api/meet/',
                 {
-                    meet_title,
-                    meet_date,
-                    participants,
-                    goal: meetGoal,
+                    meet_title: meet_title.value,
+                    meet_date: meet_date.value,
+                    participants: participants.value,
+                    goal: goal.value,
                     email: 1, // 임시
                     meet_status: '0', // default
                     rm_status: 'N', // default
@@ -211,7 +230,7 @@ function Body() {
                 )
             )
             // validation 처리
-            Promise.all(agendasReqests).then((res) => console.log(res))
+            Promise.all(agendasReqests).then((res) => router.push('/'))
         } catch (error) {}
     }
     const onSubmit = async (e) => {
@@ -219,11 +238,10 @@ function Body() {
         const sortedAgendas = Object.entries(agendaForms).sort(
             (a, b) => +a[0] - +b[0]
         )
-        const isCheckTopInputsValid = checkTopVaild()
-        const isGoalValid = checkMeetGoal()
+        const isCheckMeetForm = checkValidMeetForms()
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
-        if (isCheckTopInputsValid && isGoalValid && isAgendaFormsValid) {
+        if (isCheckMeetForm && isAgendaFormsValid) {
             fetchPostMeet(sortedAgendas)
         }
     }
@@ -236,14 +254,14 @@ function Body() {
                     <SubTitleContainer>회의 목표</SubTitleContainer>
                     <StyledInput
                         placeholder="회의 목료를 입력하세요"
-                        value={meetGoal.goal}
+                        value={goal.value}
                         onChange={(e) => {
-                            setMeetGoal((prev) => ({
+                            setMeetForm((prev) => ({
                                 ...prev,
-                                goal: e.target.value,
+                                goal: { ...prev.goal, value: e.target.value },
                             }))
                         }}
-                        isInValid={meetGoal?.validation?.error}
+                        isInValid={goal?.error}
                     />
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
@@ -262,6 +280,7 @@ function Body() {
                 <StyledButton className="cancel_btn">
                     나중에 할래요
                 </StyledButton>
+                {/* 버튼 disabled */}
                 <StyledButton className="submit_btn" onClick={onSubmit}>
                     지금 바로 시작해요
                 </StyledButton>

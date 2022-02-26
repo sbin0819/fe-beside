@@ -34,13 +34,13 @@ const TitleFormContainer = styled.div`
     }
 `
 
-const TagsInputContainer = styled.div`
+const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
     position: relative;
     width: 100%;
     height: 48px;
     padding: 0 14px;
     border-radius: 12px;
-    border: solid 1px #d6d6d7;
+    border: solid 1px ${({ isInValid }) => (isInValid ? 'red' : '#d6d6d7')};
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -78,17 +78,29 @@ const TagsInputContainer = styled.div`
     }
 `
 
-function Top() {
-    const {
-        meet: { meet_title, meet_date, participants },
-    } = useMeeting()
-    const { setMeetTitle, setMeetDate, setMeetParticipants } =
-        useMeetingActions()
+interface Form {
+    value: string
+    error: boolean
+    message: string
+}
+
+interface TopForm {
+    meet_title: Form
+    meet_date: Form
+    participants: Form
+}
+
+function Top({ form, setForm }: { form: TopForm; setForm: any }) {
+    const { meet_title, meet_date, participants } = form
+
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
     const onChange = (e) => {
         const { value } = e.target
-        setMeetTitle({ meet_title: value })
+        setForm((prev) => ({
+            ...prev,
+            meet_title: { ...prev.meet_title, value },
+        }))
     }
     const handlekeyPress = (e) => {
         if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
@@ -100,7 +112,10 @@ function Top() {
 
     useEffect(() => {
         if (tags.length > 0) {
-            setMeetParticipants({ participants: tags.join(',') })
+            setForm((prev) => ({
+                ...prev,
+                participants: { ...prev.meet_title, value: tags.join(',') },
+            }))
         }
     }, [tags])
 
@@ -116,8 +131,9 @@ function Top() {
                     <StyledInput
                         type="text"
                         className="title_input"
-                        value={meet_title}
+                        value={meet_title.value}
                         onChange={onChange}
+                        isInValid={meet_title.error}
                     />
                     <div style={{ position: 'relative' }}>
                         <StyledInput
@@ -126,9 +142,16 @@ function Top() {
                             onChange={(e) => {
                                 const { value } = e.target
                                 const offset = 'T16:20:00+09:00'
-                                setMeetDate({ meet_date: value + offset })
+                                setForm((prev) => ({
+                                    ...prev,
+                                    meet_date: {
+                                        ...prev.meet_date,
+                                        value: value + offset,
+                                    },
+                                }))
                             }}
-                            value={moment(meet_date).format('YYYY-MM-DD')}
+                            value={moment(meet_date.value).format('YYYY-MM-DD')}
+                            isInValid={meet_date.error}
                         />
                         {/* <Svg
                             style={{
@@ -148,7 +171,7 @@ function Top() {
             </TitleFormContainer>
             <div className="meet_users">
                 <SubTitleContainer>회의 참석자</SubTitleContainer>
-                <TagsInputContainer>
+                <TagsInputContainer isInValid={participants.error}>
                     {tags.map((tag, index) => (
                         <div className="tag-item" key={index}>
                             <span className="text">{tag}</span>
