@@ -23,12 +23,13 @@ export const SubTitleContainer = styled.div`
     color: #3c3c43;
 `
 
-export const StyledInput = styled.input`
+export const StyledInput = styled.input<{ isInValid?: boolean }>`
     width: 100%;
     height: 48px;
     /* padding: 14px 565px 14px 20px; */
     padding: 20px 14px;
     border-radius: 12px;
-    border: solid 1px #d6d6d7;
+    border: solid 1px ${({ isInValid }) => (isInValid ? 'red' : '#d6d6d7')};
+
     background-color: #fff;
 `
