@@ -1,5 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
 import axios from 'axios'
@@ -128,6 +128,7 @@ function Body({
             agenda_id: nanoid(),
         },
     })
+
     // 중복이 많기 때문에 줄이자
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
@@ -233,6 +234,7 @@ function Body({
             Promise.all(agendasReqests).then((res) => router.push('/'))
         } catch (error) {}
     }
+
     const onSubmit = async (e) => {
         e.preventDefault()
         const sortedAgendas = Object.entries(agendaForms).sort(

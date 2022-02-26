@@ -84,15 +84,14 @@ interface Form {
     message: string
 }
 
-interface TopForm {
+interface MeetForm {
     meet_title: Form
     meet_date: Form
     participants: Form
 }
 
-function Top({ form, setForm }: { form: TopForm; setForm: any }) {
+function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
     const { meet_title, meet_date, participants } = form
-
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
     const onChange = (e) => {
@@ -109,7 +108,6 @@ function Top({ form, setForm }: { form: TopForm; setForm: any }) {
             setTags([...tags, tag])
         }
     }
-
     useEffect(() => {
         if (tags.length > 0) {
             setForm((prev) => ({
@@ -118,7 +116,6 @@ function Top({ form, setForm }: { form: TopForm; setForm: any }) {
             }))
         }
     }, [tags])
-
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>

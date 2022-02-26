@@ -110,7 +110,6 @@ function AgendaInputs({
     }
 
     const addAgendaInput = () => {
-        // next order_number
         formOrderRef.current = Object.keys(agendaForms).length + 1
         setAgendaagendaForms((prev) => ({
             ...prev,
@@ -155,7 +154,12 @@ function AgendaInputs({
                                         ) || ''
                                     }
                                     onChange={(e) =>
-                                        onChange(e, form.order_number)
+                                        onChange(
+                                            e,
+                                            form.order_number
+                                                .toString()
+                                                .replace(/(^0+)/, '')
+                                        )
                                     }
                                     isInValid={
                                         form?.validation?.setting_time?.error

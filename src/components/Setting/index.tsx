@@ -35,7 +35,7 @@ interface Form {
     message: string
 }
 
-interface TopForm {
+interface MeetForm {
     meet_title: Form
     meet_date: Form
     participants: Form
@@ -44,7 +44,7 @@ interface TopForm {
 
 function Meeting() {
     // redux를 사용하지 않는 것이 나을 거 같다
-    const [meetForm, setMeetForm] = useState<TopForm>({
+    const [meetForm, setMeetForm] = useState<MeetForm>({
         meet_title: { value: '', error: false, message: '' },
         meet_date: { value: '', error: false, message: '' },
         participants: { value: '', error: false, message: '' },
