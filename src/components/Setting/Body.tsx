@@ -2,7 +2,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
-
+import axios from 'axios'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeeting from '@store/meeting/useMeeting'
 const Container = styled.div`
@@ -104,7 +104,59 @@ export interface AgendaForms {
 }
 
 function Body() {
-    const { agendas } = useMeeting()
+    const { meet } = useMeeting()
+    const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
+        1: {
+            agenda_id: nanoid(),
+            agenda_title: '',
+            setting_time: 0,
+            order_number: 1,
+        },
+    })
+
+    const onSubmit = async (e) => {
+        // meet validation 문제가 발생할 수 있음
+        // meet 과 agenda api 가 따로 놀기 때문에 전체적인 filter가 필요함
+        e.preventDefault()
+        try {
+            const meetResponse = await axios.post(
+                'http://125.6.40.68/api/meet/',
+                {
+                    email: 1,
+                    meet_title: '테스트  2',
+                    meet_date: '2022-02-21T16:20:00+09:00',
+                    meet_status: '0',
+                    rm_status: 'N',
+                    participants: '인범,수빈,다현,대영',
+                    goal: '맛난걸 고르자',
+                    last_time: '2022-02-19T16:19:34.730678+09:00',
+                },
+                { withCredentials: true }
+            )
+            // validation 처리 해야함
+            const { data } = meetResponse
+            const agendas = Object.entries(agendaForms)
+                .sort((a, b) => +a[0] - +b[0])
+                .map(([_, form]) => ({
+                    meet_id: data.meet_id,
+                    agenda_title: form.agenda_title,
+                    setting_time: form.setting_time,
+                    order_number: form.order_number,
+                    agenda_status: '0',
+                }))
+
+            let agendasReqests = agendas.map((agenda) =>
+                axios.post(
+                    'http://125.6.40.68/api/agenda/',
+                    { ...agenda },
+                    { withCredentials: true }
+                )
+            )
+            // validation 처리
+            Promise.all(agendasReqests).then((res) => console.log(res))
+        } catch (error) {}
+    }
+
     return (
         <Container>
             <div>
@@ -115,7 +167,10 @@ function Body() {
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
                     <SubTitleContainer>AGENDA</SubTitleContainer>
-                    <AgendaInputs />
+                    <AgendaInputs
+                        agendaForms={agendaForms}
+                        setAgendaagendaForms={setAgendaagendaForms}
+                    />
                 </div>
             </div>
             <InfoSection>
@@ -126,7 +181,7 @@ function Body() {
                 <StyledButton className="cancel_btn">
                     나중에 할래요
                 </StyledButton>
-                <StyledButton className="submit_btn">
+                <StyledButton className="submit_btn" onClick={onSubmit}>
                     지금 바로 시작해요
                 </StyledButton>
             </ButtonContainer>
@@ -134,16 +189,14 @@ function Body() {
     )
 }
 
-function AgendaInputs() {
+function AgendaInputs({
+    agendaForms,
+    setAgendaagendaForms,
+}: {
+    agendaForms: AgendaForms
+    setAgendaagendaForms: any
+}) {
     const formOrderRef = useRef(1)
-    const [agendaForms, setAgendaagendaForms] = useState<AgendaForms>({
-        1: {
-            agenda_id: nanoid(),
-            agenda_title: '',
-            setting_time: 0,
-            order_number: 1,
-        },
-    })
 
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target

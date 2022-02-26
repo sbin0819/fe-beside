@@ -196,7 +196,7 @@ function MeetingForm() {
                         value={areaForm?.decisions}
                         placeholder="결정된 사항을 작성해주세요"
                         onChange={onChange}
-                        row={areaForm?.decisions.split('\n').length + 1}
+                        row={areaForm?.decisions?.split('\n').length + 1}
                     />
                 </Body>
             </MenuContainer>

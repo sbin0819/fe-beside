@@ -104,12 +104,6 @@ function Top() {
         }
     }, [tags])
 
-    useEffect(() => {
-        if (participants) {
-            // setTags(participants.split(','))
-        }
-    }, [participants])
-
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>
