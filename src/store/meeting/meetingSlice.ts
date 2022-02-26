@@ -34,6 +34,7 @@ const initialState = {
         meet_title: '',
         meet_date: '',
         participants: '',
+        goal: '',
     },
     agendas: [],
     agendaCursor: 0,
