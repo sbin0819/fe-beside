@@ -1,5 +1,5 @@
 import React from 'react'
-export const addViewBox = '0 0 16 16'
+export const deleteViewBox = '0 0 16 16'
 export const Delete = () => {
     return (
         <>

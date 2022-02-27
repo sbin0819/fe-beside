@@ -8,9 +8,10 @@ interface Form {
     value: string
     error: boolean
     message: string
+    focus: boolean
 }
 
-interface MeetForm {
+export interface MeetForm {
     meet_title: Form
     meet_date: Form
     participants: Form
@@ -22,13 +23,12 @@ type PickedAgenda = Pick<
     'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
 >
 
-interface AgendaWithValidation extends PickedAgenda {
+export interface AgendaWithValidation extends PickedAgenda {
     validation: {
-        agenda_title?: { error?: boolean; message?: string }
-        setting_time?: { error?: boolean; message?: string }
+        agenda_title?: { error?: boolean; message?: string; focus?: boolean }
+        setting_time?: { error?: boolean; message?: string; focus?: boolean }
     }
 }
-
 export interface AgendaForms {
     [key: string]: AgendaWithValidation
 }
@@ -42,10 +42,12 @@ const defaultAgendaForm = {
         agenda_title: {
             error: false,
             message: '',
+            focus: false,
         },
         setting_time: {
             error: false,
             message: '',
+            focus: false,
         },
     },
 }
@@ -61,10 +63,10 @@ function useSetting() {
         id ? `http://125.6.40.68/api/agendas/${id.toString()}/` : null
     )
     const [meetForm, setMeetForm] = useState<MeetForm>({
-        meet_title: { value: '', error: false, message: '' },
-        meet_date: { value: '', error: false, message: '' },
-        participants: { value: '', error: false, message: '' },
-        goal: { value: '', error: false, message: '' },
+        meet_title: { value: '', error: false, message: '', focus: false },
+        meet_date: { value: '', error: false, message: '', focus: false },
+        participants: { value: '', error: false, message: '', focus: false },
+        goal: { value: '', error: false, message: '', focus: false },
     })
     const [agendaForms, setAgendagendaForms] = useState<AgendaForms>({
         1: {
@@ -82,18 +84,27 @@ function useSetting() {
                     value: meetData?.meet_title,
                     error: false,
                     message: '',
+                    focus: false,
                 },
                 meet_date: {
                     value: meetData?.meet_date,
                     error: false,
                     message: '',
+                    focus: false,
                 },
                 participants: {
                     value: meetData?.participants,
                     error: false,
                     message: '',
+                    focus: false,
                 },
-                goal: { value: meetData?.goal, error: false, message: '' },
+                goal: {
+                    value: meetData?.goal,
+                    error: false,
+                    message: '',
+
+                    focus: false,
+                },
             }))
         }
     }, [meetData])

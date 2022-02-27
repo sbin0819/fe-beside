@@ -1,12 +1,17 @@
 import { nanoid } from '@reduxjs/toolkit'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
+import {
+    MainInfoTitle,
+    StyledInput,
+    SubTitleContainer,
+    InputInfoContainer,
+} from './style'
 import axios from 'axios'
-import { AgendaState } from '@store/meeting/meetingSlice'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
+import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -50,6 +55,7 @@ const StyledButton = styled.button`
 `
 
 const InfoSection = styled.div`
+    margin-top: 36px;
     height: 72px;
     flex-grow: 0;
     display: flex;
@@ -66,59 +72,13 @@ const InfoSection = styled.div`
     color: #000;
 `
 
-type PickedAgenda = Pick<
-    AgendaState,
-    'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
->
-
-interface AgendaWithValidation extends PickedAgenda {
-    validation: {
-        agenda_title?: { error?: boolean; message?: string }
-        setting_time?: { error?: boolean; message?: string }
-    }
-}
-
-export interface AgendaForms {
-    [key: string]: AgendaWithValidation
-}
-
-const defaultAgendaForm = {
-    // agenda_id: nanoid(),
-    // order_number: 1,
-    agenda_title: '',
-    setting_time: 0,
-    validation: {
-        agenda_title: {
-            error: false,
-            message: '',
-        },
-        setting_time: {
-            error: false,
-            message: '',
-        },
-    },
-}
-
-interface Form {
-    value: string
-    error: boolean
-    message: string
-}
-
-interface TopForm {
-    meet_title: Form
-    meet_date: Form
-    participants: Form
-    goal: Form
-}
-
 function Body({
     meetForm,
     agendaForms,
     setMeetForm,
     setAgendagendaForms,
 }: {
-    meetForm: TopForm
+    meetForm: MeetForm
     agendaForms: AgendaForms
     setMeetForm: any
     setAgendagendaForms: any
@@ -126,7 +86,6 @@ function Body({
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
 
-    // 중복이 많기 때문에 줄이자
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -173,15 +132,19 @@ function Body({
             ([key, value]: [key: string, value: AgendaWithValidation]) => {
                 if (value.agenda_title.length == 0) {
                     value.validation.agenda_title.error = true
+                    value.validation.agenda_title.message = '입력이 필요합니다.'
                 }
                 if (value.agenda_title.length > 0) {
                     value.validation.agenda_title.error = false
+                    value.validation.agenda_title.message = ''
                 }
                 if (value.setting_time == 0) {
                     value.validation.setting_time.error = true
+                    value.validation.setting_time.message = '입력이 필요합니다.'
                 }
                 if (value.setting_time > 0) {
                     value.validation.setting_time.error = false
+                    value.validation.setting_time.message = ''
                 }
                 return [key, value]
             }
@@ -251,17 +214,50 @@ function Body({
                 <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
                 <GoalConatiner>
                     <SubTitleContainer>회의 목표</SubTitleContainer>
-                    <StyledInput
-                        placeholder="회의 목료를 입력하세요"
-                        value={goal.value}
-                        onChange={(e) => {
-                            setMeetForm((prev) => ({
-                                ...prev,
-                                goal: { ...prev.goal, value: e.target.value },
-                            }))
-                        }}
-                        isInValid={goal?.error}
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <StyledInput
+                            placeholder="회의 목료를 입력하세요"
+                            value={goal.value}
+                            onChange={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        value: e.target.value,
+                                    },
+                                }))
+                            }}
+                            isInValid={goal?.error}
+                            isFocus={goal?.focus}
+                            onFocus={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        focus: true,
+                                        message:
+                                            '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
+                                    },
+                                }))
+                            }}
+                            onBlur={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        focus: false,
+                                        message: '',
+                                    },
+                                }))
+                            }}
+                        />
+                        {goal?.error ||
+                            (goal?.focus && (
+                                <InputInfoContainer>
+                                    {goal.message}
+                                </InputInfoContainer>
+                            ))}
+                    </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
                     <SubTitleContainer>AGENDA</SubTitleContainer>

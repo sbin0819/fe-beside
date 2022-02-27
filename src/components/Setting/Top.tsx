@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
+import {
+    MainInfoTitle,
+    StyledInput,
+    SubTitleContainer,
+    InputInfoContainer,
+} from './style'
 
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
-import useMeetingActions from '@store/meeting/useMeetingActions'
-import useMeeting from '@store/meeting/useMeeting'
+import { MeetForm } from './useSetting'
 import moment from 'moment'
-import { useRouter } from 'next/router'
 
 const Container = styled.div`
     height: 316px;
@@ -34,13 +37,19 @@ const TitleFormContainer = styled.div`
     }
 `
 
-const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
+const TagsInputContainer = styled.div<{
+    isInValid?: boolean
+    isFocus?: boolean
+}>`
     position: relative;
     width: 100%;
     height: 48px;
     padding: 0 14px;
     border-radius: 12px;
-    border: solid 1px ${({ isInValid }) => (isInValid ? 'red' : '#d6d6d7')};
+    border: solid 1px
+        ${({ isInValid, isFocus }) =>
+            isInValid ? 'red' : isFocus ? '#748298' : '#d6d6d7'};
+
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -78,17 +87,13 @@ const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
     }
 `
 
-interface Form {
-    value: string
-    error: boolean
-    message: string
-}
-
-interface MeetForm {
-    meet_title: Form
-    meet_date: Form
-    participants: Form
-}
+const InputInfoContainerType2 = styled.div`
+    position: relative;
+    top: 4px;
+    left: 10px;
+    color: #e24646;
+    font-size: 12px;
+`
 
 function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
     const initRef = useRef(-1)
@@ -102,6 +107,26 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
             meet_title: { ...prev.meet_title, value },
         }))
     }
+
+    const onFocus = (e) => {
+        const { name } = e.target
+        setForm((prev) => ({
+            ...prev,
+            [name]: {
+                ...prev[name],
+                focus: true,
+                message: '',
+            },
+        }))
+    }
+    const onBlur = (e) => {
+        const { name } = e.target
+        setForm((prev) => ({
+            ...prev,
+            [name]: { ...prev[name], focus: false, message: '' },
+        }))
+    }
+
     const handlekeyPress = (e) => {
         if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
         if (tag) {
@@ -119,7 +144,6 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
     }, [tags])
 
     useEffect(() => {
-        // only once
         if (participants.value && initRef.current == -1) {
             initRef.current += 1
             setTags(participants.value.split(','))
@@ -132,19 +156,30 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                 <SubTitleContainer>회의 제목</SubTitleContainer>
                 <div
                     className="meet_info_title_inputs"
-                    style={{ display: 'flex' }}
+                    style={{ display: 'flex', position: 'relative' }}
                 >
                     <StyledInput
                         type="text"
                         className="title_input"
+                        name="meet_title"
                         value={meet_title.value}
                         onChange={onChange}
                         isInValid={meet_title.error}
+                        isFocus={meet_title.focus}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
                     />
+                    {meet_title.error ||
+                        (meet_title.focus && (
+                            <InputInfoContainer isInValid={meet_title.error}>
+                                {meet_title.message}
+                            </InputInfoContainer>
+                        ))}
                     <div style={{ position: 'relative' }}>
                         <StyledInput
                             type="date"
                             className="date_input"
+                            name="meet_date"
                             onChange={(e) => {
                                 const { value } = e.target
                                 const offset = 'T16:20:00+09:00'
@@ -158,6 +193,9 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             }}
                             value={moment(meet_date.value).format('YYYY-MM-DD')}
                             isInValid={meet_date.error}
+                            isFocus={meet_date.focus}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
                         />
                         {/* <Svg
                             style={{
@@ -172,12 +210,21 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         >
                             <Calendar />
                         </Svg> */}
+                        {meet_date.error ||
+                            (meet_date.focus && (
+                                <InputInfoContainer isInValid={meet_date.error}>
+                                    {meet_date.message}
+                                </InputInfoContainer>
+                            ))}
                     </div>
                 </div>
             </TitleFormContainer>
-            <div className="meet_users">
+            <div>
                 <SubTitleContainer>회의 참석자</SubTitleContainer>
-                <TagsInputContainer isInValid={participants.error}>
+                <TagsInputContainer
+                    isInValid={participants.error}
+                    isFocus={participants.focus}
+                >
                     {tags.map((tag, index) => (
                         <div className="tag-item" key={index}>
                             <span className="text">{tag}</span>
@@ -189,14 +236,22 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         onKeyPress={handlekeyPress}
                         type="text"
                         className="tags-input"
+                        name="participants"
                         onChange={(e) => {
                             const { value } = e.target
                             const trim = value.replace(/[, ]/gim, '')
                             setTag(trim)
                         }}
                         value={tag.replace(/[, ]/gim, '')}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
                     />
                 </TagsInputContainer>
+                {participants.error && (
+                    <InputInfoContainerType2>
+                        입력이 필요합니다.
+                    </InputInfoContainerType2>
+                )}
             </div>
         </Container>
     )
