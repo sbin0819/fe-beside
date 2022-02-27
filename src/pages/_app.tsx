@@ -6,6 +6,7 @@ import { wrapper } from '../store/store'
 import { Header, Footer } from '@components/common'
 import useHeaderControl from '@hooks/useHeaderControl'
 import { SWRConfig } from 'swr'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const app = ({ Component, pageProps }: AppProps) => {
     const { isHeader, desc } = useHeaderControl()

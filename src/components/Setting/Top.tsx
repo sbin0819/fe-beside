@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {
     MainInfoTitle,
     StyledInput,
+    SettingInputContinaer,
     SubTitleContainer,
     InputInfoContainer,
 } from './style'
@@ -175,7 +176,13 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                                 {meet_title.message}
                             </InputInfoContainer>
                         ))}
-                    <div style={{ position: 'relative' }}>
+                    <SettingInputContinaer>
+                        {/* <TagsInputContainer
+                            isInValid={participants.error}
+                            isFocus={participants.focus}
+                            className="date_input"
+                            style={{ position: 'relative' }}
+                        ></TagsInputContainer> */}
                         <StyledInput
                             type="date"
                             className="date_input"
@@ -197,7 +204,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             onFocus={onFocus}
                             onBlur={onBlur}
                         />
-                        {/* <Svg
+                        <Svg
                             style={{
                                 position: 'absolute',
                                 top: '50%',
@@ -209,14 +216,14 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             height={'18'}
                         >
                             <Calendar />
-                        </Svg> */}
+                        </Svg>
                         {meet_date.error ||
                             (meet_date.focus && (
                                 <InputInfoContainer isInValid={meet_date.error}>
                                     {meet_date.message}
                                 </InputInfoContainer>
                             ))}
-                    </div>
+                    </SettingInputContinaer>
                 </div>
             </TitleFormContainer>
             <div>
