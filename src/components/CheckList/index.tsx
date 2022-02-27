@@ -193,7 +193,7 @@ interface Props {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
-    const [checklistReslut, setChecklistResult] = useState(true)
+    const [checklistReslut, setChecklistResult] = useState(false)
     useOnClickOutside(ref, () => {
         onClose()
     })
