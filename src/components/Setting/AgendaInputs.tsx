@@ -1,8 +1,11 @@
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { StyledInput, ErrorContainer } from './style'
+import { StyledInput, InputInfoContainer } from './style'
 import { AgendaState } from '@store/meeting/meetingSlice'
+import { Svg } from '@common'
+import { closeViewBox, Close } from '@svgs/Close'
+import { AgendaWithValidation, AgendaForms } from './useSetting'
 
 const AgendaContainer = styled.div`
     /* margin-top: 32px; */
@@ -16,6 +19,12 @@ const AgendaContainer = styled.div`
         }
         .time_input {
             width: 168px;
+        }
+        .close {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-left: 17px;
         }
     }
 `
@@ -37,22 +46,6 @@ const AgendaAddContainer = styled.div`
     cursor: pointer;
 `
 
-type PickedAgenda = Pick<
-    AgendaState,
-    'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
->
-
-interface AgendaWithValidation extends PickedAgenda {
-    validation: {
-        agenda_title?: { error?: boolean; message?: string }
-        setting_time?: { error?: boolean; message?: string }
-    }
-}
-
-export interface AgendaForms {
-    [key: string]: AgendaWithValidation
-}
-
 const defaultAgendaForm = {
     // agenda_id: nanoid(),
     // order_number: 1,
@@ -62,10 +55,12 @@ const defaultAgendaForm = {
         agenda_title: {
             error: false,
             message: '',
+            focus: false,
         },
         setting_time: {
             error: false,
             message: '',
+            focus: false,
         },
     },
 }
@@ -78,7 +73,6 @@ function AgendaInputs({
     setAgendagendaForms: any
 }) {
     const formOrderRef = useRef(1)
-
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target
         setAgendagendaForms((prev) => ({
@@ -89,7 +83,7 @@ function AgendaInputs({
             },
         }))
     }
-    const onDelete = (order_number) => () => {
+    const onDelete = (order_number) => {
         const newForm = Object.entries(agendaForms).reduce((acc, curr) => {
             const [key, obj] = curr
             if (obj.order_number == order_number) {
@@ -142,9 +136,9 @@ function AgendaInputs({
                                             form?.validation?.agenda_title.error
                                         }
                                     />
-                                    {/* <ErrorContainer>
+                                    {/* <InputInfoContainer>
                                         입력이 필요합니다.
-                                    </ErrorContainer> */}
+                                    </InputInfoContainer> */}
                                 </div>
                                 <div style={{ position: 'relative' }}>
                                     <StyledInput
@@ -173,6 +167,22 @@ function AgendaInputs({
                                         }
                                     />
                                 </div>
+                                {form?.order_number !== 1 && (
+                                    <div
+                                        className="close"
+                                        onClick={() =>
+                                            onDelete(form?.order_number)
+                                        }
+                                    >
+                                        <Svg
+                                            viewBox={closeViewBox}
+                                            width={'20'}
+                                            height={'18'}
+                                        >
+                                            <Close />
+                                        </Svg>
+                                    </div>
+                                )}
                             </div>
                         </AgendaContainer>
                         <AgendaAddContainer onClick={addAgendaInput}>

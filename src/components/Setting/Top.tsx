@@ -4,15 +4,12 @@ import {
     MainInfoTitle,
     StyledInput,
     SubTitleContainer,
-    ErrorContainer,
+    InputInfoContainer,
 } from './style'
 
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
-import useMeetingActions from '@store/meeting/useMeetingActions'
-import useMeeting from '@store/meeting/useMeeting'
 import moment from 'moment'
-import { useRouter } from 'next/router'
 
 const Container = styled.div`
     height: 316px;
@@ -39,13 +36,19 @@ const TitleFormContainer = styled.div`
     }
 `
 
-const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
+const TagsInputContainer = styled.div<{
+    isInValid?: boolean
+    isFocus?: boolean
+}>`
     position: relative;
     width: 100%;
     height: 48px;
     padding: 0 14px;
     border-radius: 12px;
-    border: solid 1px ${({ isInValid }) => (isInValid ? 'red' : '#d6d6d7')};
+    border: solid 1px
+        ${({ isInValid, isFocus }) =>
+            isInValid ? 'red' : isFocus ? '#748298' : '#d6d6d7'};
+
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -83,7 +86,7 @@ const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
     }
 `
 
-const ErrorContainerType2 = styled.div`
+const InputInfoContainerType2 = styled.div`
     position: relative;
     top: 4px;
     left: 10px;
@@ -93,6 +96,7 @@ const ErrorContainerType2 = styled.div`
 
 interface Form {
     value: string
+    focus: boolean
     error: boolean
     message: string
 }
@@ -108,6 +112,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
     const { meet_title, meet_date, participants } = form
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
+    const [focus, setFocused] = useState(false)
     const onChange = (e) => {
         const { value } = e.target
         setForm((prev) => ({
@@ -131,6 +136,26 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
         }
     }, [tags])
 
+    const onFocus = (e) => {
+        const { name } = e.target
+
+        setForm((prev) => ({
+            ...prev,
+            [name]: {
+                ...prev[name],
+                focus: true,
+                message: '',
+            },
+        }))
+    }
+    const onBlur = (e) => {
+        const { name } = e.target
+        setForm((prev) => ({
+            ...prev,
+            [name]: { ...prev[name], focus: false, message: '' },
+        }))
+    }
+
     useEffect(() => {
         // only once
         if (participants.value && initRef.current == -1) {
@@ -150,17 +175,25 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                     <StyledInput
                         type="text"
                         className="title_input"
+                        name="meet_title"
                         value={meet_title.value}
                         onChange={onChange}
                         isInValid={meet_title.error}
+                        isFocus={meet_title.focus}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
                     />
-                    {meet_title.error && (
-                        <ErrorContainer>입력이 필요합니다.</ErrorContainer>
-                    )}
+                    {meet_title.error ||
+                        (meet_title.focus && (
+                            <InputInfoContainer isInValid={meet_title.error}>
+                                {meet_title.message}
+                            </InputInfoContainer>
+                        ))}
                     <div style={{ position: 'relative' }}>
                         <StyledInput
                             type="date"
                             className="date_input"
+                            name="meet_date"
                             onChange={(e) => {
                                 const { value } = e.target
                                 const offset = 'T16:20:00+09:00'
@@ -174,6 +207,9 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             }}
                             value={moment(meet_date.value).format('YYYY-MM-DD')}
                             isInValid={meet_date.error}
+                            isFocus={meet_date.focus}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
                         />
                         {/* <Svg
                             style={{
@@ -188,15 +224,21 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         >
                             <Calendar />
                         </Svg> */}
-                        {meet_date.error && (
-                            <ErrorContainer>입력이 필요합니다.</ErrorContainer>
-                        )}
+                        {meet_date.error ||
+                            (meet_date.focus && (
+                                <InputInfoContainer isInValid={meet_date.error}>
+                                    {meet_date.message}
+                                </InputInfoContainer>
+                            ))}
                     </div>
                 </div>
             </TitleFormContainer>
             <div>
                 <SubTitleContainer>회의 참석자</SubTitleContainer>
-                <TagsInputContainer isInValid={participants.error}>
+                <TagsInputContainer
+                    isInValid={participants.error}
+                    isFocus={participants.focus}
+                >
                     {tags.map((tag, index) => (
                         <div className="tag-item" key={index}>
                             <span className="text">{tag}</span>
@@ -208,18 +250,21 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         onKeyPress={handlekeyPress}
                         type="text"
                         className="tags-input"
+                        name="participants"
                         onChange={(e) => {
                             const { value } = e.target
                             const trim = value.replace(/[, ]/gim, '')
                             setTag(trim)
                         }}
                         value={tag.replace(/[, ]/gim, '')}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
                     />
                 </TagsInputContainer>
                 {participants.error && (
-                    <ErrorContainerType2>
+                    <InputInfoContainerType2>
                         입력이 필요합니다.
-                    </ErrorContainerType2>
+                    </InputInfoContainerType2>
                 )}
             </div>
         </Container>

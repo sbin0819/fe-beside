@@ -1,17 +1,18 @@
 import { nanoid } from '@reduxjs/toolkit'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import {
     MainInfoTitle,
     StyledInput,
     SubTitleContainer,
-    ErrorContainer,
+    InputInfoContainer,
 } from './style'
 import axios from 'axios'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
+import { AgendaWithValidation, AgendaForms } from './useSetting'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -71,43 +72,11 @@ const InfoSection = styled.div`
     color: #000;
 `
 
-type PickedAgenda = Pick<
-    AgendaState,
-    'agenda_id' | 'agenda_title' | 'setting_time' | 'order_number'
->
-
-interface AgendaWithValidation extends PickedAgenda {
-    validation: {
-        agenda_title?: { error?: boolean; message?: string }
-        setting_time?: { error?: boolean; message?: string }
-    }
-}
-
-export interface AgendaForms {
-    [key: string]: AgendaWithValidation
-}
-
-const defaultAgendaForm = {
-    // agenda_id: nanoid(),
-    // order_number: 1,
-    agenda_title: '',
-    setting_time: 0,
-    validation: {
-        agenda_title: {
-            error: false,
-            message: '',
-        },
-        setting_time: {
-            error: false,
-            message: '',
-        },
-    },
-}
-
 interface Form {
     value: string
     error: boolean
     message: string
+    focus: boolean
 }
 
 interface TopForm {
@@ -131,7 +100,6 @@ function Body({
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
 
-    // 중복이 많기 때문에 줄이자
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -178,15 +146,19 @@ function Body({
             ([key, value]: [key: string, value: AgendaWithValidation]) => {
                 if (value.agenda_title.length == 0) {
                     value.validation.agenda_title.error = true
+                    value.validation.agenda_title.message = '입력이 필요합니다.'
                 }
                 if (value.agenda_title.length > 0) {
                     value.validation.agenda_title.error = false
+                    value.validation.agenda_title.message = ''
                 }
                 if (value.setting_time == 0) {
                     value.validation.setting_time.error = true
+                    value.validation.setting_time.message = '입력이 필요합니다.'
                 }
                 if (value.setting_time > 0) {
                     value.validation.setting_time.error = false
+                    value.validation.setting_time.message = ''
                 }
                 return [key, value]
             }
@@ -270,10 +242,35 @@ function Body({
                                 }))
                             }}
                             isInValid={goal?.error}
+                            isFocus={goal?.focus}
+                            onFocus={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        focus: true,
+                                        message:
+                                            '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
+                                    },
+                                }))
+                            }}
+                            onBlur={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        focus: false,
+                                        message: '',
+                                    },
+                                }))
+                            }}
                         />
-                        {goal?.error && (
-                            <ErrorContainer>입력이 필요합니다.</ErrorContainer>
-                        )}
+                        {goal?.error ||
+                            (goal?.focus && (
+                                <InputInfoContainer>
+                                    {goal.message}
+                                </InputInfoContainer>
+                            ))}
                     </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
