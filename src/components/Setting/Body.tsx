@@ -1,7 +1,12 @@
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
+import {
+    MainInfoTitle,
+    StyledInput,
+    SubTitleContainer,
+    ErrorContainer,
+} from './style'
 import axios from 'axios'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import AgendaInputs from './AgendaInputs'
@@ -251,17 +256,25 @@ function Body({
                 <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
                 <GoalConatiner>
                     <SubTitleContainer>회의 목표</SubTitleContainer>
-                    <StyledInput
-                        placeholder="회의 목료를 입력하세요"
-                        value={goal.value}
-                        onChange={(e) => {
-                            setMeetForm((prev) => ({
-                                ...prev,
-                                goal: { ...prev.goal, value: e.target.value },
-                            }))
-                        }}
-                        isInValid={goal?.error}
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <StyledInput
+                            placeholder="회의 목료를 입력하세요"
+                            value={goal.value}
+                            onChange={(e) => {
+                                setMeetForm((prev) => ({
+                                    ...prev,
+                                    goal: {
+                                        ...prev.goal,
+                                        value: e.target.value,
+                                    },
+                                }))
+                            }}
+                            isInValid={goal?.error}
+                        />
+                        {goal?.error && (
+                            <ErrorContainer>입력이 필요합니다.</ErrorContainer>
+                        )}
+                    </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
                     <SubTitleContainer>AGENDA</SubTitleContainer>

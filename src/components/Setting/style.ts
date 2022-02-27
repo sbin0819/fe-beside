@@ -33,3 +33,11 @@ export const StyledInput = styled.input<{ isInValid?: boolean }>`
 
     background-color: #fff;
 `
+
+export const ErrorContainer = styled.div`
+    position: absolute;
+    top: 53px;
+    left: 10px;
+    color: #e24646;
+    font-size: 12px;
+`

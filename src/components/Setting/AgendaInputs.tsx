@@ -1,7 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { StyledInput } from './style'
+import { StyledInput, ErrorContainer } from './style'
 import { AgendaState } from '@store/meeting/meetingSlice'
 
 const AgendaContainer = styled.div`
@@ -128,43 +128,51 @@ function AgendaInputs({
                     <React.Fragment key={form.agenda_id}>
                         <AgendaContainer>
                             <div className="agenda_inputs">
-                                <StyledInput
-                                    type="text"
-                                    className="agenda_input"
-                                    name="agenda_title"
-                                    placeholder="AGENDA"
-                                    value={form.agenda_title}
-                                    onChange={(e) =>
-                                        onChange(e, form.order_number)
-                                    }
-                                    isInValid={
-                                        form?.validation?.agenda_title.error
-                                    }
-                                />
-                                <StyledInput
-                                    className="time_input"
-                                    type="text"
-                                    name="setting_time"
-                                    placeholder="목표시간"
-                                    value={
-                                        parseInt(
-                                            form.setting_time
-                                                .toString()
-                                                .replace(/(^0+)/, '')
-                                        ) || ''
-                                    }
-                                    onChange={(e) =>
-                                        onChange(
-                                            e,
-                                            form.order_number
-                                                .toString()
-                                                .replace(/(^0+)/, '')
-                                        )
-                                    }
-                                    isInValid={
-                                        form?.validation?.setting_time?.error
-                                    }
-                                />
+                                <div style={{ position: 'relative' }}>
+                                    <StyledInput
+                                        type="text"
+                                        className="agenda_input"
+                                        name="agenda_title"
+                                        placeholder="AGENDA"
+                                        value={form.agenda_title}
+                                        onChange={(e) =>
+                                            onChange(e, form.order_number)
+                                        }
+                                        isInValid={
+                                            form?.validation?.agenda_title.error
+                                        }
+                                    />
+                                    {/* <ErrorContainer>
+                                        입력이 필요합니다.
+                                    </ErrorContainer> */}
+                                </div>
+                                <div style={{ position: 'relative' }}>
+                                    <StyledInput
+                                        className="time_input"
+                                        type="text"
+                                        name="setting_time"
+                                        placeholder="목표시간"
+                                        value={
+                                            parseInt(
+                                                form.setting_time
+                                                    .toString()
+                                                    .replace(/(^0+)/, '')
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            onChange(
+                                                e,
+                                                form.order_number
+                                                    .toString()
+                                                    .replace(/(^0+)/, '')
+                                            )
+                                        }
+                                        isInValid={
+                                            form?.validation?.setting_time
+                                                ?.error
+                                        }
+                                    />
+                                </div>
                             </div>
                         </AgendaContainer>
                         <AgendaAddContainer onClick={addAgendaInput}>

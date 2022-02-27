@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { MainInfoTitle, StyledInput, SubTitleContainer } from './style'
+import {
+    MainInfoTitle,
+    StyledInput,
+    SubTitleContainer,
+    ErrorContainer,
+} from './style'
 
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
@@ -78,6 +83,14 @@ const TagsInputContainer = styled.div<{ isInValid?: boolean }>`
     }
 `
 
+const ErrorContainerType2 = styled.div`
+    position: relative;
+    top: 4px;
+    left: 10px;
+    color: #e24646;
+    font-size: 12px;
+`
+
 interface Form {
     value: string
     error: boolean
@@ -132,7 +145,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                 <SubTitleContainer>회의 제목</SubTitleContainer>
                 <div
                     className="meet_info_title_inputs"
-                    style={{ display: 'flex' }}
+                    style={{ display: 'flex', position: 'relative' }}
                 >
                     <StyledInput
                         type="text"
@@ -141,6 +154,9 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         onChange={onChange}
                         isInValid={meet_title.error}
                     />
+                    {meet_title.error && (
+                        <ErrorContainer>입력이 필요합니다.</ErrorContainer>
+                    )}
                     <div style={{ position: 'relative' }}>
                         <StyledInput
                             type="date"
@@ -172,10 +188,13 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         >
                             <Calendar />
                         </Svg> */}
+                        {meet_date.error && (
+                            <ErrorContainer>입력이 필요합니다.</ErrorContainer>
+                        )}
                     </div>
                 </div>
             </TitleFormContainer>
-            <div className="meet_users">
+            <div>
                 <SubTitleContainer>회의 참석자</SubTitleContainer>
                 <TagsInputContainer isInValid={participants.error}>
                     {tags.map((tag, index) => (
@@ -197,6 +216,11 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         value={tag.replace(/[, ]/gim, '')}
                     />
                 </TagsInputContainer>
+                {participants.error && (
+                    <ErrorContainerType2>
+                        입력이 필요합니다.
+                    </ErrorContainerType2>
+                )}
             </div>
         </Container>
     )
