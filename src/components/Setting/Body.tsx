@@ -8,11 +8,10 @@ import {
     InputInfoContainer,
 } from './style'
 import axios from 'axios'
-import { AgendaState } from '@store/meeting/meetingSlice'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
-import { AgendaWithValidation, AgendaForms } from './useSetting'
+import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -56,6 +55,7 @@ const StyledButton = styled.button`
 `
 
 const InfoSection = styled.div`
+    margin-top: 36px;
     height: 72px;
     flex-grow: 0;
     display: flex;
@@ -72,27 +72,13 @@ const InfoSection = styled.div`
     color: #000;
 `
 
-interface Form {
-    value: string
-    error: boolean
-    message: string
-    focus: boolean
-}
-
-interface TopForm {
-    meet_title: Form
-    meet_date: Form
-    participants: Form
-    goal: Form
-}
-
 function Body({
     meetForm,
     agendaForms,
     setMeetForm,
     setAgendagendaForms,
 }: {
-    meetForm: TopForm
+    meetForm: MeetForm
     agendaForms: AgendaForms
     setMeetForm: any
     setAgendagendaForms: any

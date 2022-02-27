@@ -9,6 +9,7 @@ import {
 
 import { Svg } from '@common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import { MeetForm } from './useSetting'
 import moment from 'moment'
 
 const Container = styled.div`
@@ -94,25 +95,11 @@ const InputInfoContainerType2 = styled.div`
     font-size: 12px;
 `
 
-interface Form {
-    value: string
-    focus: boolean
-    error: boolean
-    message: string
-}
-
-interface MeetForm {
-    meet_title: Form
-    meet_date: Form
-    participants: Form
-}
-
 function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
     const initRef = useRef(-1)
     const { meet_title, meet_date, participants } = form
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState('')
-    const [focus, setFocused] = useState(false)
     const onChange = (e) => {
         const { value } = e.target
         setForm((prev) => ({
@@ -120,25 +107,9 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
             meet_title: { ...prev.meet_title, value },
         }))
     }
-    const handlekeyPress = (e) => {
-        if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
-        if (tag) {
-            setTag('')
-            setTags([...tags, tag])
-        }
-    }
-    useEffect(() => {
-        if (tags.length > 0) {
-            setForm((prev) => ({
-                ...prev,
-                participants: { ...prev.meet_title, value: tags.join(',') },
-            }))
-        }
-    }, [tags])
 
     const onFocus = (e) => {
         const { name } = e.target
-
         setForm((prev) => ({
             ...prev,
             [name]: {
@@ -156,8 +127,23 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
         }))
     }
 
+    const handlekeyPress = (e) => {
+        if (e.key !== ',' && e.key !== ' ' && e.key !== 'Enter') return
+        if (tag) {
+            setTag('')
+            setTags([...tags, tag])
+        }
+    }
     useEffect(() => {
-        // only once
+        if (tags.length > 0) {
+            setForm((prev) => ({
+                ...prev,
+                participants: { ...prev.meet_title, value: tags.join(',') },
+            }))
+        }
+    }, [tags])
+
+    useEffect(() => {
         if (participants.value && initRef.current == -1) {
             initRef.current += 1
             setTags(participants.value.split(','))

@@ -11,7 +11,7 @@ interface Form {
     focus: boolean
 }
 
-interface MeetForm {
+export interface MeetForm {
     meet_title: Form
     meet_date: Form
     participants: Form

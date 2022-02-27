@@ -10,6 +10,8 @@ import { AgendaWithValidation, AgendaForms } from './useSetting'
 const AgendaContainer = styled.div`
     /* margin-top: 32px; */
     gap: 24px;
+    margin-bottom: 32px;
+
     .agenda_inputs {
         display: flex;
         /* justify-content: space-between; */
@@ -30,10 +32,10 @@ const AgendaContainer = styled.div`
 `
 
 const AgendaAddContainer = styled.div`
+    position: relative;
+    top: -16px;
     display: inline-block;
-    margin: 16px 0 32px;
     padding-left: 20px;
-    height: 20px;
     font-family: Pretendard;
     font-size: 14px;
     font-weight: normal;
@@ -118,7 +120,7 @@ function AgendaInputs({
         <>
             {Object.entries(agendaForms)
                 .sort((a, b) => +a[0] - +b[0])
-                .map(([k, form]) => (
+                .map(([k, form], idx) => (
                     <React.Fragment key={form.agenda_id}>
                         <AgendaContainer>
                             <div className="agenda_inputs">
@@ -185,9 +187,11 @@ function AgendaInputs({
                                 )}
                             </div>
                         </AgendaContainer>
-                        <AgendaAddContainer onClick={addAgendaInput}>
-                            + 액션 아이템 추가
-                        </AgendaAddContainer>
+                        {formOrderRef.current == idx + 1 && (
+                            <AgendaAddContainer onClick={addAgendaInput}>
+                                + 액션 아이템 추가
+                            </AgendaAddContainer>
+                        )}
                     </React.Fragment>
                 ))}
         </>
