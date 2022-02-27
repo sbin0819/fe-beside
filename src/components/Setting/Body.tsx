@@ -90,8 +90,10 @@ function Body({
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
                 v.error = true
+                v.message = '입력이 필요합니다.'
             } else {
                 v.error = false
+                v.message = ''
             }
             return [k, v]
         })
@@ -251,12 +253,11 @@ function Body({
                                 }))
                             }}
                         />
-                        {goal?.error ||
-                            (goal?.focus && (
-                                <InputInfoContainer>
-                                    {goal.message}
-                                </InputInfoContainer>
-                            ))}
+                        {(goal?.error || goal?.focus) && (
+                            <InputInfoContainer>
+                                {goal.message}
+                            </InputInfoContainer>
+                        )}
                     </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>

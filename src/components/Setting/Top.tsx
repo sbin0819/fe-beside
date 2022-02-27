@@ -170,12 +170,11 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         onFocus={onFocus}
                         onBlur={onBlur}
                     />
-                    {meet_title.error ||
-                        (meet_title.focus && (
-                            <InputInfoContainer isInValid={meet_title.error}>
-                                {meet_title.message}
-                            </InputInfoContainer>
-                        ))}
+                    {(meet_title.error || meet_title.focus) && (
+                        <InputInfoContainer isInValid={meet_title.error}>
+                            {meet_title.message}
+                        </InputInfoContainer>
+                    )}
                     <SettingInputContinaer>
                         {/* <TagsInputContainer
                             isInValid={participants.error}
@@ -217,12 +216,11 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         >
                             <Calendar />
                         </Svg>
-                        {meet_date.error ||
-                            (meet_date.focus && (
-                                <InputInfoContainer isInValid={meet_date.error}>
-                                    {meet_date.message}
-                                </InputInfoContainer>
-                            ))}
+                        {(meet_date.error || meet_date.focus) && (
+                            <InputInfoContainer isInValid={meet_date.error}>
+                                {meet_date.message}
+                            </InputInfoContainer>
+                        )}
                     </SettingInputContinaer>
                 </div>
             </TitleFormContainer>
@@ -256,7 +254,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                 </TagsInputContainer>
                 {participants.error && (
                     <InputInfoContainerType2>
-                        입력이 필요합니다.
+                        {participants.message}
                     </InputInfoContainerType2>
                 )}
             </div>
