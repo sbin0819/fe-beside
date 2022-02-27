@@ -234,25 +234,45 @@ export const ImgStatus = styled.div`
     top: 32px;
     // border: 1px solid yellow;
 `
+
 export const HoverImgStatus = styled.div`
     width: 66px;
     height: 36px;
-    position: absolute;
-    left: 32px;
-    top: 32px;
+    // position: absolute;
+    // left: 32px;
+    // top: 32px;
     // border: 1px solid yellow;
     color: #fff;
     font-align: center;
 `
 export const HoverDiv = styled.div`
-    width: 66px;
-    height: 72px;
+    position: absolute;
+    left: 106px;
+    top: 70px;
+    // width: 66px;
+    // height: 72px;
     font-size: 16px;
     color: #fff;
     font-align: center;
-
+    cursor: pointer;
     p {
         margin-top: 10px;
+        margin-left: -5px;
+    }
+`
+export const DeleteHoverDiv = styled.div`
+    position: absolute;
+    right: 106px;
+    top: 70px;
+    // width: 66px;
+    // height: 72px;
+    font-size: 16px;
+    color: #fff;
+    font-align: center;
+    cursor: pointer;
+    p {
+        margin-top: 10px;
+        margin-left: -5px;
     }
 `
 export const ModalContainer = styled.div`

@@ -7,7 +7,6 @@ import moment from 'moment'
 import {
     TabContainer,
     BoxContainer,
-    BoxstatusX,
     DataNullBox,
     InputPStype,
     BoxstatusY,
@@ -15,14 +14,49 @@ import {
     BoxstatusE,
     TimeStyle,
     ImgStatus,
-    HoverBoxContainer,
+    DeleteHoverDiv,
+    ListBoxContainer,
     HoverImgStatus,
+    BoxstatusX,
     HoverDiv,
 } from './styles'
 import { Svg } from '@components/common'
-import { Power, powerViewBox } from '@svgs/Power'
-import { Add, addViewBox } from '@svgs/Add'
+
+import { ScheduleDim, scheduleDimViewBox } from '@svgs/ScheduleDim'
+import { EndDim, endDimViewBox } from '@svgs/EndDim'
+import { ProgressDim, progressDimViewBox } from '@svgs/ProgressDim'
+import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import { Notepad, noteViewBox } from '@svgs/Notepad'
+import { Recover, recoverViewBox } from '@svgs/Recover'
+import { Timer, timerViewBox } from '@svgs/Timer'
+import { Drafts, draftsViewBox } from '@svgs/Drafts'
+import { Delete, deleteViewBox } from '@svgs/Delete'
 import { mutate } from 'swr'
+
+export const HoverBoxContainer = styled.div`
+    border: 1px solid #f1f1f1;
+    width: 364px;
+    height: 200px;
+    background-color: rgb(12, 37, 76);
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.08);
+    // position: relative;
+    border-radius: 24px;
+    color: #fff;
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease-in-out;
+    :hover {
+        opacity: 0.8;
+    }
+`
+export const HoverBox = styled.div`
+    justify-content: center;
+    align-item: center;
+    display: flex;
+    margin-top: 71px;
+`
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyRemove() {
@@ -39,8 +73,12 @@ function MyRemove() {
             stateDiv: <BoxstatusX>회의진행중</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={addViewBox} width={'32'} height={'32'}>
-                        <Add />
+                    <Svg
+                        viewBox={progressDimViewBox}
+                        width={'32'}
+                        height={'32'}
+                    >
+                        <ProgressDim />
                     </Svg>
                 </ImgStatus>
             ),
@@ -51,8 +89,12 @@ function MyRemove() {
             stateDiv: <BoxstatusX>회의예정</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
-                        <Power />
+                    <Svg
+                        viewBox={scheduleDimViewBox}
+                        width={'32'}
+                        height={'32'}
+                    >
+                        <ScheduleDim />
                     </Svg>
                 </ImgStatus>
             ),
@@ -63,16 +105,14 @@ function MyRemove() {
             stateDiv: <BoxstatusX>회의완료</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
-                    <Svg viewBox={powerViewBox} width={'32'} height={'32'}>
-                        <Power />
+                    <Svg viewBox={endDimViewBox} width={'32'} height={'32'}>
+                        <EndDim />
                     </Svg>
                 </ImgStatus>
             ),
         },
     ]
-    useEffect(() => {
-        console.log('remove', meetDatas)
-    }, [])
+
     const removeBtn = useCallback(
         async (meet_id: number) => {
             if (window.confirm('회의록을 삭제하시겠습니까?')) {
@@ -81,7 +121,7 @@ function MyRemove() {
                     async (todos) => {
                         const updateList = await axios.patch(
                             `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'N' }
+                            { meet_status: 'N', rm_status: 'N' }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
@@ -102,7 +142,7 @@ function MyRemove() {
                     async (todos) => {
                         const updateList = await axios.patch(
                             `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'Y' }
+                            { meet_status: 'Y', rm_status: 'Y' }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
@@ -115,85 +155,88 @@ function MyRemove() {
         },
         [meetDatas]
     )
-    return (
-        <TabContainer>
-            {meetDatas &&
-                meetDatas.map((meetData: any) => {
-                    return (
-                        <BoxContainer key={meetData.meet_id}>
-                            <div className="box-class">
-                                {meetData.rm_status === 'Y' && [
-                                    stateData[0].stateDiv,
-                                    stateData[0].stateImg,
-                                ]}
-                                {meetData.rm_status === 'W' && [
-                                    stateData[1].stateDiv,
-                                    stateData[1].stateImg,
-                                ]}
-                                {meetData.rm_status === 'E' && [
-                                    stateData[2].stateDiv,
-                                    stateData[2].stateImg,
-                                ]}
-                                <InputPStype className="meet_title-name">
-                                    {meetData.meet_title}
-                                </InputPStype>
-                                <TimeStyle className="last_time-name">
-                                    {moment(meetData.last_time).format(
-                                        `YYYY-MM-DD HH시 mm분`
-                                    )}
-                                </TimeStyle>
-                            </div>
 
-                            <HoverBoxContainer
-                                onMouseEnter={(e) => {
-                                    setHoverStyle({ opacity: 0.8 })
-                                }}
-                                onMouseLeave={(e) => {
-                                    setHoverStyle({ opacity: 0 })
-                                }}
-                                style={hoverStyle}
-                            >
-                                <HoverDiv
-                                    onClick={() => updateBtn(meetData.meet_id)}
-                                    style={{
-                                        position: 'absolute',
-                                        left: '96px',
-                                        bottom: '67px',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <Svg
-                                        viewBox={powerViewBox}
-                                        width={'32'}
-                                        height={'32'}
-                                    >
-                                        <Power />
-                                    </Svg>
-                                    <p style={{ fontSize: '16px' }}>복구하기</p>
-                                </HoverDiv>
-                                <HoverDiv
-                                    onClick={() => removeBtn(meetData.meet_id)}
-                                    style={{
-                                        position: 'absolute',
-                                        right: '96px',
-                                        bottom: '67px',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <Svg
-                                        viewBox={powerViewBox}
-                                        width={'32'}
-                                        height={'32'}
-                                    >
-                                        <Power />
-                                    </Svg>
-                                    <p style={{ fontSize: '16px' }}>삭제하기</p>
-                                </HoverDiv>
-                            </HoverBoxContainer>
-                        </BoxContainer>
-                    )
-                })}
-        </TabContainer>
+    return (
+        <React.Fragment>
+            <TabContainer>
+                <ListBoxContainer>
+                    {meetDatas &&
+                        meetDatas.map((meetData: any) => {
+                            return (
+                                <BoxContainer key={meetData.meet_id}>
+                                    <div className="box-class">
+                                        {meetData.rm_status === 'Y' && [
+                                            stateData[0].stateDiv,
+                                            stateData[0].stateImg,
+                                        ]}
+                                        {meetData.rm_status === 'W' && [
+                                            stateData[1].stateDiv,
+                                            stateData[1].stateImg,
+                                        ]}
+                                        {meetData.rm_status === 'E' && [
+                                            stateData[2].stateDiv,
+                                            stateData[2].stateImg,
+                                        ]}
+                                        <InputPStype className="meet_title-name">
+                                            {meetData.meet_title}
+                                        </InputPStype>
+                                        <TimeStyle className="last_time-name">
+                                            <Svg
+                                                viewBox={calendarViewBox}
+                                                width={'13'}
+                                                height={'13'}
+                                                style={{ marginRight: '5.6px' }}
+                                            >
+                                                <Calendar />
+                                            </Svg>
+                                            {moment(meetData.last_time).format(
+                                                `YYYY-MM-DD HH시 mm분`
+                                            )}
+                                        </TimeStyle>
+                                    </div>
+
+                                    <HoverBoxContainer>
+                                        <HoverBox>
+                                            <HoverDiv
+                                                onClick={() =>
+                                                    updateBtn(meetData.meet_id)
+                                                }
+                                            >
+                                                <Svg
+                                                    viewBox={recoverViewBox}
+                                                    width={'32'}
+                                                    height={'32'}
+                                                >
+                                                    <Recover />
+                                                </Svg>
+                                                <p style={{ fontSize: '16px' }}>
+                                                    복구하기
+                                                </p>
+                                            </HoverDiv>
+                                            <DeleteHoverDiv
+                                                onClick={() =>
+                                                    removeBtn(meetData.meet_id)
+                                                }
+                                            >
+                                                <Svg
+                                                    viewBox={deleteViewBox}
+                                                    width={'32'}
+                                                    height={'32'}
+                                                >
+                                                    <Delete />
+                                                </Svg>
+                                                <p style={{ fontSize: '16px' }}>
+                                                    삭제하기
+                                                </p>
+                                            </DeleteHoverDiv>
+                                        </HoverBox>
+                                    </HoverBoxContainer>
+                                </BoxContainer>
+                            )
+                        })}
+                </ListBoxContainer>
+            </TabContainer>
+        </React.Fragment>
     )
 }
 
