@@ -197,6 +197,7 @@ function Join() {
         <Container>
             <LeftContainer>
                 <h2 className="mins">59mins</h2>
+                <ImageBox src="/image/img_login.png" />
             </LeftContainer>
             <RightContainer>
                 <div className="left-text">
@@ -249,5 +250,13 @@ function Join() {
         </Container>
     )
 }
+const ImageBox = styled.img`
+    width: 480px;
+    height: 480px;
+    text-align: center;
+    position: absolute;
+    top: 185px;
+    right: 100px;
+`
 
 export default withRouter(Join)

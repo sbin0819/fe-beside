@@ -10,7 +10,7 @@ import {
     BoxstatusE,
     TimeStyle,
     ImgStatus,
-    // HoverBoxContainer,
+    DeleteHoverDiv,
     ListBoxContainer,
     HoverImgStatus,
     HoverDiv,
@@ -22,7 +22,11 @@ import { Schedule, scheduleViewBox } from '@svgs/Schedule'
 import { End, endViewBox } from '@svgs/End'
 import { Progress, progressViewBox } from '@svgs/Progress'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Add, addViewBox } from '@svgs/Add'
+import { Timer, timerViewBox } from '@svgs/Timer'
+import { Drafts, draftsViewBox } from '@svgs/Drafts'
+import { Delete, deleteViewBox } from '@svgs/Delete'
 import { mutate } from 'swr'
 import axios from 'axios'
 
@@ -40,7 +44,7 @@ export const HoverBoxContainer = styled.div`
     left: 0;
     top: 0;
     transition: all 0.3s ease-in-out;
-    $:hover {
+    :hover {
         opacity: 0.8;
     }
 `
@@ -94,6 +98,45 @@ function YDataList(props: any) {
         },
     ]
 
+    const hoverStateData = [
+        {
+            id: 0,
+            meet_status: 'Y',
+            stateDiv: <p>회의세팅</p>,
+            stateImg: (
+                <HoverImgStatus>
+                    <Svg viewBox={draftsViewBox} width={'32'} height={'32'}>
+                        <Drafts />
+                    </Svg>
+                </HoverImgStatus>
+            ),
+        },
+        {
+            id: 1,
+            meet_status: 'W',
+            stateDiv: <p>회의진행</p>,
+            stateImg: (
+                <HoverImgStatus>
+                    <Svg viewBox={timerViewBox} width={'32'} height={'32'}>
+                        <Timer />
+                    </Svg>
+                </HoverImgStatus>
+            ),
+        },
+        {
+            id: 2,
+            meet_status: 'E',
+            stateDiv: <p>회의록</p>,
+            stateImg: (
+                <HoverImgStatus>
+                    <Svg viewBox={noteViewBox} width={'32'} height={'32'}>
+                        <Notepad />
+                    </Svg>
+                </HoverImgStatus>
+            ),
+        },
+    ]
+
     const removeBtn = useCallback(
         async (meet_id: number) => {
             if (window.confirm('회의록을 삭제하시겠습니까?')) {
@@ -102,7 +145,7 @@ function YDataList(props: any) {
                     async (todos) => {
                         const updateList = await axios.patch(
                             `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'W' }
+                            { meet_status: 'W', rm_status: 'W' }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
@@ -126,7 +169,7 @@ function YDataList(props: any) {
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-
+                                cursor: 'pointer',
                                 width: '390px',
                                 marginTop: '60px',
                             }}
@@ -137,9 +180,6 @@ function YDataList(props: any) {
                                     width={'30'}
                                     height={'30'}
                                     style={{
-                                        // justifyContent: 'center',
-                                        // alignItems: 'center',
-                                        // textAlign: 'center',
                                         marginLeft: '-5px',
                                         marginTop: '-4px',
                                     }}
@@ -186,58 +226,41 @@ function YDataList(props: any) {
                                         </TimeStyle>
                                     </div>
 
-                                    <HoverBoxContainer
-                                        onChange={() =>
-                                            setHoverStyle(meetData.meet_id)
-                                        }
-                                        onMouseEnter={(e) => {
-                                            setHoverStyle({ opacity: 0.8 })
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            setHoverStyle({ opacity: 0 })
-                                        }}
-                                        style={hoverStyle}
-                                    >
+                                    <HoverBoxContainer>
                                         <HoverBox>
-                                            <HoverDiv
-                                            // style={{
-                                            //     position: 'absolute',
-                                            //     left: '96px',
-                                            //     bottom: '67px',
-                                            // }}
-                                            >
-                                                <Svg
-                                                    viewBox={powerViewBox}
-                                                    width={'32'}
-                                                    height={'32'}
-                                                >
-                                                    <Power />
-                                                </Svg>
-                                                <p style={{ fontSize: '16px' }}>
-                                                    회의세팅
-                                                </p>
+                                            <HoverDiv>
+                                                {meetData.meet_status ===
+                                                    'Y' && [
+                                                    hoverStateData[0].stateImg,
+                                                    hoverStateData[0].stateDiv,
+                                                ]}
+                                                {meetData.meet_status ===
+                                                    'W' && [
+                                                    hoverStateData[1].stateImg,
+                                                    hoverStateData[1].stateDiv,
+                                                ]}
+                                                {meetData.meet_status ===
+                                                    'E' && [
+                                                    hoverStateData[2].stateImg,
+                                                    hoverStateData[2].stateDiv,
+                                                ]}
                                             </HoverDiv>
-                                            <HoverDiv
+                                            <DeleteHoverDiv
                                                 onClick={() =>
                                                     removeBtn(meetData.meet_id)
                                                 }
-                                                // style={{
-                                                //     position: 'absolute',
-                                                //     right: '96px',
-                                                //     bottom: '67px',
-                                                // }}
                                             >
                                                 <Svg
-                                                    viewBox={powerViewBox}
+                                                    viewBox={deleteViewBox}
                                                     width={'32'}
                                                     height={'32'}
                                                 >
-                                                    <Power />
+                                                    <Delete />
                                                 </Svg>
                                                 <p style={{ fontSize: '16px' }}>
                                                     삭제하기
                                                 </p>
-                                            </HoverDiv>
+                                            </DeleteHoverDiv>
                                         </HoverBox>
                                     </HoverBoxContainer>
                                 </BoxContainer>
