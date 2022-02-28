@@ -95,12 +95,13 @@ function AgendaInputs({
                     [order_number]: {
                         ...prev[order_number],
                         validation: {
+                            [name]: '',
                             ...prev[order_number].validation,
                             [name]: {
                                 ...prev[order_number].validation[name],
                                 focus: false,
                                 error: true,
-                                message: '시간 초과',
+                                message: '허용된 시간 초과',
                             },
                         },
                     },
@@ -138,6 +139,8 @@ function AgendaInputs({
 
     const prevTime = () => {
         return agendaForms[formOrderRef.current - 1]?.setting_time
+            ? agendaForms[formOrderRef.current - 1]?.setting_time
+            : 0
     }
 
     const decreaseRemainTime = () => {
@@ -148,6 +151,18 @@ function AgendaInputs({
     }
 
     const addAgendaInput = () => {
+        if (
+            !agendaForms[formOrderRef.current]?.setting_time ||
+            agendaForms[formOrderRef.current]?.agenda_title === ''
+        ) {
+            alert('입력하지 않은 필드가 있습니다.')
+            return
+        }
+        if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
+            alert('허용 시간을 초과 했습니다.')
+            return
+        }
+
         formOrderRef.current = Object.keys(agendaForms).length + 1
         setAgendagendaForms((prev) => ({
             ...prev,
@@ -157,6 +172,7 @@ function AgendaInputs({
                 order_number: formOrderRef.current,
             },
         }))
+
         decreaseRemainTime()
     }
 
@@ -201,6 +217,16 @@ function AgendaInputs({
         }))
     }
 
+    // 허용된 시간이 초과 되고 다시 input을 작성하기 위한 로직
+    useEffect(() => {
+        if (agendaForms[formOrderRef.current].validation.setting_time.error) {
+            agendaForms[formOrderRef.current].validation.setting_time.error =
+                false
+            agendaForms[formOrderRef.current].validation.setting_time.message =
+                ''
+        }
+    }, [agendaForms[formOrderRef.current].validation.setting_time.error])
+
     return (
         <>
             {Object.entries(agendaForms)
@@ -225,9 +251,9 @@ function AgendaInputs({
                                         isFocus={
                                             form?.validation?.agenda_title.focus
                                         }
-                                        onFocus={(e) =>
+                                        onFocus={(e) => {
                                             onFocus(e, form.order_number)
-                                        }
+                                        }}
                                         onBlur={(e) => {
                                             onBlur(e, form.order_number)
                                         }}
@@ -256,20 +282,27 @@ function AgendaInputs({
                                             name="setting_time"
                                             placeholder="목표시간"
                                             value={
-                                                parseInt(
-                                                    form.setting_time
-                                                        .toString()
-                                                        .replace(/(^0+)/, '')
-                                                ) || ''
+                                                form?.validation?.setting_time
+                                                    ?.error
+                                                    ? ''
+                                                    : parseInt(
+                                                          form.setting_time
+                                                              .toString()
+                                                              .replace(
+                                                                  /(^0+)/,
+                                                                  ''
+                                                              )
+                                                      ) || ''
                                             }
-                                            onChange={(e) =>
+                                            onChange={(e) => {
+                                                // validation 을 주어야 할 듯
                                                 onChange(
                                                     e,
                                                     form.order_number
                                                         .toString()
                                                         .replace(/(^0+)/, '')
                                                 )
-                                            }
+                                            }}
                                             isInValid={
                                                 form?.validation?.setting_time
                                                     ?.error
