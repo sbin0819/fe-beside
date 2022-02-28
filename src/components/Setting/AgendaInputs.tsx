@@ -85,9 +85,12 @@ function AgendaInputs({
     setAgendagendaForms: any
 }) {
     const [remainTime, setRemainTime] = useState(60)
+    const [offsetTime, setOffsetTime] = useState(0)
     const formOrderRef = useRef(1)
+    const [focusedOrder, setFoucusedOrder] = useState(1)
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target
+        setFoucusedOrder(order_number)
         if (name === 'setting_time') {
             if (remainTime - value < 0) {
                 setAgendagendaForms((prev) => ({
@@ -222,13 +225,11 @@ function AgendaInputs({
 
     // 허용된 시간이 초과 되고 다시 input을 작성하기 위한 로직
     useEffect(() => {
-        if (agendaForms[formOrderRef.current].validation.setting_time.error) {
-            agendaForms[formOrderRef.current].validation.setting_time.error =
-                false
-            agendaForms[formOrderRef.current].validation.setting_time.message =
-                ''
+        if (agendaForms[focusedOrder]?.validation.setting_time.error) {
+            agendaForms[focusedOrder].validation.setting_time.error = false
+            agendaForms[focusedOrder].validation.setting_time.message = ''
         }
-    }, [agendaForms[formOrderRef.current].validation.setting_time.error])
+    }, [agendaForms[focusedOrder]?.validation.setting_time.error])
 
     return (
         <>
