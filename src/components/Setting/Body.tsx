@@ -85,13 +85,15 @@ function Body({
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-
+    const [remainTime, setRemainTime] = useState(60)
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
                 v.error = true
+                v.message = '입력이 필요합니다.'
             } else {
                 v.error = false
+                v.message = ''
             }
             return [k, v]
         })
@@ -235,6 +237,7 @@ function Body({
                                     goal: {
                                         ...prev.goal,
                                         focus: true,
+                                        error: false,
                                         message:
                                             '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
                                     },
@@ -251,12 +254,11 @@ function Body({
                                 }))
                             }}
                         />
-                        {goal?.error ||
-                            (goal?.focus && (
-                                <InputInfoContainer>
-                                    {goal.message}
-                                </InputInfoContainer>
-                            ))}
+                        {(goal?.error || goal?.focus) && (
+                            <InputInfoContainer isInValid={goal?.error}>
+                                {goal.message}
+                            </InputInfoContainer>
+                        )}
                     </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
@@ -264,12 +266,14 @@ function Body({
                     <AgendaInputs
                         agendaForms={agendaForms}
                         setAgendagendaForms={setAgendagendaForms}
+                        remainTime={remainTime}
+                        setRemainTime={setRemainTime}
                     />
                 </div>
             </div>
             <InfoSection>
-                ✏️ 지금부터 59분안에 회의를 완료할 수 있도록 Agenda를
-                설정해보세요!
+                {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                설정해보세요!`}
             </InfoSection>
             <ButtonContainer>
                 <StyledButton className="cancel_btn">
