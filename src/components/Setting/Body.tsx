@@ -160,7 +160,8 @@ function Body({
     }
 
     const fetchPostMeet = async (
-        sortedAgendas: [string, AgendaWithValidation][]
+        sortedAgendas: [string, AgendaWithValidation][],
+        rm_status: 'y' | 'p'
     ) => {
         try {
             const meetResponse = await axios.post(
@@ -172,7 +173,7 @@ function Body({
                     goal: goal.value,
                     email: 1, // 임시
                     meet_status: '0', // default
-                    rm_status: 'N', // default
+                    rm_status: rm_status, // default
                 },
                 { withCredentials: true }
             )
@@ -181,7 +182,7 @@ function Body({
             const agendas = sortedAgendas.slice().map(([_, form]) => ({
                 meet_id: data.meet_id,
                 agenda_title: form.agenda_title,
-                setting_time: form.setting_time,
+                setting_time: form.setting_time * 60,
                 order_number: form.order_number,
                 agenda_status: '0',
             }))
@@ -197,7 +198,7 @@ function Body({
         } catch (error) {}
     }
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e, rm_status: 'y' | 'p') => {
         e.preventDefault()
         const sortedAgendas = Object.entries(agendaForms).sort(
             (a, b) => +a[0] - +b[0]
@@ -206,7 +207,7 @@ function Body({
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
         if (isCheckMeetForm && isAgendaFormsValid) {
-            fetchPostMeet(sortedAgendas)
+            fetchPostMeet(sortedAgendas, rm_status)
         }
     }
 
@@ -276,11 +277,17 @@ function Body({
                 설정해보세요!`}
             </InfoSection>
             <ButtonContainer>
-                <StyledButton className="cancel_btn">
+                <StyledButton
+                    className="cancel_btn"
+                    onClick={(e) => onSubmit(e, 'y')}
+                >
                     나중에 할래요
                 </StyledButton>
                 {/* 버튼 disabled */}
-                <StyledButton className="submit_btn" onClick={onSubmit}>
+                <StyledButton
+                    className="submit_btn"
+                    onClick={(e) => onSubmit(e, 'p')}
+                >
                     지금 바로 시작해요
                 </StyledButton>
             </ButtonContainer>
