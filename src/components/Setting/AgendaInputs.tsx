@@ -147,7 +147,11 @@ function AgendaInputs({
         setRemainTime((prev) => +prev - +prevTime())
     }
     const increaseRemainTime = () => {
-        setRemainTime((prev) => +prev + +prevTime())
+        if (formOrderRef.current === 1) {
+            setRemainTime(60)
+        } else {
+            setRemainTime((prev) => +prev + +prevTime())
+        }
     }
 
     const addAgendaInput = () => {
@@ -172,7 +176,6 @@ function AgendaInputs({
                 order_number: formOrderRef.current,
             },
         }))
-
         decreaseRemainTime()
     }
 
@@ -294,15 +297,9 @@ function AgendaInputs({
                                                               )
                                                       ) || ''
                                             }
-                                            onChange={(e) => {
-                                                // validation 을 주어야 할 듯
-                                                onChange(
-                                                    e,
-                                                    form.order_number
-                                                        .toString()
-                                                        .replace(/(^0+)/, '')
-                                                )
-                                            }}
+                                            onChange={(e) =>
+                                                onChange(e, form.order_number)
+                                            }
                                             isInValid={
                                                 form?.validation?.setting_time
                                                     ?.error
