@@ -161,7 +161,7 @@ export const InputPStype = styled.p`
     text-align: left;
     color: #000;
 `
-export const BoxstatusY = styled.p`
+export const BoxstatusY = styled.div`
     border-radius: 8px;
     background-color: #fef4ee;
     color: #f79058;
@@ -174,7 +174,7 @@ export const BoxstatusY = styled.p`
     top: 10px;
     font-size: 12px;
 `
-export const BoxstatusW = styled.p`
+export const BoxstatusW = styled.div`
     border-radius: 8px;
     background-color: #ecf0f8;
     color: #3d6db8;
@@ -187,7 +187,7 @@ export const BoxstatusW = styled.p`
     top: 10px;
     font-size: 12px;
 `
-export const BoxstatusE = styled.p`
+export const BoxstatusE = styled.div`
     border-radius: 8px;
     background-color: #eff8f7;
     color: #5cbcad;
@@ -200,7 +200,7 @@ export const BoxstatusE = styled.p`
     top: 10px;
     font-size: 12px;
 `
-export const BoxstatusX = styled.p`
+export const BoxstatusX = styled.div`
     border-radius: 8px;
     background-color: #f1f1f1;
     color: #c0c0c2;
@@ -213,7 +213,7 @@ export const BoxstatusX = styled.p`
     top: 10px;
     font-size: 12px;
 `
-export const TimeStyle = styled.p`
+export const TimeStyle = styled.div`
     flex-grow: 0;
     font-family: Pretendard;
     font-size: 12px;

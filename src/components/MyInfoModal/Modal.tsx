@@ -1,6 +1,8 @@
 import React, { PropsWithChildren } from 'react'
 import styled from 'styled-components'
-
+import { Xclick, xclickviewBox } from '@svgs/Xclick'
+import { Delete, deleteViewBox } from '@svgs/Delete'
+import { Svg } from '@components/common'
 interface ModalDefaultType {
     onClickToggleModal: () => void
 }
@@ -38,6 +40,11 @@ function Modal({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                         >
                             계정 설정 변경 사항은 모든 워크페이스에 적용됩니다.
                         </p>
+                    </div>
+                    <div style={{ border: '1px solid red', marginTop: '24px' }}>
+                        <Svg viewBox={xclickviewBox} width={'15'} height={'15'}>
+                            <Xclick />
+                        </Svg>
                     </div>
                     <div style={{ marginTop: '40px' }}>
                         <h3 style={{ fontWeight: 'bold' }}>닉네임</h3>

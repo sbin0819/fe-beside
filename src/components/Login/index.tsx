@@ -116,7 +116,7 @@ function Login() {
             img: response.profileObj.imageUrl,
         }
         await axios
-            .post('http://127.0.0.1:8000/api/login/', [userData])
+            .post('http://127.0.0.1:8000/api/user/', [userData])
             .then((res) => {
                 if (res.data.db === 'None') {
                     Router.push({

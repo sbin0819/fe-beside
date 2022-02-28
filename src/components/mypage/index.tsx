@@ -49,13 +49,13 @@ function MyPageList() {
                     onClick={() => tabClickHandler(0)}
                     style={{ cursor: 'pointer' }}
                 >
-                    <p
+                    <div
                         style={{
                             color: activeIndex === 1 ? '#87878b' : '#000',
                         }}
                     >
                         전체 회의록
-                    </p>
+                    </div>
                 </TitleMenu>
             ),
             tabCont: <MyList />,
@@ -67,13 +67,13 @@ function MyPageList() {
                     onClick={() => tabClickHandler(1)}
                     style={{ cursor: 'pointer' }}
                 >
-                    <p
+                    <div
                         style={{
                             color: activeIndex === 1 ? '#000' : '#87878b',
                         }}
                     >
                         삭제된 회의록
-                    </p>
+                    </div>
                 </TitleMenu>
             ),
             tabCont: <MyRemove />,
@@ -84,11 +84,11 @@ function MyPageList() {
             <div>
                 <Banner />
                 <BoxContainer>
-                    <p style={{ display: 'flex', marginBottom: '19px' }}>
+                    <div style={{ display: 'flex', marginBottom: '19px' }}>
                         {tabContArr.map((section, index) => {
-                            return section.tabTitle
+                            return <div key={index}>{section.tabTitle}</div>
                         })}
-                    </p>
+                    </div>
                     <div>{tabContArr[activeIndex].tabCont}</div>
                 </BoxContainer>
             </div>

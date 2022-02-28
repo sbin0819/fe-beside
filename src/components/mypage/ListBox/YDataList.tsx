@@ -61,20 +61,7 @@ function YDataList(props: any) {
     console.log('props', props)
     const stateData = [
         {
-            id: 0,
-            state: 'Y',
-            stateDiv: <BoxstatusY>회의진행중</BoxstatusY>,
-            stateImg: (
-                <ImgStatus>
-                    <Svg viewBox={progressViewBox} width={'32'} height={'32'}>
-                        <Progress />
-                    </Svg>
-                </ImgStatus>
-            ),
-        },
-        {
-            id: 1,
-            state: 'W',
+            meet_status: 'P',
             stateDiv: <BoxstatusW>회의예정</BoxstatusW>,
             stateImg: (
                 <ImgStatus>
@@ -85,8 +72,18 @@ function YDataList(props: any) {
             ),
         },
         {
-            id: 2,
-            state: 'E',
+            meet_status: 'Y',
+            stateDiv: <BoxstatusY>회의진행중</BoxstatusY>,
+            stateImg: (
+                <ImgStatus>
+                    <Svg viewBox={progressViewBox} width={'32'} height={'32'}>
+                        <Progress />
+                    </Svg>
+                </ImgStatus>
+            ),
+        },
+        {
+            meet_status: 'C',
             stateDiv: <BoxstatusE>회의완료</BoxstatusE>,
             stateImg: (
                 <ImgStatus>
@@ -196,15 +193,15 @@ function YDataList(props: any) {
                             return (
                                 <BoxContainer key={meetData.meet_id}>
                                     <div className="box-class">
-                                        {meetData.rm_status === 'Y' && [
+                                        {meetData.meet_status === 'Y' && [
                                             stateData[0].stateDiv,
                                             stateData[0].stateImg,
                                         ]}
-                                        {meetData.rm_status === 'W' && [
+                                        {meetData.meet_status === 'P' && [
                                             stateData[1].stateDiv,
                                             stateData[1].stateImg,
                                         ]}
-                                        {meetData.rm_status === 'E' && [
+                                        {meetData.meet_status === 'C' && [
                                             stateData[2].stateDiv,
                                             stateData[2].stateImg,
                                         ]}
@@ -257,9 +254,11 @@ function YDataList(props: any) {
                                                 >
                                                     <Delete />
                                                 </Svg>
-                                                <p style={{ fontSize: '16px' }}>
+                                                <div
+                                                    style={{ fontSize: '16px' }}
+                                                >
                                                     삭제하기
-                                                </p>
+                                                </div>
                                             </DeleteHoverDiv>
                                         </HoverBox>
                                     </HoverBoxContainer>
