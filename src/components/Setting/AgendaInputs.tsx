@@ -80,35 +80,40 @@ const InputInfoContainer3 = styled.div<{ isInValid?: boolean }>`
 function AgendaInputs({
     agendaForms,
     setAgendagendaForms,
+    remainTime,
+    setRemainTime,
 }: {
     agendaForms: AgendaForms
     setAgendagendaForms: any
+    remainTime: number
+    setRemainTime: any
 }) {
-    const [remainTime, setRemainTime] = useState(60)
-    const [offsetTime, setOffsetTime] = useState(0)
     const formOrderRef = useRef(1)
     const [focusedOrder, setFoucusedOrder] = useState(1)
+    const remainTimeValidation = (name, order_number) => {
+        setAgendagendaForms((prev) => ({
+            ...prev,
+            [order_number]: {
+                ...prev[order_number],
+                validation: {
+                    [name]: '',
+                    ...prev[order_number].validation,
+                    [name]: {
+                        ...prev[order_number].validation[name],
+                        focus: false,
+                        error: true,
+                        message: '허용된 시간 초과',
+                    },
+                },
+            },
+        }))
+    }
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target
         setFoucusedOrder(order_number)
         if (name === 'setting_time') {
             if (remainTime - value < 0) {
-                setAgendagendaForms((prev) => ({
-                    ...prev,
-                    [order_number]: {
-                        ...prev[order_number],
-                        validation: {
-                            [name]: '',
-                            ...prev[order_number].validation,
-                            [name]: {
-                                ...prev[order_number].validation[name],
-                                focus: false,
-                                error: true,
-                                message: '허용된 시간 초과',
-                            },
-                        },
-                    },
-                }))
+                remainTimeValidation(name, order_number)
             }
         }
         setAgendagendaForms((prev) => ({
@@ -285,6 +290,7 @@ function AgendaInputs({
                                             type="text"
                                             name="setting_time"
                                             placeholder="목표시간"
+                                            id={`${form.order_number}-time_input`}
                                             value={
                                                 form?.validation?.setting_time
                                                     ?.error
@@ -297,6 +303,11 @@ function AgendaInputs({
                                                                   ''
                                                               )
                                                       ) || ''
+                                            }
+                                            disabled={
+                                                formOrderRef.current !== idx + 1
+                                                    ? true
+                                                    : false
                                             }
                                             onChange={(e) =>
                                                 onChange(e, form.order_number)

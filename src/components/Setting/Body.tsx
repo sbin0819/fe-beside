@@ -85,7 +85,7 @@ function Body({
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-
+    const [remainTime, setRemainTime] = useState(60)
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -266,6 +266,8 @@ function Body({
                     <AgendaInputs
                         agendaForms={agendaForms}
                         setAgendagendaForms={setAgendagendaForms}
+                        remainTime={remainTime}
+                        setRemainTime={setRemainTime}
                     />
                 </div>
             </div>
