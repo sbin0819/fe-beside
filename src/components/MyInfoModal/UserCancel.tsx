@@ -1,5 +1,7 @@
 import React, { PropsWithChildren, useState, useRef } from 'react'
 import styled from 'styled-components'
+import { Svg } from '@common'
+import { Xclick, xclickviewBox } from '@svgs/Xclick'
 interface ModalDefaultType {
     ClickToggleModal: () => void
 }
@@ -8,6 +10,19 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
         <ModalContainer>
             <DialogBox>
                 <InfoBox style={{ top: '32px' }}>
+                    <div
+                        onClick={() => ClickToggleModal()}
+                        style={{
+                            cursor: 'pointer',
+                            top: '0',
+                            right: '0',
+                            position: 'absolute',
+                        }}
+                    >
+                        <Svg viewBox={xclickviewBox} width={'15'} height={'15'}>
+                            <Xclick />
+                        </Svg>
+                    </div>
                     <h2
                         style={{
                             fontSize: '32px',

@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
 import { Google, googleViewBox } from '@svgs/Google'
+import { Xclick, xclickviewBox } from '@svgs/Xclick'
 import UserCancel from './UserCancel'
 interface ModalDefaultType {
     onClickToggleModal: () => void
@@ -36,7 +37,19 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             계정 설정 변경 사항은 모든 워크페이스에 적용됩니다.
                         </p>
                     </InfoBox>
-
+                    <div
+                        onClick={() => onClickToggleModal()}
+                        style={{
+                            cursor: 'pointer',
+                            top: '40px',
+                            right: '40px',
+                            position: 'absolute',
+                        }}
+                    >
+                        <Svg viewBox={xclickviewBox} width={'15'} height={'15'}>
+                            <Xclick />
+                        </Svg>
+                    </div>
                     <InfoBox style={{ top: '133px' }}>
                         <ModalH3>닉네임</ModalH3>
                         <input

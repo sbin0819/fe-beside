@@ -31,6 +31,7 @@ import { Recover, recoverViewBox } from '@svgs/Recover'
 import { Timer, timerViewBox } from '@svgs/Timer'
 import { Drafts, draftsViewBox } from '@svgs/Drafts'
 import { Delete, deleteViewBox } from '@svgs/Delete'
+import { DeleteGray, deleteGrayViewBox } from '@svgs/DeleteGray'
 import { mutate } from 'swr'
 
 export const HoverBoxContainer = styled.div`
@@ -59,13 +60,44 @@ export const HoverBox = styled.div`
 `
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
-function MyRemove() {
+function MyRemove(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
-    const { data: meetDatas, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?search=W',
-        fetcher,
-        { revalidateOnFocus: true }
-    )
+    // const { data: meetDatas, error } = useSWR(
+    //     'http://127.0.0.1:8000/api/meet/?search=W',
+    //     fetcher,
+    //     { revalidateOnFocus: true }
+    // )
+
+    const meetDatas = [
+        {
+            user_id: 1,
+            meet_title: '제목입니다.',
+            meet_date: '2022-02-28T16:11:31.147Z',
+            meet_status: 'Y',
+            rm_status: 'Y',
+            participants: 'user',
+            goal: 'goal',
+        },
+        {
+            user_id: 1,
+            meet_title: '제목입니다.2',
+            meet_date: '2022-02-28T16:11:31.147Z',
+            meet_status: 'P',
+            rm_status: 'W',
+            participants: 'user',
+            goal: 'goal',
+        },
+        {
+            user_id: 1,
+            meet_title: '제목입니다.3',
+            meet_date: '2022-02-28T16:11:31.147Z',
+            meet_status: 'C',
+            rm_status: 'N',
+            participants: 'user',
+            goal: 'goal',
+        },
+    ]
+
     const stateData = [
         {
             id: 0,
@@ -101,7 +133,7 @@ function MyRemove() {
         },
         {
             id: 2,
-            state: 'E',
+            state: 'C',
             stateDiv: <BoxstatusX>회의완료</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
@@ -165,15 +197,15 @@ function MyRemove() {
                             return (
                                 <BoxContainer key={meetData.meet_id}>
                                     <div className="box-class">
-                                        {meetData.rm_status === 'Y' && [
+                                        {meetData.meet_status === 'Y' && [
                                             stateData[0].stateDiv,
                                             stateData[0].stateImg,
                                         ]}
-                                        {meetData.rm_status === 'W' && [
+                                        {meetData.meet_status === 'P' && [
                                             stateData[1].stateDiv,
                                             stateData[1].stateImg,
                                         ]}
-                                        {meetData.rm_status === 'E' && [
+                                        {meetData.meet_status === 'C' && [
                                             stateData[2].stateDiv,
                                             stateData[2].stateImg,
                                         ]}
@@ -182,12 +214,12 @@ function MyRemove() {
                                         </InputPStype>
                                         <TimeStyle className="last_time-name">
                                             <Svg
-                                                viewBox={calendarViewBox}
+                                                viewBox={deleteGrayViewBox}
                                                 width={'13'}
                                                 height={'13'}
                                                 style={{ marginRight: '5.6px' }}
                                             >
-                                                <Calendar />
+                                                <DeleteGray />
                                             </Svg>
                                             {moment(meetData.last_time).format(
                                                 `YYYY-MM-DD HH시 mm분`

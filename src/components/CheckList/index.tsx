@@ -324,7 +324,7 @@ function CheckListModal({ onClose }: Props) {
                                     </p>
                                 </div>
                                 <ChartContainer>
-                                    <RadarChart />
+                                    {/* <RadarChart /> */}
                                 </ChartContainer>
                                 <div className="checklist_after_footer">
                                     <div>
