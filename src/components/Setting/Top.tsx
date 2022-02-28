@@ -180,7 +180,9 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             {meet_title.message}
                         </InputInfoContainer>
                     )}
-                    <SettingInputContinaer>
+                    <SettingInputContinaer
+                        isValue={meet_date.value ? true : false}
+                    >
                         <StyledInput
                             type="date"
                             className="date_input"

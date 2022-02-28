@@ -23,11 +23,11 @@ export const SubTitleContainer = styled.div`
     color: #3c3c43;
 `
 
-export const SettingInputContinaer = styled.div`
+export const SettingInputContinaer = styled.div<{ isValue?: boolean }>`
     position: relative;
-    /* input[type='date'] {
-        color: transparent;
-    } */
+    input[type='date'] {
+        color: ${({ isValue }) => (isValue ? 'inherit' : '#c0c0c2')};
+    }
     input[type='date']::-webkit-inner-spin-button,
     input[type='date']::-webkit-calendar-picker-indicator {
         background: transparent;
