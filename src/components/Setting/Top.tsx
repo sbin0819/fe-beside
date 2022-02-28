@@ -117,6 +117,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                 ...prev[name],
                 focus: true,
                 message: '',
+                error: false,
             },
         }))
     }

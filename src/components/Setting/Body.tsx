@@ -237,6 +237,7 @@ function Body({
                                     goal: {
                                         ...prev.goal,
                                         focus: true,
+                                        error: false,
                                         message:
                                             '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
                                     },
@@ -254,7 +255,7 @@ function Body({
                             }}
                         />
                         {(goal?.error || goal?.focus) && (
-                            <InputInfoContainer>
+                            <InputInfoContainer isInValid={goal?.error}>
                                 {goal.message}
                             </InputInfoContainer>
                         )}
