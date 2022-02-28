@@ -272,8 +272,8 @@ function Body({
                 </div>
             </div>
             <InfoSection>
-                ✏️ 지금부터 59분안에 회의를 완료할 수 있도록 Agenda를
-                설정해보세요!
+                {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                설정해보세요!`}
             </InfoSection>
             <ButtonContainer>
                 <StyledButton className="cancel_btn">

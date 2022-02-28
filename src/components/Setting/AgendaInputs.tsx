@@ -89,6 +89,9 @@ function AgendaInputs({
     setRemainTime: any
 }) {
     const formOrderRef = useRef(1)
+    // const currRef = useRef('ready')
+    // const [offsetTime, setOffsetTime] = useState(0)
+    // const [currTime, setCurrTime] = useState(0)
     const [focusedOrder, setFoucusedOrder] = useState(1)
     const remainTimeValidation = (name, order_number) => {
         setAgendagendaForms((prev) => ({
@@ -111,6 +114,13 @@ function AgendaInputs({
     const onChange = (e, order_number) => {
         const { name, value, type } = e.target
         setFoucusedOrder(order_number)
+        // if (focusedOrder !== formOrderRef.current) {
+        //     if (currRef.current == 'ready') {
+        //         setCurrTime(agendaForms[focusedOrder].setting_time)
+        //     }
+        //     setOffsetTime(value)
+        // }
+
         if (name === 'setting_time') {
             if (remainTime - value < 0) {
                 remainTimeValidation(name, order_number)
@@ -235,7 +245,19 @@ function AgendaInputs({
             agendaForms[focusedOrder].validation.setting_time.message = ''
         }
     }, [agendaForms[focusedOrder]?.validation.setting_time.error])
+    // useEffect(() => {
+    //     let timeout
+    //     if (focusedOrder !== formOrderRef.current) {
+    //         // const $timeInput = document.getElementById(
+    //         //     `${focusedOrder}-time_input`
+    //         // ) as HTMLInputElement
 
+    //         timeout = setTimeout(() => {}, 400)
+    //     }
+    //     return () => {
+    //         clearTimeout(timeout)
+    //     }
+    // }, [offsetTime])
     return (
         <>
             {Object.entries(agendaForms)

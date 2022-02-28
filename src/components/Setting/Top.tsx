@@ -56,15 +56,14 @@ const TagsInputContainer = styled.div<{
     align-items: center;
     overflow: scroll;
     .tag-item {
-        flex: 0 0 73px;
-        display: flex;
         justify-content: space-between;
         align-items: center;
         background: #f1f1f1;
-        display: inline-block;
         margin-left: 3px;
         padding: 2px 8px;
         border-radius: 8px;
+        display: flex;
+        word-break: keep-all;
         .text {
             font-size: 14px;
             font-weight: 500;
@@ -72,12 +71,11 @@ const TagsInputContainer = styled.div<{
             font-style: normal;
             line-height: 1.43;
             letter-spacing: normal;
-            text-align: left;
             color: #000;
             margin-right: 10px;
         }
         .close {
-            height: 8px;
+            cursor: pointer;
             color: #c0c0c2;
         }
     }
@@ -136,6 +134,11 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
             setTags([...tags, tag])
         }
     }
+
+    const onDeleteParticipants = (target) => {
+        const filteredTags = tags.filter((_, i) => i !== target)
+        setTags(filteredTags)
+    }
     useEffect(() => {
         if (tags.length > 0) {
             setForm((prev) => ({
@@ -151,6 +154,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
             setTags(participants.value.split(','))
         }
     }, [participants])
+
     return (
         <Container>
             <MainInfoTitle>회의 정보</MainInfoTitle>
@@ -177,12 +181,6 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                         </InputInfoContainer>
                     )}
                     <SettingInputContinaer>
-                        {/* <TagsInputContainer
-                            isInValid={participants.error}
-                            isFocus={participants.focus}
-                            className="date_input"
-                            style={{ position: 'relative' }}
-                        ></TagsInputContainer> */}
                         <StyledInput
                             type="date"
                             className="date_input"
@@ -232,9 +230,17 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                     isFocus={participants.focus}
                 >
                     {tags.map((tag, index) => (
-                        <div className="tag-item" key={index}>
-                            <span className="text">{tag}</span>
-                            <span className="close">&times;</span>
+                        <div
+                            className="tag-item"
+                            key={`${tag}-${index.toString()}`}
+                        >
+                            <div className="text">{tag}</div>
+                            <div
+                                className="close"
+                                onClick={() => onDeleteParticipants(index)}
+                            >
+                                &times;
+                            </div>
                         </div>
                     ))}
 
