@@ -50,7 +50,7 @@ function Progress() {
         isRunning,
         remainingTime,
     } = useTimer({
-        duration: data?.data?.duration, // 프리패칭으로 처리해야하나?
+        duration: 300, // 프리패칭으로 처리해야하나?
         onEnd: () => {
             soundEffect.play()
         },
