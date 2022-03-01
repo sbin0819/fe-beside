@@ -42,6 +42,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         const current = Number(new Date())
         setCurrentTime(current)
         setEndTime(current + duration * 1000)
+        setOverTime(0)
     }, [duration])
 
     const toggle = useCallback(() => {
@@ -97,6 +98,8 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
                 onEnd()
                 setIsSoundRun(true)
             }
+            // if (remainingTime == 0) {
+            // }
         }
     }, [currentTime, endTime, overTime, onEnd, isSoundRun])
 
@@ -122,7 +125,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         ) {
             interval.current = setTimeout(() => {
                 setCurrentTime(Number(new Date()))
-            }, 67)
+            }, 300)
         }
 
         return () => {
@@ -150,6 +153,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         milliseconds: (remainingTime - seconds * 1000)
             .toString()
             .padStart(3, '0'),
+        overTime,
         reset,
         isRunning,
         endTime,

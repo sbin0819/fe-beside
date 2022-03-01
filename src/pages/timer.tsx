@@ -4,13 +4,11 @@ import { duration } from 'moment'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import Bell from '@components/Bell'
 const Container = styled.div`
-    body {
-        background: #020438;
-        font: 14px/1 'Open Sans', helvetica, sans-serif;
-        -webkit-font-smoothing: antialiased;
-    }
-
+    background: #020438;
+    font: 14px/1 'Open Sans', helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
     .box {
         height: 250px;
         width: 250px;
@@ -43,7 +41,7 @@ const Container = styled.div`
             width: 100%;
             height: 100%;
             transform: translate(0, 100%);
-            background: #4d6de3;
+            background: #5cbcad;
             transition: all 0.3s;
             &_wave {
                 width: 200%;
@@ -51,12 +49,12 @@ const Container = styled.div`
                 bottom: 100%;
                 &_back {
                     right: 0;
-                    fill: #c7eeff;
+                    fill: #bee4de;
                     animation: wave-back 1.4s infinite linear;
                 }
                 &_front {
                     left: 0;
-                    fill: #4d6de3;
+                    fill: #5cbcad;
                     margin-bottom: -1px;
                     animation: wave-front 0.7s infinite linear;
                 }
@@ -79,10 +77,11 @@ const Container = styled.div`
 function UI2() {
     const { data } = useSWR('/api/timer', (url) => axios.get(url))
     const [soundEffect, setSoundEffect] = useState<any>()
-
+    const duration = 5
     const {
         minutes,
         seconds,
+        overTime,
         overMinutes,
         overSeconds,
         start,
@@ -91,26 +90,71 @@ function UI2() {
         isRunning,
         remainingTime,
     } = useTimer({
-        duration: 100, // 프리패칭으로 처리해야하나?
+        duration, // 프리패칭으로 처리해야하나?
         onEnd: () => {
             // soundEffect.play()
         },
     })
-
+    let isUnderMinute = () => {
+        return 60 > Math.round(remainingTime / 1000)
+    }
     let remainPercent = () => {
-        return Math.floor((Math.round(remainingTime / 1000) / 100) * 100)
+        return +overSeconds > 0
+            ? 0
+            : Math.floor((Math.round(remainingTime / 1000) / duration) * 100)
+    }
+    let increasePercent = () => {
+        return +overSeconds > 0
+            ? 100
+            : 100 -
+                  Math.floor(
+                      (Math.round(remainingTime / 1000) / duration) * 100
+                  )
     }
 
     // timer ui
     useEffect(() => {
+        let box = document.querySelector<HTMLElement>('.box')
         var cnt = document.getElementById('count')
         var water = document.getElementById('water')
+        let waveFront = document.querySelector<HTMLElement>('.water_wave_back')
+        let waveBack = document.querySelector<HTMLElement>('.water_wave_front')
         // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
         // cnt.innerHTML = `${formattedMinutes}분`
-        cnt.innerHTML = '' + remainPercent()
-        water.style.transform =
-            'translate(0' + ',' + (0 + 100 - remainPercent()) + '%)'
-    }, [seconds])
+        cnt.innerHTML = '' + remainPercent() + '%'
+        if (remainingTime != 0) {
+            box.style.background = '#020438'
+            cnt.style.color = '#fff'
+            waveFront.style.display = 'block'
+            waveBack.style.display = 'block'
+            if (+increasePercent() > 20 && !isUnderMinute()) {
+                water.style.background = '#ffc848'
+                waveFront.style.fill = '#ffc848'
+                waveBack.style.fill = '#ffe9b6'
+            } else if (isUnderMinute()) {
+                water.style.background = '#f76f58'
+                waveFront.style.fill = '#f76f58'
+                waveBack.style.fill = '#fcd3bc'
+            } else {
+                water.style.background = '#5cbcad'
+                waveFront.style.fill = '#5cbcad'
+                waveBack.style.fill = '#bee4de'
+            }
+            water.style.transform =
+                'translate(0' + ',' + (0 + increasePercent()) + '%)'
+        } else {
+            // box.style.background = '#384c6c'
+            // water.style.background = '#384c6c'
+            // cnt.style.color = '#e24646'
+            // waveFront.style.display = 'none'
+            // waveBack.style.display = 'none'
+            // cnt.innerHTML = '' + overSeconds + '초'
+        }
+    }, [seconds, overSeconds])
+
+    //overTime이 1이 넘어가면 알람을 울린다
+    // 알람을 ?초 동안 울리게 하고
+    // 알람의 울림이 끝나면 overTime 을 보여준다.
 
     return (
         <>
@@ -119,6 +163,18 @@ function UI2() {
                 style={{ background: 'gold', padding: '20px' }}
             >
                 start
+            </div>
+            <div
+                onClick={() => stop()}
+                style={{ background: 'pink', padding: '20px' }}
+            >
+                stop
+            </div>
+            <div
+                onClick={() => reset()}
+                style={{ background: 'teal', padding: '20px' }}
+            >
+                reset
             </div>
             <Container>
                 <svg
@@ -141,7 +197,8 @@ function UI2() {
                         <div className="percentNum" id="count">
                             0
                         </div>
-                        <div className="percentB">%</div>
+                        {/* <Bell /> */}
+                        <div className="percentB"></div>
                     </div>
                     <div id="water" className="water">
                         <svg
