@@ -2,6 +2,9 @@ import React, { useDebugValue, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
+import { Svg } from '@components/common'
+import { GoogleBtn, googleBtnViewBox } from '@svgs/googleBtn'
+import { GoogleBtnNone, googleBtnNoneViewBox } from '@svgs/googleBtnNone'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
@@ -85,15 +88,14 @@ const RightContainer = styled.div`
         // width: 359px;
     }
 `
-const GoogleBtn = styled(GoogleLogin)`
+const GoogleLoginBtn = styled.div`
     width: 359px;
     height: 52px;
     text-algin: center;
     font-size: 16px;
     font-weight: 500;
-    color: red;
-    border: solid 1px #d6d6d7;
     object-fit: contain;
+    cursor: pointer;
 `
 interface UserProps {
     username?: string
@@ -134,6 +136,7 @@ function Login() {
                     console.log('token', token)
                     setCookie('Authorization', token, {
                         path: '/',
+                        maxAge: 1000 * 60 * 60 * 24 * 7,
                         secure: true,
                         SameSite: 'None',
                     })
@@ -175,13 +178,29 @@ function Login() {
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
                         로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    <GoogleBtn
+                    <GoogleLogin
                         clientId={clientId}
                         className="GoogleBtn"
                         responseType={'id_token'}
                         onSuccess={onSuccess}
                         onFailure={onFailure}
                         cookiePolicy={'single_host_origin'}
+                        render={({ onClick }) => (
+                            <GoogleLoginBtn
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    onClick()
+                                }}
+                            >
+                                <Svg
+                                    viewBox={googleBtnViewBox}
+                                    width={'364'}
+                                    height={'52'}
+                                >
+                                    <GoogleBtn />
+                                </Svg>
+                            </GoogleLoginBtn>
+                        )}
                     />
                 </div>
             </RightContainer>

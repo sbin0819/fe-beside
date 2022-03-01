@@ -5,7 +5,14 @@ import { Xclick, xclickviewBox } from '@svgs/Xclick'
 interface ModalDefaultType {
     ClickToggleModal: () => void
 }
+
 function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
+    const [selectedDrink, setSelectedDrink] = useState<String>()
+
+    const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedDrink(event.target.value)
+    }
+
     return (
         <ModalContainer>
             <DialogBox>
@@ -50,15 +57,15 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     <ModalH3>탈퇴이유</ModalH3>
                     <RadioBox>
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>자주 이용하지 않음</label>
+                            <RadioInput id="radio1" type="radio" />
+                            <label htmlFor="radio1">자주 이용하지 않음</label>
                         </LiBox>
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>개인정보 노출 걱정</label>
+                            <RadioInput type="radio" id="radio2" />
+                            <label htmlFor="radio2">개인정보 노출 걱정</label>
                         </LiBox>
                         <LiBox>
-                            <RadioInput type="radio" />
+                            <RadioInput type="radio" id="radio3" />
                             <label>UI/UX 불편</label>
                         </LiBox>
                         <LiBox>
@@ -187,14 +194,14 @@ const InfoBox = styled.div`
     position: absolute;
     left: 36px;
 `
-const RadioBox = styled.ul`
+const RadioBox = styled.div`
     font-size: 14px;
     color: #89898b;
     display: flex;
     flex-wrap: wrap;
     width: 436px;
 `
-const LiBox = styled.li`
+const LiBox = styled.div`
     width: 218px;
     margin-bottom: 12px;
 `

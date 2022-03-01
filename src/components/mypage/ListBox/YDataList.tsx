@@ -110,7 +110,7 @@ function YDataList(props: any) {
         },
         {
             id: 1,
-            meet_status: 'W',
+            meet_status: 'P',
             stateDiv: <p>회의진행</p>,
             stateImg: (
                 <HoverImgStatus>
@@ -122,7 +122,7 @@ function YDataList(props: any) {
         },
         {
             id: 2,
-            meet_status: 'E',
+            meet_status: 'C',
             stateDiv: <p>회의록</p>,
             stateImg: (
                 <HoverImgStatus>
@@ -232,12 +232,12 @@ function YDataList(props: any) {
                                                     hoverStateData[0].stateDiv,
                                                 ]}
                                                 {meetData.meet_status ===
-                                                    'W' && [
+                                                    'P' && [
                                                     hoverStateData[1].stateImg,
                                                     hoverStateData[1].stateDiv,
                                                 ]}
                                                 {meetData.meet_status ===
-                                                    'E' && [
+                                                    'C' && [
                                                     hoverStateData[2].stateImg,
                                                     hoverStateData[2].stateDiv,
                                                 ]}

@@ -14,6 +14,82 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     const ClickToggleModal = useCallback(() => {
         setOpenModal(!isOpenModal)
     }, [isOpenModal])
+
+    const testEmojis = [
+        {
+            id: 1,
+            emoji: '😀',
+        },
+        {
+            id: 2,
+            emoji: '😴',
+        },
+        {
+            id: 3,
+            emoji: '😎',
+        },
+        {
+            id: 4,
+            emoji: '🤯',
+        },
+        {
+            id: 5,
+            emoji: '😱',
+        },
+        {
+            id: 6,
+            emoji: '🤔',
+        },
+        {
+            id: 7,
+            emoji: '🐶',
+        },
+        {
+            id: 8,
+            emoji: '🐱',
+        },
+        {
+            id: 9,
+            emoji: '🙊',
+        },
+        {
+            id: 10,
+            emoji: '👻',
+        },
+        {
+            id: 11,
+            emoji: '👀',
+        },
+        {
+            id: 12,
+            emoji: '👾',
+        },
+        {
+            id: 13,
+            emoji: '👿',
+        },
+        {
+            id: 14,
+            emoji: '🔥',
+        },
+        {
+            id: 15,
+            emoji: '❤',
+        },
+        {
+            id: 16,
+            emoji: '💨',
+        },
+        {
+            id: 17,
+            emoji: '💡',
+        },
+        {
+            id: 18,
+            emoji: '📖',
+        },
+    ]
+
     return (
         <div>
             <ModalContainer>
@@ -65,18 +141,19 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             }}
                         />
                     </InfoBox>
-
+                    {/* testEmojis */}
                     <InfoBox style={{ top: '247px' }}>
                         <ModalH3>프로필 이미지</ModalH3>
-                        <div
-                            style={{
-                                height: '98px',
-                                border: '1px solid blue',
-                                marginTop: '8px',
-                            }}
-                        >
-                            이모지 부분
-                        </div>
+                        <EmojiBox>
+                            {testEmojis &&
+                                testEmojis.map((testEmoji) => {
+                                    return (
+                                        <EmojiStyle key={testEmoji.id}>
+                                            {testEmoji.emoji}
+                                        </EmojiStyle>
+                                    )
+                                })}
+                        </EmojiBox>
                     </InfoBox>
 
                     <InfoBox style={{ top: '427px' }}>
@@ -204,149 +281,29 @@ const Backdrop = styled.div`
     z-index: 99;
     background-color: rgba(0, 0, 0, 0.2);
 `
+const EmojiBox = styled.div`
+    width: 460px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 12px));
+    // grid-template-columns: 1fr 1fr 1fr;
+    align-content: start;
+    height: 98px;
+
+    margin-top: 8px;
+`
+const EmojiStyle = styled.div`
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 8px;
+    border: solid 1px #d6d6d7;
+    margin: 0 12px 12px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    :hover {
+        border: 2px solid #162f55;
+    }
+`
 
 export default MyInfo
-
-// import React, { useState, useCallback } from 'react'
-// import UserCancel from './UserCancel'
-// import Modal from './Modal'
-
-// interface ModalDefaultType {
-//     onClickToggleModal: () => void
-// }
-
-// function MyInfo() {
-//     const [MyisOpenModal, setMyIsOpenModal] = useState(false)
-//     const [isOpenModal, setOpenModal] = useState<boolean>(false);
-
-//     const onClickToggleModal = useCallback(() => {
-//       setOpenModal(!isOpenModal);
-//     }, [isOpenModal]);
-//     return (
-//         <div>
-//             <div
-//                 style={{
-//                     width: '528px',
-//                     height: '696px',
-//                     borderRadius: '24px',
-//                     backgroundColor: '#fff',
-//                     padding: '32px 36px',
-//                     position: 'absolute',
-//                     left: '-250px',
-//                 }}
-//             >
-//                 <div>
-//                     <h2
-//                         style={{
-//                             fontSize: '32px',
-//                             fontWeight: '500',
-//                         }}
-//                     >
-//                         내 계정
-//                     </h2>
-//                     <p
-//                         style={{
-//                             color: '#87878b',
-//                             fontSize: '14px',
-//                             marginTop: '10px',
-//                         }}
-//                     >
-//                         계정 설정 변경 사항은 모든 워크페이스에 적용됩니다.
-//                     </p>
-//                 </div>
-//                 <div style={{ marginTop: '40px' }}>
-//                     <h3 style={{ fontWeight: 'bold' }}>닉네임</h3>
-//                     <input
-//                         placeholder="10자 이내 입력"
-//                         style={{
-//                             marginTop: '8px',
-//                             width: '360px',
-//                             height: '48px',
-//                             padding: '0 20px',
-//                             borderRadius: '12px',
-//                             border: '1px solid #d6d6d7',
-//                             marginBottom: '31px',
-//                         }}
-//                     />
-//                 </div>
-
-//                 <hr style={{ border: '1px solid #f1f1f1' }} />
-//                 <div style={{ marginTop: '32px' }}>
-//                     <h3
-//                         style={{
-//                             fontWeight: 'bold',
-//                             fontSize: '14px',
-//                             marginBottom: '8px',
-//                         }}
-//                     >
-//                         계정
-//                     </h3>
-//                     <p style={{ fontSize: '16px' }}>testeamil@gmail.com</p>
-//                 </div>
-//                 <div style={{ marginTop: '32px' }}>
-//                     <h3
-//                         style={{
-//                             fontSize: '14px',
-//                             fontWeight: 'bold',
-//                             marginBottom: '8px',
-//                         }}
-//                     >
-//                         계정 탈퇴
-//                     </h3>
-//                     <button
-//                         // onClick={() => setMyIsOpenModal((prev) => !prev)}
-//                         style={{
-//                             width: '130px',
-//                             height: '40px',
-//                             padding: '10px 20px',
-//                             border: '1px solid #e24646',
-//                             color: '#e24646',
-//                             borderRadius: '12px',
-//                             fontSize: '14px',
-//                         }}
-//                     >
-//                         회원 탈퇴하기
-//                     </button>
-//                 </div>
-//                 <div
-//                     style={{
-//                         position: 'absolute',
-//                         bottom: '32px',
-//                         right: '36px',
-//                     }}
-//                 >
-//                     <button
-//                         style={{
-//                             width: '72px',
-//                             height: '40px',
-//                             border: '1px solid #d6d6d7',
-//                             color: '#87878b',
-//                             padding: '10px 20px',
-//                             borderRadius: '12px',
-//                             fontSize: '14px',
-//                             marginRight: '12px',
-//                         }}
-//                     >
-//                         취소
-//                     </button>
-//                     <button
-//                         style={{
-//                             width: '72px',
-//                             height: '40px',
-//                             backgroundColor: '#162f55',
-//                             color: '#fff',
-//                             padding: '10px 20px',
-//                             borderRadius: '12px',
-//                             fontSize: '14px',
-//                             marginRight: '12px',
-//                         }}
-//                     >
-//                         저장
-//                     </button>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default MyInfo
