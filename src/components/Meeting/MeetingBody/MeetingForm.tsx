@@ -105,13 +105,19 @@ function MeetingForm() {
 
     const onPatchAgenda = async () => {
         await axios.patch(
-            `http://125.6.40.68/api/agenda/${activeAgenda?.agenda_id}/`,
+            `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
             {
                 ...activeAgenda,
                 discussion:
                     areaForm.discussion === '' ? null : areaForm.discussion,
                 decisions:
                     areaForm.decisions === '' ? null : areaForm.decisions,
+            },
+            {
+                headers: {
+                    Authorization:
+                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+                },
             }
         )
     }

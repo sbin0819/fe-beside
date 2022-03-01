@@ -165,7 +165,7 @@ function Body({
     ) => {
         try {
             const meetResponse = await axios.post(
-                'http://125.6.40.68/api/meet/',
+                'http://localhost:8000/api/meet/',
                 {
                     meet_title: meet_title.value,
                     meet_date: meet_date.value,
@@ -175,7 +175,13 @@ function Body({
                     meet_status: '0', // default
                     rm_status: rm_status, // default
                 },
-                { withCredentials: true }
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization:
+                            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+                    },
+                }
             )
             // validation 처리 해야함
             const { data } = meetResponse
@@ -188,9 +194,15 @@ function Body({
             }))
             const agendasReqests = agendas.map((agenda) =>
                 axios.post(
-                    'http://125.6.40.68/api/agenda/',
+                    'http://localhost:8000/api/agenda/',
                     { ...agenda },
-                    { withCredentials: true }
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization:
+                                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+                        },
+                    }
                 )
             )
             // validation 처리

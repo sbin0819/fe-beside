@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
+// import { useRouter } from 'next/router'
+// import useSWR from 'swr'
 function MeetingPage({ meet, agendas }: { meet: any; agendas: any }) {
     const { setMeeting } = useMeetingActions()
     useEffect(() => {
@@ -10,9 +12,14 @@ function MeetingPage({ meet, agendas }: { meet: any; agendas: any }) {
 }
 
 export async function getStaticPaths() {
-    const res = await fetch('http://125.6.40.68/api/meet/')
+    const res = await fetch('http://localhost:8000/api/meet/', {
+        headers: {
+            Authorization:
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+        },
+    })
     const posts = await res.json()
-    const paths = posts.map((post) => ({
+    const paths = posts?.map((post) => ({
         params: { id: '' + post.meet_id },
     }))
 
@@ -21,9 +28,17 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
     const { id } = params
-    const resMeet = await fetch(`http://125.6.40.68/api/meet/${id.toString()}`)
+    const resMeet = await fetch(
+        `http://localhost:8000/api/meet/${id.toString()}`,
+        {
+            headers: {
+                Authorization:
+                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+            },
+        }
+    )
     const resAgenda = await fetch(
-        `http://125.6.40.68/api/agendas/${id.toString()}/`
+        `http://localhost:8000/api/agendas/${id.toString()}/`
     )
     const meet = await resMeet.json()
     const agendas = await resAgenda.json()

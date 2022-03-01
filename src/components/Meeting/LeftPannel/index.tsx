@@ -4,9 +4,11 @@ import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 
+import Timer from '@components/Timer'
+
 function LeftPannel() {
-    const { agendas } = useMeeting()
-    const mockActive = agendas[0]
+    const { agendas, agendaCursor } = useMeeting()
+    const mockActive = agendas[agendaCursor]
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -36,9 +38,19 @@ function LeftPannel() {
                         {mockActive?.agenda_title}
                     </div>
                 </div>
-                <div className="main_pannel_toast">
-                    🔥 결정사항을 정리할 시간이에요!
+                <div>
+                    {mockActive?.setting_time &&
+                    mockActive.agenda_status != 'c' ? (
+                        <Timer duration={3} />
+                    ) : (
+                        <div>loading</div>
+                    )}
                 </div>
+                {false && (
+                    <div className="main_pannel_toast">
+                        🔥 결정사항을 정리할 시간이에요!
+                    </div>
+                )}
             </MainPannelBody>
         </MainPannelContainer>
     )

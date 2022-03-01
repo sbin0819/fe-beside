@@ -1,21 +1,21 @@
 import useTimer from '@hooks/useTimer'
 import axios from 'axios'
 import { duration } from 'moment'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import Bell from '@components/Bell'
 const Container = styled.div`
-    background: #020438;
+    display: flex;
+    justify-content: center;
+    /* background: #020438; */
     font: 14px/1 'Open Sans', helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     .box {
+        position: relative;
         height: 250px;
         width: 250px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
         background: #020438;
         border-radius: 100%;
         overflow: hidden;
@@ -74,25 +74,29 @@ const Container = styled.div`
     }
 `
 
-function AnimationTimer() {
-    const { data } = useSWR('/api/timer', (url) => axios.get(url))
+function AnimationTimer({ duration }: { duration: number }) {
+    const initRef = useRef(-1)
+    // const video = useRef<HTMLVideoElement>()
     const [soundEffect, setSoundEffect] = useState<any>()
-    const duration = 5
+    const [isSound, setIsSound] = useState(false)
     const {
         minutes,
         seconds,
         overTime,
         overMinutes,
         overSeconds,
-        start,
-        stop,
-        reset,
+        // start,
+        // stop,
+        // reset,
         isRunning,
         remainingTime,
     } = useTimer({
-        duration, // 프리패칭으로 처리해야하나?
+        autostart: true,
+        duration: duration, // 프리패칭으로 처리해야하나?
         onEnd: () => {
-            // soundEffect.play()
+            setTimeout(() => {
+                setIsSound(true)
+            }, 800)
         },
     })
     let isUnderMinute = () => {
@@ -112,49 +116,83 @@ function AnimationTimer() {
                   )
     }
 
+    useEffect(() => {
+        var water = document.getElementById('water')
+        var cnt = document.getElementById('count')
+        cnt.innerHTML = '100%'
+        // setSoundEffect(new Audio('/sounds/alaram.mp3'))
+        setSoundEffect(
+            new Audio(
+                'http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav'
+            )
+        )
+
+        water.style.transform = `translate(0,${0}%)`
+        initRef.current += 1
+    }, [])
+
     // timer ui
     useEffect(() => {
-        let box = document.querySelector<HTMLElement>('.box')
-        var cnt = document.getElementById('count')
-        var water = document.getElementById('water')
-        let waveFront = document.querySelector<HTMLElement>('.water_wave_back')
-        let waveBack = document.querySelector<HTMLElement>('.water_wave_front')
-        // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
-        // cnt.innerHTML = `${formattedMinutes}분`
-        cnt.innerHTML = '' + remainPercent() + '%'
-        if (remainingTime != 0) {
-            box.style.background = '#020438'
-            cnt.style.color = '#fff'
-            waveFront.style.display = 'block'
-            waveBack.style.display = 'block'
-            if (+increasePercent() > 20 && !isUnderMinute()) {
-                water.style.background = '#ffc848'
-                waveFront.style.fill = '#ffc848'
-                waveBack.style.fill = '#ffe9b6'
-            } else if (isUnderMinute()) {
-                water.style.background = '#f76f58'
-                waveFront.style.fill = '#f76f58'
-                waveBack.style.fill = '#fcd3bc'
-            } else {
-                water.style.background = '#5cbcad'
-                waveFront.style.fill = '#5cbcad'
-                waveBack.style.fill = '#bee4de'
+        if (initRef.current > -1) {
+            let box = document.querySelector<HTMLElement>('.box')
+            var cnt = document.getElementById('count')
+            var water = document.getElementById('water')
+            let waveFront =
+                document.querySelector<HTMLElement>('.water_wave_back')
+            let waveBack =
+                document.querySelector<HTMLElement>('.water_wave_front')
+            // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
+            // cnt.innerHTML = `${formattedMinutes}분`
+            cnt.innerHTML = '' + remainPercent() + '%'
+            if (remainingTime != 0) {
+                box.style.background = '#020438'
+                cnt.style.color = '#fff'
+                waveFront.style.display = 'block'
+                waveBack.style.display = 'block'
+                if (+increasePercent() > 20 && !isUnderMinute()) {
+                    water.style.background = '#ffc848'
+                    waveFront.style.fill = '#ffc848'
+                    waveBack.style.fill = '#ffe9b6'
+                } else if (isUnderMinute()) {
+                    water.style.background = '#f76f58'
+                    waveFront.style.fill = '#f76f58'
+                    waveBack.style.fill = '#fcd3bc'
+                } else {
+                    water.style.background = '#5cbcad'
+                    waveFront.style.fill = '#5cbcad'
+                    waveBack.style.fill = '#bee4de'
+                }
+                water.style.transform = `translate(0,${0 + increasePercent()}%)`
+            } else if (isSound) {
+                box.style.background = '#0c254c'
+                water.style.background = '#0c254c'
+                waveFront.style.fill = '#0c254c'
+                waveBack.style.fill = '#0c254c'
+                cnt.innerHTML = ''
+            } else if (!isSound && remainingTime == 0) {
+                box.style.background = '#384c6c'
+                water.style.background = '#384c6c'
+                cnt.style.color = '#e24646'
+                waveFront.style.display = 'none'
+                waveBack.style.display = 'none'
+                cnt.innerHTML = '' + overSeconds + '초'
             }
-            water.style.transform =
-                'translate(0' + ',' + (0 + increasePercent()) + '%)'
-        } else {
-            // box.style.background = '#384c6c'
-            // water.style.background = '#384c6c'
-            // cnt.style.color = '#e24646'
-            // waveFront.style.display = 'none'
-            // waveBack.style.display = 'none'
-            // cnt.innerHTML = '' + overSeconds + '초'
         }
-    }, [seconds, overSeconds])
+    }, [duration, seconds, overSeconds])
 
     //overTime이 1이 넘어가면 알람을 울린다
     // 알람을 ?초 동안 울리게 하고
     // 알람의 울림이 끝나면 overTime 을 보여준다.
+
+    useEffect(() => {
+        let timeout
+        if (isSound) {
+            timeout = setTimeout(() => {
+                setIsSound(false)
+            }, 6000)
+        }
+        return () => clearTimeout(timeout)
+    }, [isSound])
 
     return (
         <>
@@ -179,9 +217,9 @@ function AnimationTimer() {
                         <div className="percentNum" id="count">
                             0
                         </div>
-                        {/* <Bell /> */}
                         <div className="percentB"></div>
                     </div>
+                    {isSound && <Bell />}
                     <div id="water" className="water">
                         <svg
                             viewBox="0 0 560 20"

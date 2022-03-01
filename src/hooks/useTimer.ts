@@ -95,11 +95,9 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
             if (seconds == soundTiming && !isSoundRun) {
-                onEnd()
+                // onEnd()
                 setIsSoundRun(true)
             }
-            // if (remainingTime == 0) {
-            // }
         }
     }, [currentTime, endTime, overTime, onEnd, isSoundRun])
 
@@ -107,6 +105,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
             // stop()
+            onEnd()
             setOverTime(1)
         }
         if (overTime) {
