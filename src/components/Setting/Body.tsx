@@ -165,17 +165,23 @@ function Body({
     ) => {
         try {
             const meetResponse = await axios.post(
-                'http://125.6.40.68/api/meet/',
+                'http://localhost:8000/api/meet/',
                 {
                     meet_title: meet_title.value,
                     meet_date: meet_date.value,
                     participants: participants.value,
                     goal: goal.value,
                     email: 1, // 임시
-                    meet_status: '0', // default
+                    meet_status: '0',
                     rm_status: rm_status, // default
                 },
-                { withCredentials: true }
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization:
+                            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
+                    },
+                }
             )
             // validation 처리 해야함
             const { data } = meetResponse
@@ -184,13 +190,19 @@ function Body({
                 agenda_title: form.agenda_title,
                 setting_time: form.setting_time * 60,
                 order_number: form.order_number,
-                agenda_status: '0',
+                agenda_status: form.order_number == 1 ? 'p' : 'y',
             }))
             const agendasReqests = agendas.map((agenda) =>
                 axios.post(
-                    'http://125.6.40.68/api/agenda/',
+                    'http://localhost:8000/api/agenda/',
                     { ...agenda },
-                    { withCredentials: true }
+                    {
+                        withCredentials: true,
+                        headers: {
+                            Authorization:
+                                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
+                        },
+                    }
                 )
             )
             // validation 처리

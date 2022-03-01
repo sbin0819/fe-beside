@@ -2,6 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
+    position: relative;
+    background: #0c254c;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+    border-radius: 50%;
+    border: 3px solid #0c254c;
     @keyframes ring {
         0%,
         100% {
@@ -47,7 +57,7 @@ const Container = styled.div`
         transform: rotate(-30deg);
         transform-origin: top center;
         width: 80px;
-
+        z-index: 101;
         &::before {
             background-color: gold;
             border-radius: 50%;
@@ -58,6 +68,7 @@ const Container = styled.div`
             top: 0;
             transform: translate(-50%, -50%);
             width: 20px;
+            z-index: 100;
         }
 
         &::after {
@@ -70,6 +81,7 @@ const Container = styled.div`
             bottom: 0;
             transform: translate(-50%, 50%);
             width: 100px;
+            z-index: 100;
         }
     }
 
@@ -82,28 +94,17 @@ const Container = styled.div`
         width: 20px;
         transform: translate(-50%, 50%);
         border-radius: 0 0 10px 10px;
+        z-index: 100;
     }
 
     .quote {
         color: gold;
         margin-bottom: 20px;
         font-size: 30px;
-    }
-
-    html,
-    body {
-        height: 100%;
+        z-index: 100;
     }
 
     @import url(https://fonts.googleapis.com/css?family=Poiret+One);
-    body {
-        font-family: 'Poiret One';
-        background-color: #3be2bb;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
 `
 
 const Bell = () => {

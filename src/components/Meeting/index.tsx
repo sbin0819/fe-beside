@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const OffsetPositionContainer = styled.div`
     position: relative;
-    top: -160px;
+    top: -142px;
     width: 1100px;
     margin: 0 auto;
 `

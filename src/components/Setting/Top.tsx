@@ -189,7 +189,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             name="meet_date"
                             onChange={(e) => {
                                 const { value } = e.target
-                                const offset = 'T16:20:00+09:00'
+                                const offset = ' 12:12:12'
                                 setForm((prev) => ({
                                     ...prev,
                                     meet_date: {
