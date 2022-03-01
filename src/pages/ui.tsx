@@ -21,26 +21,6 @@ const Container = styled.div`
         font-family: 'Lato', sans-serif;
         font-size: 20px;
     }
-    .wave {
-        animation: waves 2s linear infinite;
-    }
-    #wave1 {
-        animation-delay: -1s;
-        animation-duration: 7s;
-    }
-    #wave2 {
-        animation-delay: -2s;
-        animation-duration: 5s;
-    }
-
-    @keyframes waves {
-        from {
-            transform: translateX(0px);
-        }
-        to {
-            transform: translateX(-100px);
-        }
-    }
 `
 
 function UIPage() {
@@ -81,7 +61,6 @@ function UIPage() {
                     pathLength_1 +
                     progress2 * dropAccumulatesSpeed +
                     0.5 * freeFallAcceleration * progress2 * progress2
-                console.log(progress2 + ' -> ' + pos)
                 element.setAttribute('transform', 'translate(0,' + pos + ')')
                 window.requestAnimationFrame(step)
             }
@@ -147,23 +126,6 @@ function UIPage() {
                             fill="#3561c0"
                         />
                     </g>
-
-                    <use
-                        id="wave2"
-                        className="wave"
-                        href="#wave"
-                        x="0"
-                        y="3"
-                        fill="#3561c0"
-                    />
-                    <use
-                        id="wave3"
-                        className="wave"
-                        href="#wave"
-                        x="0"
-                        y="6"
-                        fill="#2e53ab"
-                    />
                 </svg>
             </Container>
         </div>
