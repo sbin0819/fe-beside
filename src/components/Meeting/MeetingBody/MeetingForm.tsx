@@ -180,7 +180,11 @@ function MeetingForm() {
                 <Body>
                     <TextArea
                         name="discussion"
-                        value={areaForm?.discussion}
+                        value={
+                            areaForm?.discussion === null
+                                ? ''
+                                : areaForm?.discussion
+                        }
                         placeholder="논의할 내용에 대해 작성해주세요."
                         onChange={onChange}
                         row={areaForm?.discussion?.split('\n').length + 1}
@@ -199,7 +203,11 @@ function MeetingForm() {
                 <Body>
                     <TextArea
                         name="decisions"
-                        value={areaForm?.decisions}
+                        value={
+                            areaForm?.decisions === null
+                                ? ''
+                                : areaForm?.decisions
+                        }
                         placeholder="결정된 사항을 작성해주세요"
                         onChange={onChange}
                         row={areaForm?.decisions?.split('\n').length + 1}

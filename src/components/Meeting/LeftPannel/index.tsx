@@ -41,7 +41,7 @@ function LeftPannel() {
                 <div>
                     {mockActive?.setting_time &&
                     mockActive.agenda_status != 'c' ? (
-                        <Timer duration={3} />
+                        <Timer duration={10} />
                     ) : (
                         <div>loading</div>
                     )}

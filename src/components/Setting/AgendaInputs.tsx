@@ -152,7 +152,7 @@ function AgendaInputs({
         // formOrderRef 초기화
         formOrderRef.current = Object.keys(agendaForms).length - 1
         setAgendagendaForms(newForm)
-        increaseRemainTime()
+        increaseRemainTime(order_number)
     }
 
     const prevTime = () => {
@@ -164,11 +164,13 @@ function AgendaInputs({
     const decreaseRemainTime = () => {
         setRemainTime((prev) => +prev - +prevTime())
     }
-    const increaseRemainTime = () => {
-        if (formOrderRef.current === 1) {
+    const increaseRemainTime = (order_number) => {
+        if (order_number === 1) {
             setRemainTime(60)
         } else {
-            setRemainTime((prev) => +prev + +prevTime())
+            setRemainTime(
+                (prev) => +prev + +agendaForms[order_number].setting_time
+            )
         }
     }
 
