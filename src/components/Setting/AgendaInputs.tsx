@@ -152,7 +152,7 @@ function AgendaInputs({
         // formOrderRef 초기화
         formOrderRef.current = Object.keys(agendaForms).length - 1
         setAgendagendaForms(newForm)
-        increaseRemainTime(order_number)
+        // increaseRemainTime(order_number)
     }
 
     const prevTime = () => {
@@ -161,9 +161,6 @@ function AgendaInputs({
             : 0
     }
 
-    const decreaseRemainTime = () => {
-        setRemainTime((prev) => +prev - +prevTime())
-    }
     const increaseRemainTime = (order_number) => {
         if (order_number === 1) {
             setRemainTime(60)
@@ -172,6 +169,10 @@ function AgendaInputs({
                 (prev) => +prev + +agendaForms[order_number].setting_time
             )
         }
+    }
+
+    const decreaseRemainTime = (order_number) => {
+        setRemainTime((prev) => +prev - +agendaForms[order_number].setting_time)
     }
 
     const addAgendaInput = () => {
@@ -196,7 +197,7 @@ function AgendaInputs({
                 order_number: formOrderRef.current,
             },
         }))
-        decreaseRemainTime()
+        // decreaseRemainTime()
     }
 
     const onFocus = (e, order_number) => {
@@ -243,23 +244,12 @@ function AgendaInputs({
     // 허용된 시간이 초과 되고 다시 input을 작성하기 위한 로직
     useEffect(() => {
         if (agendaForms[focusedOrder]?.validation.setting_time.error) {
+            agendaForms[focusedOrder].setting_time = 0
             agendaForms[focusedOrder].validation.setting_time.error = false
             agendaForms[focusedOrder].validation.setting_time.message = ''
         }
     }, [agendaForms[focusedOrder]?.validation.setting_time.error])
-    // useEffect(() => {
-    //     let timeout
-    //     if (focusedOrder !== formOrderRef.current) {
-    //         // const $timeInput = document.getElementById(
-    //         //     `${focusedOrder}-time_input`
-    //         // ) as HTMLInputElement
 
-    //         timeout = setTimeout(() => {}, 400)
-    //     }
-    //     return () => {
-    //         clearTimeout(timeout)
-    //     }
-    // }, [offsetTime])
     return (
         <>
             {Object.entries(agendaForms)
@@ -328,11 +318,11 @@ function AgendaInputs({
                                                               )
                                                       ) || ''
                                             }
-                                            disabled={
-                                                formOrderRef.current !== idx + 1
-                                                    ? true
-                                                    : false
-                                            }
+                                            // disabled={
+                                            //     formOrderRef.current !== idx + 1
+                                            //         ? true
+                                            //         : false
+                                            // }
                                             onChange={(e) =>
                                                 onChange(e, form.order_number)
                                             }
@@ -344,11 +334,17 @@ function AgendaInputs({
                                                 form?.validation?.setting_time
                                                     .focus
                                             }
-                                            onFocus={(e) =>
+                                            onFocus={(e) => {
                                                 onFocus(e, form.order_number)
-                                            }
+                                                increaseRemainTime(
+                                                    form.order_number
+                                                )
+                                            }}
                                             onBlur={(e) => {
                                                 onBlur(e, form.order_number)
+                                                decreaseRemainTime(
+                                                    form.order_number
+                                                )
                                             }}
                                         />
                                     </div>
