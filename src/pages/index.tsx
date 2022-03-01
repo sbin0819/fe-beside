@@ -148,7 +148,7 @@ export async function getStaticProps() {
     const resMeet = await fetch(`http://localhost:8000/api/meet/`, {
         headers: {
             Authorization:
-                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjcxNTA2MiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.PRN_MC8wo2f8Y9AxGfDTkqDkTqSgLOEt_icjjwJiGgw',
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
         },
     })
     const meets = await resMeet.json()

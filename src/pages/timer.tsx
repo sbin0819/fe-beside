@@ -77,7 +77,7 @@ const Container = styled.div`
 function UI2() {
     const { data } = useSWR('/api/timer', (url) => axios.get(url))
     const [soundEffect, setSoundEffect] = useState<any>()
-    const duration = 5
+    const duration = 120
     const {
         minutes,
         seconds,

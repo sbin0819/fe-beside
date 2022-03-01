@@ -4,6 +4,7 @@ import { duration } from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import useSound from 'use-sound'
 import Bell from '@components/Bell'
 const Container = styled.div`
     display: flex;
@@ -74,11 +75,21 @@ const Container = styled.div`
     }
 `
 
-function AnimationTimer({ duration }: { duration: number }) {
+function AnimationTimer({
+    duration,
+    setTwentyPercentLeft,
+}: {
+    duration: number
+    setTwentyPercentLeft: any
+}) {
     const initRef = useRef(-1)
-    // const video = useRef<HTMLVideoElement>()
+    const audioRef = useRef<HTMLAudioElement>()
     const [soundEffect, setSoundEffect] = useState<any>()
     const [isSound, setIsSound] = useState(false)
+    const [play] = useSound(
+        'http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav',
+        { volume: 0.2 }
+    )
     const {
         minutes,
         seconds,
@@ -93,10 +104,13 @@ function AnimationTimer({ duration }: { duration: number }) {
     } = useTimer({
         autostart: true,
         duration: duration, // 프리패칭으로 처리해야하나?
-        onEnd: () => {
-            setTimeout(() => {
-                setIsSound(true)
-            }, 800)
+        onCallback: (type: 'done' | 'left') => {
+            if (type == 'done') {
+                return setIsSound(true)
+            }
+            if (type == 'left') {
+                return setTwentyPercentLeft(true)
+            }
         },
     })
     let isUnderMinute = () => {
@@ -121,11 +135,6 @@ function AnimationTimer({ duration }: { duration: number }) {
         var cnt = document.getElementById('count')
         cnt.innerHTML = '100%'
         // setSoundEffect(new Audio('/sounds/alaram.mp3'))
-        setSoundEffect(
-            new Audio(
-                'http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav'
-            )
-        )
 
         water.style.transform = `translate(0,${0}%)`
         initRef.current += 1
@@ -187,6 +196,7 @@ function AnimationTimer({ duration }: { duration: number }) {
     useEffect(() => {
         let timeout
         if (isSound) {
+            play()
             timeout = setTimeout(() => {
                 setIsSound(false)
             }, 6000)
@@ -196,6 +206,23 @@ function AnimationTimer({ duration }: { duration: number }) {
 
     return (
         <>
+            {/* <iframe
+                style={{ display: 'none' }}
+                src="silence.mp3"
+                allow="autoplay"
+                id="audio"
+            ></iframe>
+            <audio
+                style={{ display: 'none' }}
+                controls
+                autoPlay
+                src="http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav"
+                id="player"
+                ref={audioRef}
+            >
+                <code>audio</code> element.
+            </audio> */}
+
             <Container>
                 <svg
                     version="1.1"
