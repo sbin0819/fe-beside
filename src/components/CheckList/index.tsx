@@ -193,6 +193,7 @@ interface Props {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
+
     const [checklistReslut, setChecklistResult] = useState(true)
     // 오너십 3
     const [ownerShipCheck, setOwnerShipCheck] = useState([])
@@ -261,6 +262,7 @@ function CheckListModal({ onClose }: Props) {
             productivityCheck.length * 10
         )
     }
+
 
     useOnClickOutside(ref, () => {
         onClose()

@@ -55,12 +55,11 @@ const defaultAgendaForm = {
 function useSetting() {
     const router = useRouter()
     const { id } = router.query
-
     const { data: meetData } = useSWR<MeetState>(
-        id ? `http://125.6.40.68/api/meet/${id.toString()}` : null
+        id ? `http://localhost:8000/api/meet/?meet_id=${id.toString()}` : null
     )
     const { data: agendasData } = useSWR(
-        id ? `http://125.6.40.68/api/agendas/${id.toString()}/` : null
+        id ? `http://localhost:8000/api/agenda/?meet_id=${id.toString()}` : null
     )
     const [meetForm, setMeetForm] = useState<MeetForm>({
         meet_title: { value: '', error: false, message: '', focus: false },
@@ -75,44 +74,56 @@ function useSetting() {
             agenda_id: nanoid(),
         },
     })
-
     // meeDate에 status 값과 같은 validation이 필요하다
     useEffect(() => {
         if (meetData) {
             setMeetForm((prev) => ({
                 meet_title: {
-                    value: meetData?.meet_title,
+                    value: meetData[0]?.meet_title,
                     error: false,
                     message: '',
                     focus: false,
                 },
                 meet_date: {
-                    value: meetData?.meet_date,
+                    value: meetData[0]?.meet_date,
                     error: false,
                     message: '',
                     focus: false,
                 },
                 participants: {
-                    value: meetData?.participants,
+                    value: meetData[0]?.participants,
                     error: false,
                     message: '',
                     focus: false,
                 },
                 goal: {
-                    value: meetData?.goal,
+                    value: meetData[0]?.goal,
                     error: false,
                     message: '',
-
                     focus: false,
                 },
             }))
         }
     }, [meetData])
-
     useEffect(() => {
         if (agendasData) {
-            const newAgendasForm = agendasData.reduce((acc, curr) => {
-                acc[curr.order_number] = curr
+            const newAgendasForm = agendasData?.reduce((acc, curr) => {
+                acc[curr.order_number] = {
+                    ...curr,
+                    setting_time: curr.setting_time / 60,
+                    validation: {
+                        agenda_title: {
+                            error: false,
+                            message: '',
+                            focus: false,
+                        },
+                        setting_time: {
+                            error: false,
+                            message: '',
+                            focus: false,
+                        },
+                    },
+                }
                 return acc
             }, {})
             setAgendagendaForms(newAgendasForm)

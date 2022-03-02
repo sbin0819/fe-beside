@@ -4,9 +4,13 @@ import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 
+import Timer from '@components/Timer'
+import { useState } from 'react'
+
 function LeftPannel() {
-    const { agendas } = useMeeting()
-    const mockActive = agendas[0]
+    const { agendas, agendaCursor } = useMeeting()
+    const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
+    const mockActive = agendas[agendaCursor]
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -21,7 +25,9 @@ function LeftPannel() {
                         alignItems: 'center',
                     }}
                 >
-                    <span className="main_pannel_top_desc">NEXT AGENDA</span>
+                    <span className="main_pannel_top_desc" onClick={() => {}}>
+                        NEXT AGENDA
+                    </span>
                     <span>
                         <Svg viewBox={nextViewBox} width={'20'} height={'20'}>
                             <Next />
@@ -36,9 +42,22 @@ function LeftPannel() {
                         {mockActive?.agenda_title}
                     </div>
                 </div>
-                <div className="main_pannel_toast">
-                    🔥 결정사항을 정리할 시간이에요!
+                <div>
+                    {mockActive?.setting_time &&
+                    mockActive.agenda_status != 'c' ? (
+                        <Timer
+                            duration={mockActive?.setting_time}
+                            setTwentyPercentLeft={setTwentyPercentLeft}
+                        />
+                    ) : (
+                        <div>loading</div>
+                    )}
                 </div>
+                {twentyPercentLeft && (
+                    <div className="main_pannel_toast">
+                        🔥 결정사항을 정리할 시간이에요!
+                    </div>
+                )}
             </MainPannelBody>
         </MainPannelContainer>
     )

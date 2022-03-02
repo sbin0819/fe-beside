@@ -5,10 +5,10 @@ type Seconds = number
 type Props = {
     autostart?: boolean
     duration: Seconds
-    onEnd: () => any
+    onCallback: (type: string) => any
 }
 
-const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
+const useTimer = ({ autostart = false, duration = 0, onCallback }: Props) => {
     const [isRunning, setRunning] = useState(autostart)
     const [currentTime, setCurrentTime] = useState(Number(new Date()))
     const [endTime, setEndTime] = useState(currentTime + duration * 1000)
@@ -42,6 +42,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         const current = Number(new Date())
         setCurrentTime(current)
         setEndTime(current + duration * 1000)
+        setOverTime(0)
     }, [duration])
 
     const toggle = useCallback(() => {
@@ -78,13 +79,13 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         if (remaining <= 0) {
             setRemainingTime(0)
             // if (
-            //     typeof onEnd === 'function' &&
+            //     typeof onCallback === 'function' &&
             //     remainingTime === 0 &&
             //     duration > 0 &&
             //     overTime == 0 &&
             //     isRunning
             // ) {
-            //     onEnd()
+            //     onCallback()
             // }
             if (overTime > 0) {
                 const over = currentTime - endTime
@@ -94,16 +95,17 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
             if (seconds == soundTiming && !isSoundRun) {
-                onEnd()
                 setIsSoundRun(true)
+                onCallback('left')
             }
         }
-    }, [currentTime, endTime, overTime, onEnd, isSoundRun])
+    }, [currentTime, endTime, overTime, onCallback, isSoundRun])
 
     // stop and clear timeout when useTimer is expired
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
             // stop()
+            onCallback('done')
             setOverTime(1)
         }
         if (overTime) {
@@ -122,7 +124,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         ) {
             interval.current = setTimeout(() => {
                 setCurrentTime(Number(new Date()))
-            }, 67)
+            }, 300)
         }
 
         return () => {
@@ -150,6 +152,7 @@ const useTimer = ({ autostart = false, duration = 0, onEnd }: Props) => {
         milliseconds: (remainingTime - seconds * 1000)
             .toString()
             .padStart(3, '0'),
+        overTime,
         reset,
         isRunning,
         endTime,

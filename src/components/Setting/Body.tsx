@@ -7,7 +7,7 @@ import {
     SubTitleContainer,
     InputInfoContainer,
 } from './style'
-import axios from 'axios'
+import axios from '@axios'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
@@ -85,13 +85,15 @@ function Body({
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-
+    const [remainTime, setRemainTime] = useState(60)
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
                 v.error = true
+                v.message = '입력이 필요합니다.'
             } else {
                 v.error = false
+                v.message = ''
             }
             return [k, v]
         })
@@ -158,44 +160,39 @@ function Body({
     }
 
     const fetchPostMeet = async (
-        sortedAgendas: [string, AgendaWithValidation][]
+        sortedAgendas: [string, AgendaWithValidation][],
+        rm_status: 'y' | 'p'
     ) => {
         try {
             const meetResponse = await axios.post(
-                'http://125.6.40.68/api/meet/',
+                'http://localhost:8000/api/meet/',
                 {
                     meet_title: meet_title.value,
                     meet_date: meet_date.value,
                     participants: participants.value,
                     goal: goal.value,
-                    email: 1, // 임시
-                    meet_status: '0', // default
-                    rm_status: 'N', // default
-                },
-                { withCredentials: true }
+                    meet_status: '0',
+                    rm_status: rm_status, // default
+                }
             )
             // validation 처리 해야함
             const { data } = meetResponse
             const agendas = sortedAgendas.slice().map(([_, form]) => ({
                 meet_id: data.meet_id,
                 agenda_title: form.agenda_title,
-                setting_time: form.setting_time,
+                setting_time: form.setting_time * 60,
                 order_number: form.order_number,
-                agenda_status: '0',
+                agenda_status: form.order_number == 1 ? 'p' : 'y',
             }))
             const agendasReqests = agendas.map((agenda) =>
-                axios.post(
-                    'http://125.6.40.68/api/agenda/',
-                    { ...agenda },
-                    { withCredentials: true }
-                )
+                axios.post('/api/agenda/', { ...agenda })
             )
             // validation 처리
             Promise.all(agendasReqests).then((res) => router.push('/'))
         } catch (error) {}
     }
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e, rm_status: 'y' | 'p') => {
         e.preventDefault()
         const sortedAgendas = Object.entries(agendaForms).sort(
             (a, b) => +a[0] - +b[0]
@@ -204,7 +201,7 @@ function Body({
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
         if (isCheckMeetForm && isAgendaFormsValid) {
-            fetchPostMeet(sortedAgendas)
+            fetchPostMeet(sortedAgendas, rm_status)
         }
     }
 
@@ -235,6 +232,7 @@ function Body({
                                     goal: {
                                         ...prev.goal,
                                         focus: true,
+                                        error: false,
                                         message:
                                             '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
                                     },
@@ -251,12 +249,11 @@ function Body({
                                 }))
                             }}
                         />
-                        {goal?.error ||
-                            (goal?.focus && (
-                                <InputInfoContainer>
-                                    {goal.message}
-                                </InputInfoContainer>
-                            ))}
+                        {(goal?.error || goal?.focus) && (
+                            <InputInfoContainer isInValid={goal?.error}>
+                                {goal.message}
+                            </InputInfoContainer>
+                        )}
                     </div>
                 </GoalConatiner>
                 <div style={{ marginTop: '32px' }}>
@@ -264,19 +261,27 @@ function Body({
                     <AgendaInputs
                         agendaForms={agendaForms}
                         setAgendagendaForms={setAgendagendaForms}
+                        remainTime={remainTime}
+                        setRemainTime={setRemainTime}
                     />
                 </div>
             </div>
             <InfoSection>
-                ✏️ 지금부터 59분안에 회의를 완료할 수 있도록 Agenda를
-                설정해보세요!
+                {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                설정해보세요!`}
             </InfoSection>
             <ButtonContainer>
-                <StyledButton className="cancel_btn">
+                <StyledButton
+                    className="cancel_btn"
+                    onClick={(e) => onSubmit(e, 'y')}
+                >
                     나중에 할래요
                 </StyledButton>
                 {/* 버튼 disabled */}
-                <StyledButton className="submit_btn" onClick={onSubmit}>
+                <StyledButton
+                    className="submit_btn"
+                    onClick={(e) => onSubmit(e, 'p')}
+                >
                     지금 바로 시작해요
                 </StyledButton>
             </ButtonContainer>

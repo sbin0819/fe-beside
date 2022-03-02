@@ -55,7 +55,7 @@ const Container = styled.div`
     }
 `
 function MeetingSummary() {
-    const { agendas } = useMeeting()
+    const { meet, agendas } = useMeeting()
     return (
         <Container>
             <div
@@ -65,9 +65,7 @@ function MeetingSummary() {
                 }}
             >
                 <div className="agenda_order">AGENDA1</div>
-                <div className="agenda_desc">
-                    회의 진행 화면 UI 디자인 시안 발표 및 개발 구현 관련 논의
-                </div>
+                <div className="agenda_desc">{meet.goal}</div>
             </div>
             <div className="summary_progress">
                 <div className="agenda_type">진행중</div>

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { Cookies } from 'react-cookie'
+const cookies = new Cookies()
 
 function useIsHeader() {
     const router = useRouter()
     const { pathname } = router
+    const withOutAuthUrlList = ['/login', '/join']
     const headerOmitList = [
         '/login',
         '/login/join',
@@ -20,7 +23,11 @@ function useIsHeader() {
     }
     const [isHeader, setIsHeader] = useState(false)
     const [descListKey, setDescListKey] = useState('')
+    const [auth, setAuth] = useState('')
     useEffect(() => {
+        if (cookies.get('Authorization') && auth === '') {
+            setAuth(cookies.get('Authorization'))
+        }
         setDescListKey(() => {
             const arr = pathname.split('/')
             if (arr.length > 2) {
@@ -35,7 +42,8 @@ function useIsHeader() {
             setIsHeader(true)
         }
     }, [pathname])
-    return { isHeader, desc: descList[descListKey] ?? '' }
+
+    return { isHeader, auth, desc: descList[descListKey] ?? '' }
 }
 
 export default useIsHeader

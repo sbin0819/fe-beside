@@ -20,12 +20,14 @@ ChartJS.register(
     Tooltip,
     Legend
 )
+
 interface Props {
     ownerShip: number
     participation: number
     efficiency: number
     productivity: number
 }
+
 
 export const data = {
     labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4'],

@@ -105,13 +105,17 @@ function MeetingForm() {
 
     const onPatchAgenda = async () => {
         await axios.patch(
-            `http://125.6.40.68/api/agenda/${activeAgenda?.agenda_id}/`,
+            `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
             {
                 ...activeAgenda,
-                discussion:
-                    areaForm.discussion === '' ? null : areaForm.discussion,
-                decisions:
-                    areaForm.decisions === '' ? null : areaForm.decisions,
+                discussion: areaForm.discussion,
+                decisions: areaForm.decisions,
+            },
+            {
+                headers: {
+                    Authorization:
+                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
+                },
             }
         )
     }
@@ -174,10 +178,14 @@ function MeetingForm() {
                 <Body>
                     <TextArea
                         name="discussion"
-                        value={areaForm?.discussion}
+                        value={areaForm?.discussion || ''}
                         placeholder="논의할 내용에 대해 작성해주세요."
                         onChange={onChange}
-                        row={areaForm?.discussion?.split('\n').length + 1}
+                        row={
+                            areaForm?.discussion === null
+                                ? 1
+                                : areaForm?.discussion?.split('\n').length + 1
+                        }
                     />
                 </Body>
             </MenuContainer>
@@ -193,10 +201,14 @@ function MeetingForm() {
                 <Body>
                     <TextArea
                         name="decisions"
-                        value={areaForm?.decisions}
+                        value={areaForm?.decisions || ''}
                         placeholder="결정된 사항을 작성해주세요"
                         onChange={onChange}
-                        row={areaForm?.decisions?.split('\n').length + 1}
+                        row={
+                            areaForm?.decisions === null
+                                ? 1
+                                : areaForm?.decisions?.split('\n').length + 1
+                        }
                     />
                 </Body>
             </MenuContainer>
