@@ -2,6 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { Cookies } from 'react-cookie'
+
+const cookies = new Cookies()
 
 const CardContainer = styled.div`
     margin: 40px auto;
@@ -47,8 +51,17 @@ interface Meet {
     last_time?: string
 }
 
-const Home = ({ meets }: { meets: Meet[] }) => {
+const Home = () => {
     const router = useRouter()
+    const { data: meets } = useSWR('http://localhost:8000/api/meet/', (url) =>
+        fetch(url, {
+            headers: {
+                Authorization: cookies.get('Authorization'),
+            },
+            credentials: 'include',
+        }).then((res) => res.json())
+    )
+
     return (
         <div>
             <div>
@@ -144,15 +157,15 @@ const Home = ({ meets }: { meets: Meet[] }) => {
     )
 }
 
-export async function getStaticProps() {
-    const resMeet = await fetch(`http://localhost:8000/api/meet/`, {
-        headers: {
-            Authorization:
-                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
-        },
-    })
-    const meets = await resMeet.json()
-    return { props: { meets } }
-}
+// export async function getStaticProps() {
+//     const resMeet = await fetch(`http://localhost:8000/api/meet/`, {
+//         headers: {
+//             Authorization:
+//                 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
+//         },
+//     })
+//     const meets = await resMeet.json()
+//     return { props: { meets } }
+// }
 
 export default Home
