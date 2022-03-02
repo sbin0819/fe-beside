@@ -3,7 +3,6 @@ import { Banner } from '@components/common'
 import Top from './Top'
 import Body from './Body'
 import useSetting from './useSetting'
-import { useState } from 'react'
 
 const Container = styled.div`
     position: relative;

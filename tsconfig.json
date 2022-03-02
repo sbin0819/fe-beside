@@ -23,7 +23,8 @@
             "@api/*": ["api/*"],
             "@common/*": ["components/common/*"],
             "@common": ["components/common"],
-            "@svgs/*": ["svgs/*"]
+            "@svgs/*": ["svgs/*"],
+            "@axios": ["api/axios.ts"]
         },
         "incremental": true
     },
