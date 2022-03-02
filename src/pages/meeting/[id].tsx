@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
+import axios from '@axios'
 // import { useRouter } from 'next/router'
 // import useSWR from 'swr'
 function MeetingPage({ meet, agendas }: { meet: any; agendas: any }) {

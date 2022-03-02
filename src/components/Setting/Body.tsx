@@ -7,7 +7,7 @@ import {
     SubTitleContainer,
     InputInfoContainer,
 } from './style'
-import axios from 'axios'
+import axios from '@axios'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
@@ -174,13 +174,6 @@ function Body({
                     email: 1, // 임시
                     meet_status: '0',
                     rm_status: rm_status, // default
-                },
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization:
-                            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
-                    },
                 }
             )
             // validation 처리 해야함
@@ -193,17 +186,7 @@ function Body({
                 agenda_status: form.order_number == 1 ? 'p' : 'y',
             }))
             const agendasReqests = agendas.map((agenda) =>
-                axios.post(
-                    'http://localhost:8000/api/agenda/',
-                    { ...agenda },
-                    {
-                        withCredentials: true,
-                        headers: {
-                            Authorization:
-                                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
-                        },
-                    }
-                )
+                axios.post('/api/agenda/', { ...agenda })
             )
             // validation 처리
             Promise.all(agendasReqests).then((res) => router.push('/'))
