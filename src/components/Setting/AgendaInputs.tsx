@@ -183,10 +183,10 @@ function AgendaInputs({
             alert('입력하지 않은 필드가 있습니다.')
             return
         }
-        if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
-            alert('허용 시간을 초과 했습니다.')
-            return
-        }
+        // if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
+        //     alert('허용 시간을 초과 했습니다.')
+        //     return
+        // }
 
         formOrderRef.current = Object.keys(agendaForms).length + 1
         setAgendagendaForms((prev) => ({
@@ -229,9 +229,9 @@ function AgendaInputs({
             [order_number]: {
                 ...prev[order_number],
                 validation: {
-                    ...prev[order_number].validation,
+                    ...prev[order_number]?.validation,
                     [name]: {
-                        ...prev[order_number].validation[name],
+                        ...prev[order_number]?.validation[name],
                         focus: false,
                         error: false,
                         message: '',
@@ -243,12 +243,12 @@ function AgendaInputs({
 
     // 허용된 시간이 초과 되고 다시 input을 작성하기 위한 로직
     useEffect(() => {
-        if (agendaForms[focusedOrder]?.validation.setting_time.error) {
+        if (agendaForms[focusedOrder]?.validation?.setting_time?.error) {
             agendaForms[focusedOrder].setting_time = 0
             agendaForms[focusedOrder].validation.setting_time.error = false
             agendaForms[focusedOrder].validation.setting_time.message = ''
         }
-    }, [agendaForms[focusedOrder]?.validation.setting_time.error])
+    }, [agendaForms[focusedOrder]?.validation?.setting_time?.error])
 
     return (
         <>
@@ -281,17 +281,17 @@ function AgendaInputs({
                                             onBlur(e, form.order_number)
                                         }}
                                     />
-                                    {(form.validation.agenda_title?.error ||
-                                        form.validation.agenda_title
+                                    {(form.validation?.agenda_title?.error ||
+                                        form.validation?.agenda_title
                                             ?.focus) && (
                                         <InputInfoContainer
                                             isInValid={
-                                                form.validation.agenda_title
+                                                form.validation?.agenda_title
                                                     .error
                                             }
                                         >
                                             {
-                                                form.validation.agenda_title
+                                                form.validation?.agenda_title
                                                     .message
                                             }
                                         </InputInfoContainer>
@@ -348,17 +348,17 @@ function AgendaInputs({
                                             }}
                                         />
                                     </div>
-                                    {(form.validation.setting_time?.error ||
-                                        form.validation.setting_time
+                                    {(form.validation?.setting_time?.error ||
+                                        form.validation?.setting_time
                                             ?.focus) && (
                                         <InputInfoContainer3
                                             isInValid={
-                                                form.validation.setting_time
+                                                form.validation?.setting_time
                                                     .error
                                             }
                                         >
                                             {
-                                                form.validation.setting_time
+                                                form.validation?.setting_time
                                                     .message
                                             }
                                         </InputInfoContainer3>
