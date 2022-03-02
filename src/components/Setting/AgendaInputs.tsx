@@ -183,10 +183,10 @@ function AgendaInputs({
             alert('입력하지 않은 필드가 있습니다.')
             return
         }
-        if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
-            alert('허용 시간을 초과 했습니다.')
-            return
-        }
+        // if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
+        //     alert('허용 시간을 초과 했습니다.')
+        //     return
+        // }
 
         formOrderRef.current = Object.keys(agendaForms).length + 1
         setAgendagendaForms((prev) => ({

@@ -43,15 +43,15 @@ function LeftPannel() {
                     </div>
                 </div>
                 <div>
-                    {/* {mockActive?.setting_time &&
+                    {mockActive?.setting_time &&
                     mockActive.agenda_status != 'c' ? (
                         <Timer
-                            duration={10}
+                            duration={mockActive?.setting_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (
                         <div>loading</div>
-                    )} */}
+                    )}
                 </div>
                 {twentyPercentLeft && (
                     <div className="main_pannel_toast">
