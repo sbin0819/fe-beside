@@ -171,7 +171,6 @@ function Body({
                     meet_date: meet_date.value,
                     participants: participants.value,
                     goal: goal.value,
-                    email: 1, // 임시
                     meet_status: '0',
                     rm_status: rm_status, // default
                 }
