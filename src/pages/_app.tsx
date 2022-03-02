@@ -9,12 +9,17 @@ import { SWRConfig } from 'swr'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const app = ({ Component, pageProps }: AppProps) => {
-    const { isHeader, desc } = useHeaderControl()
+    const { isHeader, desc, auth } = useHeaderControl()
     return (
         <SWRConfig
             value={{
                 fetcher: (url: string) =>
-                    fetch(url).then((response) => response.json()),
+                    fetch(url, {
+                        headers: {
+                            Authorization: auth ? auth : '',
+                        },
+                        credentials: 'include',
+                    }).then((response) => response.json()),
             }}
         >
             <Head>
