@@ -56,7 +56,6 @@ const Container = styled.div`
 `
 function MeetingSummary() {
     const { meet, agendas } = useMeeting()
-    console.log(meet)
     return (
         <Container>
             <div
