@@ -1,6 +1,31 @@
 import React from 'react'
 
+import {
+    Chart as ChartJS,
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+
 import { Radar } from 'react-chartjs-2'
+
+ChartJS.register(
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend
+)
+interface Props {
+    ownerShip: number
+    participation: number
+    efficiency: number
+    productivity: number
+}
 
 export const data = {
     labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4'],

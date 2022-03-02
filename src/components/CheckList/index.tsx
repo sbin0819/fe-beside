@@ -194,6 +194,74 @@ interface Props {
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
     const [checklistReslut, setChecklistResult] = useState(true)
+    // 오너십 3
+    const [ownerShipCheck, setOwnerShipCheck] = useState([])
+    // 참여도 2
+    const [participationCheck, setParticipationCheck] = useState([])
+    const [efficiencyCheck, setEfficiencyCheck] = useState([])
+    const [productivityCheck, setProductivityCheck] = useState([])
+
+    const [ownerShip, setOwnerShip] = useState(null)
+    const [participation, setParticipation] = useState(null)
+    const [efficiency, setEfficiency] = useState(null)
+    const [productivity, setProductivity] = useState(null)
+
+    const ownerShipHandler = (checked, id) => {
+        if (checked) {
+            setOwnerShipCheck([...ownerShipCheck, id])
+        } else {
+            setOwnerShipCheck(ownerShipCheck.filter((el) => el !== id))
+        }
+    }
+    const participatioHandler = (checked, id) => {
+        if (checked) {
+            setParticipationCheck([...participationCheck, id])
+        } else {
+            setParticipationCheck(participationCheck.filter((el) => el !== id))
+        }
+    }
+    const efficiencyHandler = (checked, id) => {
+        if (checked) {
+            setEfficiencyCheck([...efficiencyCheck, id])
+        } else {
+            setEfficiencyCheck(efficiencyCheck.filter((el) => el !== id))
+        }
+    }
+    const productivityHandler = (checked, id) => {
+        if (checked) {
+            setProductivityCheck([...productivityCheck, id])
+        } else {
+            setProductivityCheck(productivityCheck.filter((el) => el !== id))
+        }
+    }
+
+    const changeClick = () => {
+        setOwnerShip(ownerShipCheck.length * 10)
+        setParticipation(participationCheck.length * 15)
+        setEfficiency(efficiencyCheck.length * 15)
+        setProductivity(productivityCheck.length * 10)
+        console.log(
+            'ownerShipCheck',
+            ownerShipCheck,
+            ownerShipCheck.length * 10
+        )
+        console.log(
+            'participationCheck',
+            participationCheck,
+            participationCheck.length * 15
+        )
+        console.log(
+            'efficiencyCheck',
+            efficiencyCheck,
+            efficiencyCheck.length * 15
+        )
+        console.log(
+            'productivityCheck',
+            productivityCheck,
+            productivityCheck.length * 10
+        )
+    }
+
     useOnClickOutside(ref, () => {
         onClose()
     })
@@ -224,81 +292,233 @@ function CheckListModal({ onClose }: Props) {
                                         className="checkcomm"
                                         type="checkbox"
                                         readOnly
-                                        value=""
-                                        checked
+                                        id="check1"
+                                        onChange={(e) => {
+                                            ownerShipHandler(
+                                                e.currentTarget.checked,
+                                                'check1'
+                                            )
+                                        }}
+                                        checked={
+                                            ownerShipCheck.includes('check1')
+                                                ? true
+                                                : false
+                                        }
                                     />
                                     나는, 회의에서 무엇에 대한 결정을
                                     내려야하는지 명확히 알고 있었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check2"
+                                        onChange={(e) => {
+                                            ownerShipHandler(
+                                                e.currentTarget.checked,
+                                                'check2'
+                                            )
+                                        }}
+                                        checked={
+                                            ownerShipCheck.includes('check2')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     나는, 이 회의에서 목적에 부합하는 이야기
                                     흐름을 유지되도록 노력했어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check3"
+                                        onChange={(e) => {
+                                            ownerShipHandler(
+                                                e.currentTarget.checked,
+                                                'check3'
+                                            )
+                                        }}
+                                        checked={
+                                            ownerShipCheck.includes('check3')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     나는, 모든 참여자가 회의 목적이 무엇인지
                                     알게하려고 노력했어요.
                                 </label>
                             </div>
                         </div>
+                        {/* ************** 두번째 진단 ************ */}
                         <div style={{ marginTop: '36px' }}>
                             <div className="checklist_title">
                                 참여자들의 참여도는? (20점)
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check4"
+                                        onChange={(e) => {
+                                            participatioHandler(
+                                                e.currentTarget.checked,
+                                                'check4'
+                                            )
+                                        }}
+                                        checked={
+                                            participationCheck.includes(
+                                                'check4'
+                                            )
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     참여자들은, 경직되지 않은 분위기에서 회의에
                                     참여할 수 있었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check5"
+                                        onChange={(e) => {
+                                            participatioHandler(
+                                                e.currentTarget.checked,
+                                                'check5'
+                                            )
+                                        }}
+                                        checked={
+                                            participationCheck.includes(
+                                                'check5'
+                                            )
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     참여자들은, 모두 골고루 발언의 기회를
                                     가졌어요.
                                 </label>
                             </div>
                         </div>
+                        {/* *********** 3 번째 진단 *********** */}
                         <div style={{ marginTop: '36px' }}>
                             <div className="checklist_title">
                                 나의 오너십(Ownership)은? (30점)
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check6"
+                                        onChange={(e) => {
+                                            efficiencyHandler(
+                                                e.currentTarget.checked,
+                                                'check6'
+                                            )
+                                        }}
+                                        checked={
+                                            efficiencyCheck.includes('check6')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     회의가, 제 시간에 결과물을 도출하고
                                     끝났어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check7"
+                                        onChange={(e) => {
+                                            efficiencyHandler(
+                                                e.currentTarget.checked,
+                                                'check7'
+                                            )
+                                        }}
+                                        checked={
+                                            efficiencyCheck.includes('check7')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     회의가, 대체로 맴돌거나 주제에서 벗어나지
                                     않고 진행되었어요.
                                 </label>
                             </div>
                         </div>
+                        {/* ************ 4 번째 진단 ************* */}
                         <div style={{ marginTop: '36px' }}>
                             <div className="checklist_title">
                                 참여자들의 참여도는? (30점)
                             </div>
                             <div className="checklist">
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check8"
+                                        onChange={(e) => {
+                                            productivityHandler(
+                                                e.currentTarget.checked,
+                                                'check8'
+                                            )
+                                        }}
+                                        checked={
+                                            productivityCheck.includes('check8')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     결정사항(또는 next action item)이
                                     도출되었어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check9"
+                                        onChange={(e) => {
+                                            productivityHandler(
+                                                e.currentTarget.checked,
+                                                'check9'
+                                            )
+                                        }}
+                                        checked={
+                                            productivityCheck.includes('check9')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     결정사항의 실행 주체가 정해졌어요.
                                 </label>
                                 <label>
-                                    <input type="checkbox" readOnly value="" />
+                                    <input
+                                        type="checkbox"
+                                        readOnly
+                                        id="check0"
+                                        onChange={(e) => {
+                                            productivityHandler(
+                                                e.currentTarget.checked,
+                                                'check0'
+                                            )
+                                        }}
+                                        checked={
+                                            productivityCheck.includes('check0')
+                                                ? true
+                                                : false
+                                        }
+                                    />
                                     결정사항의 실행 일정이 정해졌어요.
                                 </label>
                             </div>
                         </div>
                     </CheckListContainer>
                     <ResultContainer>
-                        {!checklistReslut ? (
+                        {checklistReslut ? (
                             <CheckListReslutBeforeContainer>
                                 <div className="result_info">
                                     Checklist 선택이 완료되었다면 아래 버튼을
@@ -307,7 +527,8 @@ function CheckListModal({ onClose }: Props) {
                                 <button
                                     className="result_btn"
                                     onClick={() => {
-                                        setChecklistResult(true)
+                                        setChecklistResult(false)
+                                        changeClick()
                                     }}
                                 >
                                     자가진단 결과보기
@@ -324,7 +545,7 @@ function CheckListModal({ onClose }: Props) {
                                     </p>
                                 </div>
                                 <ChartContainer>
-                                    {/* <RadarChart /> */}
+                                    <RadarChart />
                                 </ChartContainer>
                                 <div className="checklist_after_footer">
                                     <div>
