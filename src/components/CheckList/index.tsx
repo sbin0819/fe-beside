@@ -206,6 +206,8 @@ function CheckListModal({ onClose }: Props) {
     const [participation, setParticipation] = useState(null)
     const [efficiency, setEfficiency] = useState(null)
     const [productivity, setProductivity] = useState(null)
+    const [result, setResult] = useState([])
+    const [check, setCheck] = useState(false)
 
     const ownerShipHandler = (checked, id) => {
         if (checked) {
@@ -236,33 +238,20 @@ function CheckListModal({ onClose }: Props) {
         }
     }
 
+    let resultdatas: Array<number> = [
+        ownerShip,
+        participation,
+        efficiency,
+        productivity,
+    ]
+
     const changeClick = () => {
         setOwnerShip(ownerShipCheck.length * 10)
         setParticipation(participationCheck.length * 15)
         setEfficiency(efficiencyCheck.length * 15)
         setProductivity(productivityCheck.length * 10)
-        console.log(
-            'ownerShipCheck',
-            ownerShipCheck,
-            ownerShipCheck.length * 10
-        )
-        console.log(
-            'participationCheck',
-            participationCheck,
-            participationCheck.length * 15
-        )
-        console.log(
-            'efficiencyCheck',
-            efficiencyCheck,
-            efficiencyCheck.length * 15
-        )
-        console.log(
-            'productivityCheck',
-            productivityCheck,
-            productivityCheck.length * 10
-        )
     }
-
+    const resultdata = [ownerShip, participation, efficiency, productivity]
 
     useOnClickOutside(ref, () => {
         onClose()
@@ -300,6 +289,8 @@ function CheckListModal({ onClose }: Props) {
                                                 e.currentTarget.checked,
                                                 'check1'
                                             )
+                                            setCheck(check ? false : true)
+                                            console.log(check)
                                         }}
                                         checked={
                                             ownerShipCheck.includes('check1')
@@ -320,6 +311,8 @@ function CheckListModal({ onClose }: Props) {
                                                 e.currentTarget.checked,
                                                 'check2'
                                             )
+                                            setCheck(check ? false : true)
+                                            console.log(check)
                                         }}
                                         checked={
                                             ownerShipCheck.includes('check2')
@@ -327,8 +320,14 @@ function CheckListModal({ onClose }: Props) {
                                                 : false
                                         }
                                     />
-                                    나는, 이 회의에서 목적에 부합하는 이야기
-                                    흐름을 유지되도록 노력했어요.
+                                    <label
+                                        style={{
+                                            color: check ? '#87878b' : 'black',
+                                        }}
+                                    >
+                                        나는, 이 회의에서 목적에 부합하는 이야기
+                                        흐름을 유지되도록 노력했어요.
+                                    </label>
                                 </label>
                                 <label>
                                     <input
@@ -355,7 +354,7 @@ function CheckListModal({ onClose }: Props) {
                         {/* ************** 두번째 진단 ************ */}
                         <div style={{ marginTop: '36px' }}>
                             <div className="checklist_title">
-                                참여자들의 참여도는? (20점)
+                                참여자들의 참여도는? (30점)
                             </div>
                             <div className="checklist">
                                 <label>
@@ -543,11 +542,15 @@ function CheckListModal({ onClose }: Props) {
                                         이번 회의 자가진단 결과는?
                                     </p>
                                     <p className="checklist_after_header_description">
-                                        75점
+                                        {ownerShip +
+                                            participation +
+                                            efficiency +
+                                            productivity}
+                                        점
                                     </p>
                                 </div>
                                 <ChartContainer>
-                                    <RadarChart />
+                                    <RadarChart data={resultdatas} />
                                 </ChartContainer>
                                 <div className="checklist_after_footer">
                                     <div>

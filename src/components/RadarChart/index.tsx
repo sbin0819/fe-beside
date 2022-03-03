@@ -26,8 +26,8 @@ interface Props {
     participation: number
     efficiency: number
     productivity: number
+    // data: Array<number>
 }
-
 
 export const data = {
     labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4'],
@@ -38,7 +38,7 @@ export const data = {
                 display: false,
             },
             label: '# of Votes',
-            data: [20, 10, 10, 30],
+            data: [30, 30, 30, 30],
             backgroundColor: 'rgba(61, 109, 184, 0.4)',
             borderColor: '#3D6DB8',
             borderWidth: 1,
@@ -52,6 +52,28 @@ const options = {
         },
     },
 }
-export default function App() {
-    return <Radar data={data} options={options} />
+export default function App(Props) {
+    console.log('reusltdata', Props.data)
+    return (
+        <Radar
+            // data={data}
+            data={{
+                labels: ['오너십', '참여도', '오너십3', '참여도4'],
+
+                datasets: [
+                    {
+                        // legend: {
+                        //     display: false,
+                        // },
+                        label: '# of Votes',
+                        data: Props.data,
+                        backgroundColor: 'rgba(61, 109, 184, 0.4)',
+                        borderColor: '#3D6DB8',
+                        borderWidth: 1,
+                    },
+                ],
+            }}
+            options={options}
+        />
+    )
 }
