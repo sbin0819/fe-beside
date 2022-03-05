@@ -1,12 +1,9 @@
 import useTimer from '@hooks/useTimer'
-import axios from 'axios'
-import { duration } from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import useSWR from 'swr'
 import useSound from 'use-sound'
 import Bell from '@components/Bell'
-import { useRouter } from 'next/router'
+import axios from '@axios'
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -77,16 +74,17 @@ const Container = styled.div`
 `
 
 function AnimationTimer({
+    agendaId,
     duration,
     progress,
     setTwentyPercentLeft,
 }: {
+    agendaId: number | string
     duration: number
     progress?: number
     setTwentyPercentLeft: any
 }) {
     const initRef = useRef(-1)
-    const router = useRouter()
     const [isSound, setIsSound] = useState(false)
     const [play, { stop: soundStop }] = useSound('/sounds/alaram.mp3', {
         volume: 0.2,
@@ -104,8 +102,8 @@ function AnimationTimer({
         remainingTime,
     } = useTimer({
         autostart: true,
-        duration: 10 - 1,
-        progress,
+        duration: duration - 1,
+        progress: progress ? progress * 1000 - 1000 : 0,
         onCallback: (type: 'done' | 'left') => {
             if (type == 'done') {
                 return setIsSound(true)
@@ -118,9 +116,15 @@ function AnimationTimer({
 
     const onPatchAgenda = async (time) => {
         await axios.patch(
-            `http://localhost:8000/api/agenda/${router.query.id}/`,
+            `http://localhost:8000/api/agenda/${agendaId}/`,
             {
-                progress_time: time <= duration ? time : duration,
+                progress_time: time,
+            },
+            {
+                headers: {
+                    Authorization:
+                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InNiaW5oYTEyM0BnbWFpbC5jb20iLCJleHAiOjE2NDcwNzU4ODYsImVtYWlsIjoic2JpbmhhMTIzQGdtYWlsLmNvbSJ9.ZtkN5yA_CRRYjdy2MZLIQhShKZBXgCatdv9VT8fC6qg',
+                },
             }
         )
     }
@@ -152,7 +156,9 @@ function AnimationTimer({
 
     useEffect(() => {
         if (initRef.current > -1) {
-            onPatchAgenda(duration - getRemainTime())
+            onPatchAgenda(
+                duration - getRemainTime() + Math.round(overTime / 1000)
+            )
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')

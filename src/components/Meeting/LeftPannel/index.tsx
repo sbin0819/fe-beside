@@ -112,6 +112,7 @@ function LeftPannel() {
                     ) : activeAgenda?.setting_time &&
                       activeAgenda?.agenda_status == 'p' ? (
                         <Timer
+                            agendaId={activeAgenda?.agenda_id}
                             duration={activeAgenda?.setting_time}
                             progress={activeAgenda?.progress_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
