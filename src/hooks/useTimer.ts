@@ -82,23 +82,18 @@ const useTimer = ({
     // re-calculate remaining time whenever currentTime or endTime is updated
     useEffect(() => {
         const remaining = endTime - currentTime - progress
+        // progress 와 duration 이 같을 겨우 오버타임 강제함
+        if (progress == duration * 1000) {
+            const over = currentTime + progress - endTime
+            setOverTime(over)
+        }
         if (remaining <= 0) {
             setRemainingTime(0)
-            // if (
-            //     typeof onCallback === 'function' &&
-            //     remainingTime === 0 &&
-            //     duration > 0 &&
-            //     overTime == 0 &&
-            //     isRunning
-            // ) {
-            //     onCallback()
-            // }
             if (overTime > 0) {
                 const over = currentTime + progress - endTime
                 setOverTime(over)
             }
         } else {
-            //
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
             if (seconds == soundTiming && !isSoundRun) {
@@ -112,11 +107,12 @@ const useTimer = ({
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
             const remaining = endTime - currentTime - progress
-            if (progress <= duration && remaining <= 0) {
-                onCallback('done')
-            }
+            // if (progress <= duration && remaining <= 0) {
+            //     onCallback('done')
+            // }
             setOverTime(1)
         }
+
         if (overTime) {
             // 1시간 초과시 stop
             stop()
