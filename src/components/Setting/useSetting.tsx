@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { AgendaState, MeetState } from '@store/meeting/meetingSlice'
 import { nanoid } from '@reduxjs/toolkit'
-import { agendasAPI } from '@api/agenda'
+import { agendasSWR } from '@api/agenda'
 interface Form {
     value: string
     error: boolean
@@ -58,7 +58,7 @@ function useSetting() {
     const { data: meetData } = useSWR<MeetState>(
         id ? `http://localhost:8000/api/meet/?meet_id=${id.toString()}` : null
     )
-    const { agendasData } = agendasAPI(id)
+    const { agendasData } = agendasSWR(id)
     const [meetForm, setMeetForm] = useState<MeetForm>({
         meet_title: { value: '', error: false, message: '', focus: false },
         meet_date: { value: '', error: false, message: '', focus: false },

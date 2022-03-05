@@ -4,7 +4,7 @@ import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
 import useSWR from 'swr'
-import { agendasAPI } from '@api/agenda'
+import { agendasSWR } from '@api/agenda'
 // import { useRouter } from 'next/router'
 // import useSWR from 'swr'
 function MeetingPage() {
@@ -15,7 +15,7 @@ function MeetingPage() {
         id ? `http://localhost:8000/api/meet/?meet_id=${id}` : null
     )
 
-    const { agendasData } = agendasAPI(id)
+    const { agendasData } = agendasSWR(id)
 
     const { setMeeting, ressetMeeting } = useMeetingActions()
     useEffect(() => {

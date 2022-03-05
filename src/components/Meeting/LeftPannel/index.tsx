@@ -11,7 +11,7 @@ import axios from '@axios'
 import { useEffect } from 'react'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
-import { agendasAPI } from '@api/agenda'
+import { agendasSWR } from '@api/agenda'
 import { useRouter } from 'next/router'
 
 function LeftPannel() {
@@ -20,7 +20,7 @@ function LeftPannel() {
     const { setAgendaCursor } = useMeetingActions()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
     const [activeIdx, setActiveIdx] = useState(0)
-    const { agendaMutate } = agendasAPI(router.query.id)
+    const { agendaMutate } = agendasSWR(router.query.id)
     const [activeAgenda, setActiveAgenda] = useState<AgendaState>({})
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
@@ -30,14 +30,16 @@ function LeftPannel() {
                     agenda_status: 'c',
                 }
             )
-            const idx = agendas.findIndex((el) => el.agenda_status == 'y')
-            const nextAgenda = agendas[idx]
-            await axios.patch(
-                `http://localhost:8000/api/agenda/${nextAgenda?.agenda_id}/`,
-                {
-                    agenda_status: 'p',
-                }
-            )
+            if (activeIdx + 1 <= agendas.length) {
+                const idx = agendas.findIndex((el) => el.agenda_status == 'y')
+                const nextAgenda = agendas[idx]
+                await axios.patch(
+                    `http://localhost:8000/api/agenda/${nextAgenda?.agenda_id}/`,
+                    {
+                        agenda_status: 'p',
+                    }
+                )
+            }
             setActiveIdx((prev) => prev + 1)
             agendaMutate()
         }
@@ -52,8 +54,12 @@ function LeftPannel() {
 
     useEffect(() => {
         if (Array.isArray(agendas)) {
-            setActiveAgenda(agendas[activeIdx])
-            setAgendaCursor({ agendaCursor: activeIdx })
+            if (activeIdx !== -1) {
+                setActiveAgenda(agendas[activeIdx])
+                setAgendaCursor({ agendaCursor: activeIdx })
+            } else {
+                setActiveAgenda(agendas[agendas.length - 1])
+            }
         }
     }, [agendas, activeIdx])
 
@@ -72,7 +78,9 @@ function LeftPannel() {
                         cursor: 'pointer',
                     }}
                     onClick={() => {
-                        onEndAgenda()
+                        if (activeIdx + 1 <= agendas.length) {
+                            onEndAgenda()
+                        }
                     }}
                 >
                     <span className="main_pannel_top_desc">NEXT AGENDA</span>
@@ -86,7 +94,8 @@ function LeftPannel() {
             <MainPannelBody>
                 <div className="main_pannel_top">
                     <div className="main_pannel_body_progress">
-                        AGENDA {activeIdx + 1}
+                        AGENDA{' '}
+                        {activeIdx !== -1 ? activeIdx + 1 : agendas.length}
                     </div>
                     <div className="main_pannel_body_sub_title">
                         {activeAgenda?.agenda_title}

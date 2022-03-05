@@ -14,6 +14,7 @@ const Container = styled.div`
     font-style: normal;
     line-height: normal;
     letter-spacing: normal;
+    width: 656px;
 `
 
 function MeetingBody() {

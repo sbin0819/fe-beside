@@ -7,6 +7,8 @@ import useMeetingActions from '@store/meeting/useMeetingActions'
 const MenulSteps = styled.div`
     display: flex;
     margin: 28px 0 32px;
+    width: 656px;
+    overflow: scroll;
     gap: 10px;
     .menu_step {
         display: flex;
