@@ -55,6 +55,7 @@ export const meetingSlice = createSlice({
                 participants: '',
             }
             state.agendas = []
+            state.agendaCursor = 0
         },
         setMeeting: (state, { payload: { meet, agendas } }) => {
             state.meet = meet

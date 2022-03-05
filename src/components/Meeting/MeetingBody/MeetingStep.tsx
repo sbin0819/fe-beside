@@ -25,20 +25,27 @@ const MenulSteps = styled.div`
         background: #384c6c;
         color: #fff;
     }
+    .menu_step.disabled {
+        border: solid 1px #f1f1f1;
+        color: #d6d6d7;
+    }
 `
 
 function MeetingStep() {
     const { agendas, agendaCursor } = useMeeting()
     const { setAgendaCursor } = useMeetingActions()
+
     return (
         <MenulSteps>
             {agendas.map((data, idx) => (
                 <div
                     className={`menu_step ${
                         agendaCursor === idx ? 'active' : ''
-                    }`}
+                    } ${data.agenda_status === 'y' && 'disabled'}`}
                     key={data.agenda_id}
-                    onClick={() => setAgendaCursor({ agendaCursor: idx })}
+                    onClick={() => {
+                        setAgendaCursor({ agendaCursor: idx })
+                    }}
                 >
                     AGENDA {idx + 1}
                 </div>
