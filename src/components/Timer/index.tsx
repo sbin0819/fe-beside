@@ -121,7 +121,7 @@ function AnimationTimer({
         await axios.patch(
             `http://localhost:8000/api/agenda/${router.query.id}/`,
             {
-                progress_time: time,
+                progress_time: time <= duration ? time : duration,
             }
         )
     }
@@ -151,17 +151,13 @@ function AnimationTimer({
         var water = document.getElementById('water')
         var cnt = document.getElementById('count')
         cnt.innerHTML = '100%'
-        // setSoundEffect(new Audio('/sounds/alaram.mp3'))
-
         water.style.transform = `translate(0,${0}%)`
         initRef.current += 1
     }, [])
 
-    // timer ui
-
     useEffect(() => {
         if (initRef.current > -1) {
-            // onPatchAgenda(duration - getRemainTime())
+            onPatchAgenda(duration - getRemainTime())
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
