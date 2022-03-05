@@ -23,7 +23,7 @@ const useTimer = ({
     const interval = useRef<any>(null)
 
     const soundTiming = Math.floor(duration * 0.2)
-    const [isSoundRun, setIsSoundRun] = useState(false)
+    // const [isSoundRun, setIsSoundRun] = useState(false)
 
     const start = useCallback(() => {
         if (!isRunning && remainingTime > 0) {
@@ -83,7 +83,7 @@ const useTimer = ({
     useEffect(() => {
         const remaining = endTime - currentTime - progress
         // progress 와 duration 이 같을 겨우 오버타임 강제함
-        if (progress == duration * 1000) {
+        if (duration !== 0 && progress !== 0 && progress == duration * 1000) {
             const over = currentTime + progress - endTime
             setOverTime(over)
         }
@@ -96,12 +96,13 @@ const useTimer = ({
         } else {
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
-            if (seconds == soundTiming && !isSoundRun) {
-                setIsSoundRun(true)
-                onCallback('left')
-            }
+            // if (seconds == soundTiming && !isSoundRun) {
+            //     setIsSoundRun(true)
+            //     onCallback('left')
+            // }
         }
-    }, [currentTime, endTime, overTime, onCallback, isSoundRun])
+        //isSoundRun
+    }, [currentTime, endTime, overTime, onCallback])
 
     // stop and clear timeout when useTimer is expired
     useEffect(() => {

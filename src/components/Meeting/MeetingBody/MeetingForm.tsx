@@ -114,7 +114,6 @@ function MeetingForm() {
         await axios.patch(
             `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
             {
-                ...activeAgenda,
                 discussion: areaForm.discussion,
                 decisions: areaForm.decisions,
             }

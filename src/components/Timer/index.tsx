@@ -1,5 +1,5 @@
 import useTimer from '@hooks/useTimer'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import useSound from 'use-sound'
 import Bell from '@components/Bell'
@@ -105,28 +105,19 @@ function AnimationTimer({
         duration: duration - 1,
         progress: progress ? progress * 1000 - 1000 : 0,
         onCallback: (type: 'done' | 'left') => {
-            if (type == 'done') {
-                return setIsSound(true)
-            }
-            if (type == 'left') {
-                return setTwentyPercentLeft(true)
-            }
+            // if (type == 'done') {
+            //     return setIsSound(true)
+            // }
+            // if (type == 'left') {
+            //     return setTwentyPercentLeft(true)
+            // }
         },
     })
 
     const onPatchAgenda = async (time) => {
-        await axios.patch(
-            `http://localhost:8000/api/agenda/${agendaId}/`,
-            {
-                progress_time: time,
-            },
-            {
-                headers: {
-                    Authorization:
-                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InNiaW5oYTEyM0BnbWFpbC5jb20iLCJleHAiOjE2NDcwNzU4ODYsImVtYWlsIjoic2JpbmhhMTIzQGdtYWlsLmNvbSJ9.ZtkN5yA_CRRYjdy2MZLIQhShKZBXgCatdv9VT8fC6qg',
-                },
-            }
-        )
+        await axios.patch(`http://localhost:8000/api/agenda/${agendaId}/`, {
+            progress_time: time,
+        })
     }
 
     const getRemainTime = () => {
@@ -144,6 +135,10 @@ function AnimationTimer({
                   Math.floor(
                       (Math.round(remainingTime / 1000) / duration) * 100
                   )
+    }
+
+    const isRemainTwentyPercent = () => {
+        return getRemainTime() / duration < 0.2
     }
 
     useEffect(() => {
@@ -168,26 +163,29 @@ function AnimationTimer({
                 document.querySelector<HTMLElement>('.water_wave_front')
             // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
             // cnt.innerHTML = `${formattedMinutes}분`
-            const parsedMinutes =
-                minutes.length === 2 && minutes[0] == '0'
-                    ? +minutes[1] + 1
-                    : +minutes[0] + 1
-            cnt.innerHTML = '' + parsedMinutes + '분'
+            const parseMinutes = parseInt(minutes) + 1
+            cnt.innerHTML = '' + parseMinutes + '분'
+
+            if (progress == duration && duration !== 0 && progress !== 0) {
+                setIsSound(true)
+            }
 
             if (remainingTime != 0) {
                 box.style.background = '#020438'
                 cnt.style.color = '#fff'
                 waveFront.style.display = 'block'
                 waveBack.style.display = 'block'
-                if (+increasePercent() > 20 && !isUnderMinute()) {
+                if (isRemainTwentyPercent() && !isUnderMinute()) {
                     water.style.background = '#ffc848'
                     waveFront.style.fill = '#ffc848'
                     waveBack.style.fill = '#ffe9b6'
+                    setTwentyPercentLeft(true)
                 } else if (isUnderMinute()) {
                     water.style.background = '#f76f58'
                     waveFront.style.fill = '#f76f58'
                     waveBack.style.fill = '#fcd3bc'
                     cnt.innerHTML = '' + seconds + '초'
+                    setTwentyPercentLeft(true)
                 } else {
                     water.style.background = '#5cbcad'
                     waveFront.style.fill = '#5cbcad'
@@ -213,7 +211,9 @@ function AnimationTimer({
                         : `${overSeconds}초`
             }
         }
-        return () => {}
+        return () => {
+            soundStop()
+        }
     }, [duration, seconds, minutes, overSeconds])
 
     //overTime이 1이 넘어가면 알람을 울린다
@@ -226,7 +226,7 @@ function AnimationTimer({
             play()
             timeout = setTimeout(() => {
                 setIsSound(false)
-            }, 6000)
+            }, 3000)
         }
         return () => clearTimeout(timeout)
     }, [isSound])

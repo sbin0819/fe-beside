@@ -2,28 +2,21 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
-import axios from '@axios'
-import useSWR from 'swr'
+import { meetSWR } from '@api/meet'
 import { agendasSWR } from '@api/agenda'
-// import { useRouter } from 'next/router'
-// import useSWR from 'swr'
 function MeetingPage() {
     const router = useRouter()
     const { id } = router.query
 
-    const { data: meet } = useSWR(
-        id ? `http://localhost:8000/api/meet/?meet_id=${id}` : null
-    )
-
+    const { meetData } = meetSWR(id)
     const { agendasData } = agendasSWR(id)
-
     const { setMeeting, ressetMeeting } = useMeetingActions()
     useEffect(() => {
-        if (meet?.length > 0 && agendasData?.length > 0) {
+        if (meetData?.length > 0 && agendasData?.length > 0) {
             ressetMeeting()
-            setMeeting({ meet: meet[0], agendas: agendasData })
+            setMeeting({ meet: meetData[0], agendas: agendasData })
         }
-    }, [meet, agendasData])
+    }, [meetData, agendasData])
     return <Meeting />
 }
 
