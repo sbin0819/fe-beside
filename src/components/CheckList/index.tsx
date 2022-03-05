@@ -178,6 +178,7 @@ const FooterContainer = styled.div`
     justify-content: flex-end;
     gap: 12px;
     button {
+        cursor: pointer;
         width: 120px;
         flex-grow: 0;
         display: flex;
@@ -187,6 +188,14 @@ const FooterContainer = styled.div`
         border: solid 1px #d6d6d7;
         background-color: #fff;
     }
+    .success-btn {
+        color: #fff;
+        background-color: #0c254c;
+        cursor: default;
+    }
+`
+const LabelColor = styled.label<{ textColors?: boolean }>`
+    color: ${(props) => (props.textColors ? 'red' : 'blue')};
 `
 interface Props {
     onClose: () => void
@@ -195,6 +204,7 @@ function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
 
     const [checklistReslut, setChecklistResult] = useState(true)
+    const [disable, setDisable] = useState(false)
     // 오너십 3
     const [ownerShipCheck, setOwnerShipCheck] = useState([])
     // 참여도 2
@@ -206,7 +216,6 @@ function CheckListModal({ onClose }: Props) {
     const [participation, setParticipation] = useState(null)
     const [efficiency, setEfficiency] = useState(null)
     const [productivity, setProductivity] = useState(null)
-    const [result, setResult] = useState([])
     const [check, setCheck] = useState(false)
 
     const ownerShipHandler = (checked, id) => {
@@ -252,7 +261,19 @@ function CheckListModal({ onClose }: Props) {
         setProductivity(productivityCheck.length * 10)
     }
     const resultdata = [ownerShip, participation, efficiency, productivity]
+    const plusData = ownerShip + participation + efficiency + productivity
 
+    function resultText() {
+        if (plusData >= 75) {
+            return <div>75점까지의 점수 설명입니다!</div>
+        } else if (plusData >= 50) {
+            return <div>50점까지의 점수 설명입니다!</div>
+        } else if (plusData >= 25) {
+            return <div>25점까지의 점수 설명입니다!</div>
+        } else if (plusData >= 0) {
+            return <div>0점까지의 점수 설명입니다!</div>
+        }
+    }
     useOnClickOutside(ref, () => {
         onClose()
     })
@@ -278,12 +299,17 @@ function CheckListModal({ onClose }: Props) {
                                 나의 오너십(Ownership)은? (30점)
                             </div>
                             <div className="checklist">
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         className="checkcomm"
                                         type="checkbox"
                                         readOnly
                                         id="check1"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             ownerShipHandler(
                                                 e.currentTarget.checked,
@@ -301,11 +327,16 @@ function CheckListModal({ onClose }: Props) {
                                     나는, 회의에서 무엇에 대한 결정을
                                     내려야하는지 명확히 알고 있었어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check2"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             ownerShipHandler(
                                                 e.currentTarget.checked,
@@ -320,20 +351,19 @@ function CheckListModal({ onClose }: Props) {
                                                 : false
                                         }
                                     />
-                                    <label
-                                        style={{
-                                            color: check ? '#87878b' : 'black',
-                                        }}
-                                    >
-                                        나는, 이 회의에서 목적에 부합하는 이야기
-                                        흐름을 유지되도록 노력했어요.
-                                    </label>
+                                    나는, 이 회의에서 목적에 부합하는 이야기
+                                    흐름을 유지되도록 노력했어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check3"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             ownerShipHandler(
                                                 e.currentTarget.checked,
@@ -357,11 +387,16 @@ function CheckListModal({ onClose }: Props) {
                                 참여자들의 참여도는? (30점)
                             </div>
                             <div className="checklist">
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check4"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             participatioHandler(
                                                 e.currentTarget.checked,
@@ -379,11 +414,16 @@ function CheckListModal({ onClose }: Props) {
                                     참여자들은, 경직되지 않은 분위기에서 회의에
                                     참여할 수 있었어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check5"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             participatioHandler(
                                                 e.currentTarget.checked,
@@ -409,11 +449,16 @@ function CheckListModal({ onClose }: Props) {
                                 나의 오너십(Ownership)은? (30점)
                             </div>
                             <div className="checklist">
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check6"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             efficiencyHandler(
                                                 e.currentTarget.checked,
@@ -429,11 +474,16 @@ function CheckListModal({ onClose }: Props) {
                                     회의가, 제 시간에 결과물을 도출하고
                                     끝났어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check7"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             efficiencyHandler(
                                                 e.currentTarget.checked,
@@ -457,11 +507,16 @@ function CheckListModal({ onClose }: Props) {
                                 참여자들의 참여도는? (30점)
                             </div>
                             <div className="checklist">
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check8"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             productivityHandler(
                                                 e.currentTarget.checked,
@@ -477,11 +532,16 @@ function CheckListModal({ onClose }: Props) {
                                     결정사항(또는 next action item)이
                                     도출되었어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check9"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             productivityHandler(
                                                 e.currentTarget.checked,
@@ -496,11 +556,16 @@ function CheckListModal({ onClose }: Props) {
                                     />
                                     결정사항의 실행 주체가 정해졌어요.
                                 </label>
-                                <label>
+                                <label
+                                    style={{
+                                        color: disable ? '#87878b' : 'black',
+                                    }}
+                                >
                                     <input
                                         type="checkbox"
                                         readOnly
                                         id="check0"
+                                        disabled={disable}
                                         onChange={(e) => {
                                             productivityHandler(
                                                 e.currentTarget.checked,
@@ -528,6 +593,7 @@ function CheckListModal({ onClose }: Props) {
                                 <button
                                     className="result_btn"
                                     onClick={() => {
+                                        setDisable(true)
                                         setChecklistResult(false)
                                         changeClick()
                                     }}
@@ -542,33 +608,22 @@ function CheckListModal({ onClose }: Props) {
                                         이번 회의 자가진단 결과는?
                                     </p>
                                     <p className="checklist_after_header_description">
-                                        {ownerShip +
-                                            participation +
-                                            efficiency +
-                                            productivity}
-                                        점
+                                        {plusData}점
                                     </p>
                                 </div>
                                 <ChartContainer>
                                     <RadarChart data={resultdatas} />
                                 </ChartContainer>
                                 <div className="checklist_after_footer">
-                                    <div>
-                                        그럭저럭 효율적인 회의였네요! 부족한
-                                        부분이 무엇이었는지
-                                    </div>
-                                    <div>
-                                        그래프에서 확인해보고 다음 번 회의 때 그
-                                        부분을 개선해보아요!
-                                    </div>
+                                    {resultText()}
                                 </div>
                             </CheckListReslutAfterContainer>
                         )}
                     </ResultContainer>
                 </BodyContainer>
                 <FooterContainer>
-                    <button>나중에 할게요</button>
-                    <button>자가진단 완료</button>
+                    <button className="none-btn">나중에 할게요</button>
+                    <button className="success-btn">자가진단 완료</button>
                 </FooterContainer>
             </ModalContainer>
         </Container>
