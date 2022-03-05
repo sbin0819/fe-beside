@@ -23,7 +23,7 @@ const useTimer = ({
     const interval = useRef<any>(null)
 
     const soundTiming = Math.floor(duration * 0.2)
-    // const [isSoundRun, setIsSoundRun] = useState(false)
+    const [isSoundRun, setIsSoundRun] = useState(false)
 
     const start = useCallback(() => {
         if (!isRunning && remainingTime > 0) {
@@ -81,25 +81,21 @@ const useTimer = ({
 
     // re-calculate remaining time whenever currentTime or endTime is updated
     useEffect(() => {
-        const remaining = endTime - currentTime - progress
-        // progress 와 duration 이 같을 겨우 오버타임 강제함
-        if (duration !== 0 && progress !== 0 && progress == duration * 1000) {
-            const over = currentTime + progress - endTime
-            setOverTime(over)
-        }
+        const remaining = endTime - currentTime
+
         if (remaining <= 0) {
             setRemainingTime(0)
             if (overTime > 0) {
-                const over = currentTime + progress - endTime
+                const over = currentTime - endTime
                 setOverTime(over)
             }
         } else {
             setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
-            // if (seconds == soundTiming && !isSoundRun) {
-            //     setIsSoundRun(true)
-            //     onCallback('left')
-            // }
+            if (remaining / 1000 <= soundTiming && !isSoundRun) {
+                setIsSoundRun(true)
+                onCallback('left')
+            }
         }
         //isSoundRun
     }, [currentTime, endTime, overTime, onCallback])
@@ -107,10 +103,10 @@ const useTimer = ({
     // stop and clear timeout when useTimer is expired
     useEffect(() => {
         if (remainingTime === 0 && isRunning === true) {
-            const remaining = endTime - currentTime - progress
-            // if (progress <= duration && remaining <= 0) {
-            //     onCallback('done')
-            // }
+            const remaining = endTime - currentTime
+            if (remaining <= 0 && isRunning) {
+                onCallback('done')
+            }
             setOverTime(1)
         }
 

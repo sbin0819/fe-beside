@@ -105,20 +105,21 @@ function AnimationTimer({
         duration: duration - 1,
         progress: progress ? progress * 1000 - 1000 : 0,
         onCallback: (type: 'done' | 'left') => {
-            // if (type == 'done') {
-            //     return setIsSound(true)
-            // }
-            // if (type == 'left') {
-            //     return setTwentyPercentLeft(true)
-            // }
+            if (type == 'done') {
+                setTwentyPercentLeft(true)
+                return setIsSound(true)
+            }
+            if (type == 'left') {
+                return setTwentyPercentLeft(true)
+            }
         },
     })
 
-    const onPatchAgenda = async (time) => {
-        await axios.patch(`http://localhost:8000/api/agenda/${agendaId}/`, {
-            progress_time: time,
-        })
-    }
+    // const onPatchAgenda = async (time) => {
+    //     await axios.patch(`http://localhost:8000/api/agenda/${agendaId}/`, {
+    //         progress_time: time,
+    //     })
+    // }
 
     const getRemainTime = () => {
         return Math.round(remainingTime / 1000)
@@ -151,9 +152,9 @@ function AnimationTimer({
 
     useEffect(() => {
         if (initRef.current > -1) {
-            onPatchAgenda(
-                duration - getRemainTime() + Math.round(overTime / 1000)
-            )
+            // onPatchAgenda(
+            //     duration - getRemainTime() + Math.round(overTime / 1000)
+            // )
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
@@ -161,14 +162,9 @@ function AnimationTimer({
                 document.querySelector<HTMLElement>('.water_wave_back')
             let waveBack =
                 document.querySelector<HTMLElement>('.water_wave_front')
-            // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
-            // cnt.innerHTML = `${formattedMinutes}분`
+
             const parseMinutes = parseInt(minutes) + 1
             cnt.innerHTML = '' + parseMinutes + '분'
-
-            if (progress == duration && duration !== 0 && progress !== 0) {
-                setIsSound(true)
-            }
 
             if (remainingTime != 0) {
                 box.style.background = '#020438'
@@ -179,13 +175,11 @@ function AnimationTimer({
                     water.style.background = '#ffc848'
                     waveFront.style.fill = '#ffc848'
                     waveBack.style.fill = '#ffe9b6'
-                    setTwentyPercentLeft(true)
                 } else if (isUnderMinute()) {
                     water.style.background = '#f76f58'
                     waveFront.style.fill = '#f76f58'
                     waveBack.style.fill = '#fcd3bc'
                     cnt.innerHTML = '' + seconds + '초'
-                    setTwentyPercentLeft(true)
                 } else {
                     water.style.background = '#5cbcad'
                     waveFront.style.fill = '#5cbcad'

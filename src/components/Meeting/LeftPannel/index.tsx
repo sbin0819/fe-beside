@@ -43,6 +43,7 @@ function LeftPannel() {
             }
             setActiveIdx(activeIdx)
             agendaMutate()
+            setTwentyPercentLeft(false)
         }
     }
 
@@ -55,7 +56,6 @@ function LeftPannel() {
 
     useEffect(() => {
         if (Array.isArray(agendas)) {
-            setTwentyPercentLeft(false)
             if (activeIdx !== -1) {
                 setProgressAgenda(agendas[activeIdx])
             } else {
