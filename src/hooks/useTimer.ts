@@ -98,9 +98,9 @@ const useTimer = ({
                 setOverTime(over)
             }
         } else {
-            // ? 중간에 들어올 경우
+            //
             const offset = progress ? progress * 1000 : 0
-            setRemainingTime(remaining - offset)
+            setRemainingTime(remaining)
             // 20% 남았을 때 한 번만 울리고 비교 x
             if (seconds == soundTiming && !isSoundRun) {
                 setIsSoundRun(true)

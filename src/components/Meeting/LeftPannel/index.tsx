@@ -10,9 +10,11 @@ import { useState } from 'react'
 import axios from '@axios'
 import { useEffect } from 'react'
 import { AgendaState } from '@store/meeting/meetingSlice'
+import useMeetingActions from '@store/meeting/useMeetingActions'
 
 function LeftPannel() {
     const { agendas } = useMeeting()
+    const { setAgendaCursor } = useMeetingActions()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
     const [activeIdx, setActiveIdx] = useState(0)
 
@@ -38,8 +40,10 @@ function LeftPannel() {
     useEffect(() => {
         if (Array.isArray(agendas)) {
             setActiveAgenda(agendas[activeIdx])
+            setAgendaCursor({ agendaCursor: activeIdx })
         }
     }, [agendas, activeIdx])
+
     return (
         <MainPannelContainer>
             <MainPannelTop>

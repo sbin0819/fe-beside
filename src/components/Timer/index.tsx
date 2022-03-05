@@ -157,7 +157,7 @@ function AnimationTimer({
 
     useEffect(() => {
         if (initRef.current > -1) {
-            // onPatchAgenda(duration - getRemainTime())
+            onPatchAgenda(duration - getRemainTime())
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
@@ -193,7 +193,7 @@ function AnimationTimer({
                 waveFront.style.fill = '#0c254c'
                 waveBack.style.fill = '#0c254c'
                 cnt.innerHTML = ''
-            } else if (!isSound && remainingTime == 0) {
+            } else if (!isSound && remainingTime <= 0) {
                 box.style.background = '#384c6c'
                 water.style.background = '#384c6c'
                 cnt.style.color = '#e24646'
