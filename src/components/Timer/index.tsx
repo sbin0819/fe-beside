@@ -157,7 +157,7 @@ function AnimationTimer({
 
     useEffect(() => {
         if (initRef.current > -1) {
-            onPatchAgenda(duration - getRemainTime())
+            // onPatchAgenda(duration - getRemainTime())
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')

@@ -5,18 +5,41 @@ import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 
 import Timer from '@components/Timer'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
+
+import axios from '@axios'
+import { useEffect } from 'react'
+import { AgendaState } from '@store/meeting/meetingSlice'
 
 function LeftPannel() {
-    const { agendas, agendaCursor } = useMeeting()
+    const { agendas } = useMeeting()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
-    const mockActive = agendas[agendaCursor]
-    const timerRef = useRef(null)
+    const [activeIdx, setActiveIdx] = useState(0)
+
+    const [activeAgenda, setActiveAgenda] = useState<AgendaState>({})
+    const mockActive = agendas.filter((el) => el.agenda_status === 'y')[0]
+    const onEndAgenda = async () => {
+        await axios.patch(
+            `http://localhost:8000/api/agenda/${mockActive?.agenda_id}/`,
+            {
+                agenda_status: 'c',
+            }
+        )
+        setActiveIdx((prev) => prev + 1)
+    }
+
     useEffect(() => {
-        if (!timerRef.current && mockActive) {
-            timerRef.current = mockActive
+        if (Array.isArray(agendas)) {
+            const idx = agendas.findIndex((el) => el.agenda_status == 'y')
+            setActiveIdx(idx)
         }
-    }, [agendas, mockActive])
+    }, [agendas])
+
+    useEffect(() => {
+        if (Array.isArray(agendas)) {
+            setActiveAgenda(agendas[activeIdx])
+        }
+    }, [agendas, activeIdx])
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -29,11 +52,13 @@ function LeftPannel() {
                     style={{
                         display: 'flex',
                         alignItems: 'center',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                        onEndAgenda()
                     }}
                 >
-                    <span className="main_pannel_top_desc" onClick={() => {}}>
-                        NEXT AGENDA
-                    </span>
+                    <span className="main_pannel_top_desc">NEXT AGENDA</span>
                     <span>
                         <Svg viewBox={nextViewBox} width={'20'} height={'20'}>
                             <Next />
@@ -43,19 +68,21 @@ function LeftPannel() {
             </MainPannelTop>
             <MainPannelBody>
                 <div className="main_pannel_top">
-                    <div className="main_pannel_body_progress">AGENDA 1</div>
+                    <div className="main_pannel_body_progress">
+                        AGENDA {activeIdx + 1}
+                    </div>
                     <div className="main_pannel_body_sub_title">
-                        {mockActive?.agenda_title}
+                        {activeAgenda?.agenda_title}
                     </div>
                 </div>
                 <div>
-                    {mockActive?.agenda_status == 'c' ? (
+                    {activeAgenda?.agenda_status == 'c' ? (
                         <div>done</div>
-                    ) : timerRef.current?.setting_time &&
-                      timerRef.current?.agenda_status != 'c' ? (
+                    ) : activeAgenda?.setting_time &&
+                      activeAgenda?.agenda_status != 'c' ? (
                         <Timer
-                            duration={timerRef.current?.setting_time}
-                            progress={timerRef.current?.progress_time}
+                            duration={activeAgenda?.setting_time}
+                            progress={activeAgenda?.progress_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (
