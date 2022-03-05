@@ -88,10 +88,9 @@ function AnimationTimer({
     const initRef = useRef(-1)
     const router = useRouter()
     const [isSound, setIsSound] = useState(false)
-    const [play] = useSound(
-        'http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav',
-        { volume: 0.2 }
-    )
+    const [play, { stop: soundStop }] = useSound('/sounds/alaram.mp3', {
+        volume: 0.2,
+    })
     const {
         minutes,
         seconds,
@@ -105,7 +104,7 @@ function AnimationTimer({
         remainingTime,
     } = useTimer({
         autostart: true,
-        duration: duration, // 프리패칭으로 처리해야하나?
+        duration: 10 - 1,
         progress,
         onCallback: (type: 'done' | 'left') => {
             if (type == 'done') {
@@ -133,11 +132,7 @@ function AnimationTimer({
     const isUnderMinute = () => {
         return 60 > Math.round(remainingTime / 1000)
     }
-    const remainPercent = () => {
-        return +overSeconds > 0
-            ? 0
-            : Math.floor((Math.round(remainingTime / 1000) / duration) * 100)
-    }
+
     const increasePercent = () => {
         return +overSeconds > 0
             ? 100
@@ -167,7 +162,12 @@ function AnimationTimer({
                 document.querySelector<HTMLElement>('.water_wave_front')
             // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
             // cnt.innerHTML = `${formattedMinutes}분`
-            cnt.innerHTML = '' + remainPercent() + '%'
+            const parsedMinutes =
+                minutes.length === 2 && minutes[0] == '0'
+                    ? +minutes[1] + 1
+                    : +minutes[0] + 1
+            cnt.innerHTML = '' + parsedMinutes + '분'
+
             if (remainingTime != 0) {
                 box.style.background = '#020438'
                 cnt.style.color = '#fff'
@@ -181,6 +181,7 @@ function AnimationTimer({
                     water.style.background = '#f76f58'
                     waveFront.style.fill = '#f76f58'
                     waveBack.style.fill = '#fcd3bc'
+                    cnt.innerHTML = '' + seconds + '초'
                 } else {
                     water.style.background = '#5cbcad'
                     waveFront.style.fill = '#5cbcad'
@@ -199,10 +200,15 @@ function AnimationTimer({
                 cnt.style.color = '#e24646'
                 waveFront.style.display = 'none'
                 waveBack.style.display = 'none'
-                cnt.innerHTML = '' + overSeconds + '초'
+
+                cnt.innerHTML =
+                    overMinutes !== '00'
+                        ? `${overMinutes}분`
+                        : `${overSeconds}초`
             }
         }
-    }, [duration, seconds, overSeconds])
+        return () => {}
+    }, [duration, seconds, minutes, overSeconds])
 
     //overTime이 1이 넘어가면 알람을 울린다
     // 알람을 ?초 동안 울리게 하고
