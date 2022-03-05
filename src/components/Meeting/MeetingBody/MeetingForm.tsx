@@ -97,8 +97,8 @@ function MeetingForm() {
     useEffect(() => {
         if (activeAgenda) {
             setAreaForm({
-                discussion: activeAgenda?.discussion || null,
-                decisions: activeAgenda?.decisions || null,
+                discussion: activeAgenda?.discussion,
+                decisions: activeAgenda?.decisions,
             })
         }
     }, [activeAgenda])

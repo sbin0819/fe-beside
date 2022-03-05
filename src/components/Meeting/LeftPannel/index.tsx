@@ -22,6 +22,7 @@ function LeftPannel() {
     const [activeIdx, setActiveIdx] = useState(0)
     const { agendaMutate } = agendasSWR(router.query.id)
     const [activeAgenda, setActiveAgenda] = useState<AgendaState>({})
+
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
             await axios.patch(
@@ -40,7 +41,7 @@ function LeftPannel() {
                     }
                 )
             }
-            setActiveIdx((prev) => prev + 1)
+            setActiveIdx(activeIdx)
             agendaMutate()
         }
     }
@@ -56,13 +57,17 @@ function LeftPannel() {
         if (Array.isArray(agendas)) {
             if (activeIdx !== -1) {
                 setActiveAgenda(agendas[activeIdx])
-                setAgendaCursor({ agendaCursor: activeIdx })
             } else {
                 setActiveAgenda(agendas[agendas.length - 1])
             }
         }
     }, [agendas, activeIdx])
 
+    useEffect(() => {
+        if (activeIdx !== -1) {
+            setAgendaCursor({ agendaCursor: activeIdx })
+        }
+    }, [activeIdx])
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -105,7 +110,7 @@ function LeftPannel() {
                     {activeAgenda?.agenda_status == 'c' ? (
                         <div>done</div>
                     ) : activeAgenda?.setting_time &&
-                      activeAgenda?.agenda_status != 'c' ? (
+                      activeAgenda?.agenda_status == 'p' ? (
                         <Timer
                             duration={activeAgenda?.setting_time}
                             progress={activeAgenda?.progress_time}

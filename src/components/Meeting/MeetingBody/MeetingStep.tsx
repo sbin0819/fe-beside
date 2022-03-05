@@ -46,7 +46,9 @@ function MeetingStep() {
                     } ${data.agenda_status === 'y' && 'disabled'}`}
                     key={data.agenda_id}
                     onClick={() => {
-                        setAgendaCursor({ agendaCursor: idx })
+                        if (data.agenda_status !== 'y') {
+                            setAgendaCursor({ agendaCursor: idx })
+                        }
                     }}
                 >
                     AGENDA {idx + 1}
