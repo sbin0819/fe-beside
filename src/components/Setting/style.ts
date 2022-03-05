@@ -81,4 +81,5 @@ export const InputInfoContainer = styled.div<{ isInValid?: boolean }>`
     left: 10px;
     color: ${({ isInValid }) => (isInValid ? '#e24646' : '#748298')};
     font-size: 12px;
+    height: 50px;
 `

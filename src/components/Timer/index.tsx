@@ -1,5 +1,5 @@
 import useTimer from '@hooks/useTimer'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import useSound from 'use-sound'
 import Bell from '@components/Bell'
@@ -106,6 +106,7 @@ function AnimationTimer({
         progress: progress ? progress * 1000 - 1000 : 0,
         onCallback: (type: 'done' | 'left') => {
             if (type == 'done') {
+                setTwentyPercentLeft(true)
                 return setIsSound(true)
             }
             if (type == 'left') {
@@ -114,20 +115,11 @@ function AnimationTimer({
         },
     })
 
-    const onPatchAgenda = async (time) => {
-        await axios.patch(
-            `http://localhost:8000/api/agenda/${agendaId}/`,
-            {
-                progress_time: time,
-            },
-            {
-                headers: {
-                    Authorization:
-                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InNiaW5oYTEyM0BnbWFpbC5jb20iLCJleHAiOjE2NDcwNzU4ODYsImVtYWlsIjoic2JpbmhhMTIzQGdtYWlsLmNvbSJ9.ZtkN5yA_CRRYjdy2MZLIQhShKZBXgCatdv9VT8fC6qg',
-                },
-            }
-        )
-    }
+    // const onPatchAgenda = async (time) => {
+    //     await axios.patch(`http://localhost:8000/api/agenda/${agendaId}/`, {
+    //         progress_time: time,
+    //     })
+    // }
 
     const getRemainTime = () => {
         return Math.round(remainingTime / 1000)
@@ -146,6 +138,10 @@ function AnimationTimer({
                   )
     }
 
+    const isRemainTwentyPercent = () => {
+        return getRemainTime() / duration < 0.2
+    }
+
     useEffect(() => {
         var water = document.getElementById('water')
         var cnt = document.getElementById('count')
@@ -156,9 +152,9 @@ function AnimationTimer({
 
     useEffect(() => {
         if (initRef.current > -1) {
-            onPatchAgenda(
-                duration - getRemainTime() + Math.round(overTime / 1000)
-            )
+            // onPatchAgenda(
+            //     duration - getRemainTime() + Math.round(overTime / 1000)
+            // )
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
@@ -166,20 +162,16 @@ function AnimationTimer({
                 document.querySelector<HTMLElement>('.water_wave_back')
             let waveBack =
                 document.querySelector<HTMLElement>('.water_wave_front')
-            // var formattedMinutes = minutes[0] == '0' ? minutes[1] : minutes
-            // cnt.innerHTML = `${formattedMinutes}분`
-            const parsedMinutes =
-                minutes.length === 2 && minutes[0] == '0'
-                    ? +minutes[1] + 1
-                    : +minutes[0] + 1
-            cnt.innerHTML = '' + parsedMinutes + '분'
+
+            const parseMinutes = parseInt(minutes) + 1
+            cnt.innerHTML = '' + parseMinutes + '분'
 
             if (remainingTime != 0) {
                 box.style.background = '#020438'
                 cnt.style.color = '#fff'
                 waveFront.style.display = 'block'
                 waveBack.style.display = 'block'
-                if (+increasePercent() > 20 && !isUnderMinute()) {
+                if (isRemainTwentyPercent() && !isUnderMinute()) {
                     water.style.background = '#ffc848'
                     waveFront.style.fill = '#ffc848'
                     waveBack.style.fill = '#ffe9b6'
@@ -213,7 +205,9 @@ function AnimationTimer({
                         : `${overSeconds}초`
             }
         }
-        return () => {}
+        return () => {
+            soundStop()
+        }
     }, [duration, seconds, minutes, overSeconds])
 
     //overTime이 1이 넘어가면 알람을 울린다
@@ -226,7 +220,7 @@ function AnimationTimer({
             play()
             timeout = setTimeout(() => {
                 setIsSound(false)
-            }, 6000)
+            }, 3000)
         }
         return () => clearTimeout(timeout)
     }, [isSound])

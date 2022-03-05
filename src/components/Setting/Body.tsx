@@ -105,13 +105,13 @@ function Body({
         })
         const isValid =
             meetFormsArr.filter(([_, v]) => v.error).length > 0 ? false : true
-        setIsShowModal(true)
         if (!isValid) {
             const newMeetForms = meetFormsArr.reduce((acc, curr) => {
                 acc[curr[0]] = curr[1]
                 return acc
             }, {})
             setMeetForm(newMeetForms)
+            setIsShowModal(true)
             return false
         }
         return true

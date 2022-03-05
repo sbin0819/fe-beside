@@ -21,12 +21,12 @@ function LeftPannel() {
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
     const [activeIdx, setActiveIdx] = useState(0)
     const { agendaMutate } = agendasSWR(router.query.id)
-    const [activeAgenda, setActiveAgenda] = useState<AgendaState>({})
+    const [progressAgenda, setProgressAgenda] = useState<AgendaState>({})
 
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
             await axios.patch(
-                `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
+                `http://localhost:8000/api/agenda/${progressAgenda?.agenda_id}/`,
                 {
                     agenda_status: 'c',
                 }
@@ -43,6 +43,7 @@ function LeftPannel() {
             }
             setActiveIdx(activeIdx)
             agendaMutate()
+            setTwentyPercentLeft(false)
         }
     }
 
@@ -56,9 +57,9 @@ function LeftPannel() {
     useEffect(() => {
         if (Array.isArray(agendas)) {
             if (activeIdx !== -1) {
-                setActiveAgenda(agendas[activeIdx])
+                setProgressAgenda(agendas[activeIdx])
             } else {
-                setActiveAgenda(agendas[agendas.length - 1])
+                setProgressAgenda(agendas[agendas.length - 1])
             }
         }
     }, [agendas, activeIdx])
@@ -68,6 +69,7 @@ function LeftPannel() {
             setAgendaCursor({ agendaCursor: activeIdx })
         }
     }, [activeIdx])
+
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -103,18 +105,18 @@ function LeftPannel() {
                         {activeIdx !== -1 ? activeIdx + 1 : agendas.length}
                     </div>
                     <div className="main_pannel_body_sub_title">
-                        {activeAgenda?.agenda_title}
+                        {progressAgenda?.agenda_title}
                     </div>
                 </div>
                 <div>
-                    {activeAgenda?.agenda_status == 'c' ? (
+                    {progressAgenda?.agenda_status == 'c' ? (
                         <div>done</div>
-                    ) : activeAgenda?.setting_time &&
-                      activeAgenda?.agenda_status == 'p' ? (
+                    ) : progressAgenda?.setting_time &&
+                      progressAgenda?.agenda_status == 'p' ? (
                         <Timer
-                            agendaId={activeAgenda?.agenda_id}
-                            duration={activeAgenda?.setting_time}
-                            progress={activeAgenda?.progress_time}
+                            agendaId={progressAgenda?.agenda_id}
+                            duration={progressAgenda?.setting_time}
+                            progress={progressAgenda?.progress_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (
