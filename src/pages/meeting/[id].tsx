@@ -4,23 +4,26 @@ import Meeting from '@components/Meeting'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
 import useSWR from 'swr'
+import { agendasSWR } from '@api/agenda'
 // import { useRouter } from 'next/router'
 // import useSWR from 'swr'
 function MeetingPage() {
     const router = useRouter()
     const { id } = router.query
+
     const { data: meet } = useSWR(
         id ? `http://localhost:8000/api/meet/?meet_id=${id}` : null
     )
-    const { data: agendas } = useSWR(
-        id ? `http://localhost:8000/api/agenda/?meet_id=${id}` : null
-    )
 
-    const { setMeeting } = useMeetingActions()
+    const { agendasData } = agendasSWR(id)
+
+    const { setMeeting, ressetMeeting } = useMeetingActions()
     useEffect(() => {
-        if (meet?.length > 0 && agendas?.length > 0)
-            setMeeting({ meet: meet[0], agendas: agendas })
-    }, [meet, agendas])
+        if (meet?.length > 0 && agendasData?.length > 0) {
+            ressetMeeting()
+            setMeeting({ meet: meet[0], agendas: agendasData })
+        }
+    }, [meet, agendasData])
     return <Meeting />
 }
 

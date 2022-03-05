@@ -58,7 +58,8 @@ function MeetingSummary() {
     const { meet, agendas } = useMeeting()
     return (
         <Container>
-            <div
+            {meet.goal}
+            {/* <div
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -74,7 +75,7 @@ function MeetingSummary() {
                         <Dropdown />
                     </Svg>
                 </div>
-            </div>
+            </div> */}
         </Container>
     )
 }

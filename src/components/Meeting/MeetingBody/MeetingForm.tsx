@@ -4,13 +4,17 @@ import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Pin, pinViewBox } from '@svgs/Pin'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
+import { Close, closeViewBox } from '@svgs/Close'
+import { Calendar, calendarViewBox } from '@svgs/Calendar'
+import { People, peopleViewBox } from '@svgs/People'
+
 import styled from 'styled-components'
 
 import { nanoid } from '@reduxjs/toolkit'
 import useMeeting from '@store/meeting/useMeeting'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
-import axios from 'axios'
+import axios from '@axios'
 
 const MenuTopContainer = styled.div`
     height: 24px;
@@ -44,6 +48,9 @@ const Body = styled.div`
 
 const ItemList = styled.div`
     margin: 12px 0;
+    border-top: solid 1px #f1f1f1;
+    border-left: solid 1px #f1f1f1;
+    border-right: solid 1px #f1f1f1;
 `
 
 const Item = styled.div`
@@ -52,7 +59,7 @@ const Item = styled.div`
     justify-content: space-around;
     height: 103px;
     padding: 16px 16px 17px 20px;
-    border: solid 1px #f1f1f1;
+    border-bottom: solid 1px #f1f1f1;
     background-color: #fff;
     input[type='date']::before {
         content: attr(data-placeholder);
@@ -97,8 +104,8 @@ function MeetingForm() {
     useEffect(() => {
         if (activeAgenda) {
             setAreaForm({
-                discussion: activeAgenda?.discussion || null,
-                decisions: activeAgenda?.decisions || null,
+                discussion: activeAgenda?.discussion,
+                decisions: activeAgenda?.decisions,
             })
         }
     }, [activeAgenda])
@@ -110,12 +117,6 @@ function MeetingForm() {
                 ...activeAgenda,
                 discussion: areaForm.discussion,
                 decisions: areaForm.decisions,
-            },
-            {
-                headers: {
-                    Authorization:
-                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIxQGdtYWlsLmNvbSIsImV4cCI6MTY0NjczMzU3NCwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20ifQ.dkVpKFIgU6KW56ppBkzPbD2cxXP7hIASC4-I05u7VaA',
-                },
             }
         )
     }
@@ -229,7 +230,7 @@ function MeetingForm() {
                     <ItemList>
                         {Object.entries(actionsForm).map(([key, value]) => (
                             <Item key={key}>
-                                <div>
+                                <div style={{ display: 'flex' }}>
                                     <input
                                         type="text"
                                         placeholder="액션 아이템을 작성해주세요"
@@ -237,20 +238,41 @@ function MeetingForm() {
                                         name="title"
                                         onChange={onChangeActionItems(key)}
                                     />
+                                    <Svg
+                                        viewBox={closeViewBox}
+                                        width={'20'}
+                                        height={'18'}
+                                    >
+                                        <Close />
+                                    </Svg>
                                 </div>
-                                <div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg
+                                        viewBox={peopleViewBox}
+                                        width={'16'}
+                                        height={'16'}
+                                    >
+                                        <People />
+                                    </Svg>
                                     <input
                                         type="text"
-                                        placeholder="A 담당자"
+                                        placeholder="담당자"
                                         value={value.authors}
                                         name="authors"
                                         onChange={onChangeActionItems(key)}
                                     />
                                 </div>
-                                <div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg
+                                        viewBox={calendarViewBox}
+                                        width={'20'}
+                                        height={'18'}
+                                    >
+                                        <Calendar />
+                                    </Svg>
                                     <input
                                         type="date"
-                                        data-placeholder="B 마감기한"
+                                        data-placeholder="마감기한"
                                         value={value.date}
                                         name="date"
                                         readOnly

@@ -7,10 +7,67 @@ import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 import Timer from '@components/Timer'
 import { useState } from 'react'
 
+import axios from '@axios'
+import { useEffect } from 'react'
+import { AgendaState } from '@store/meeting/meetingSlice'
+import useMeetingActions from '@store/meeting/useMeetingActions'
+import { agendasSWR } from '@api/agenda'
+import { useRouter } from 'next/router'
+
 function LeftPannel() {
-    const { agendas, agendaCursor } = useMeeting()
+    const router = useRouter()
+    const { agendas } = useMeeting()
+    const { setAgendaCursor } = useMeetingActions()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
-    const mockActive = agendas[agendaCursor]
+    const [activeIdx, setActiveIdx] = useState(0)
+    const { agendaMutate } = agendasSWR(router.query.id)
+    const [activeAgenda, setActiveAgenda] = useState<AgendaState>({})
+
+    const onEndAgenda = async () => {
+        if (activeIdx !== -1) {
+            await axios.patch(
+                `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
+                {
+                    agenda_status: 'c',
+                }
+            )
+            if (activeIdx + 1 <= agendas.length) {
+                const idx = agendas.findIndex((el) => el.agenda_status == 'y')
+                const nextAgenda = agendas[idx]
+                await axios.patch(
+                    `http://localhost:8000/api/agenda/${nextAgenda?.agenda_id}/`,
+                    {
+                        agenda_status: 'p',
+                    }
+                )
+            }
+            setActiveIdx(activeIdx)
+            agendaMutate()
+        }
+    }
+
+    useEffect(() => {
+        if (Array.isArray(agendas)) {
+            const idx = agendas.findIndex((el) => el.agenda_status == 'p')
+            setActiveIdx(idx)
+        }
+    }, [agendas])
+
+    useEffect(() => {
+        if (Array.isArray(agendas)) {
+            if (activeIdx !== -1) {
+                setActiveAgenda(agendas[activeIdx])
+            } else {
+                setActiveAgenda(agendas[agendas.length - 1])
+            }
+        }
+    }, [agendas, activeIdx])
+
+    useEffect(() => {
+        if (activeIdx !== -1) {
+            setAgendaCursor({ agendaCursor: activeIdx })
+        }
+    }, [activeIdx])
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -23,11 +80,15 @@ function LeftPannel() {
                     style={{
                         display: 'flex',
                         alignItems: 'center',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                        if (activeIdx + 1 <= agendas.length) {
+                            onEndAgenda()
+                        }
                     }}
                 >
-                    <span className="main_pannel_top_desc" onClick={() => {}}>
-                        NEXT AGENDA
-                    </span>
+                    <span className="main_pannel_top_desc">NEXT AGENDA</span>
                     <span>
                         <Svg viewBox={nextViewBox} width={'20'} height={'20'}>
                             <Next />
@@ -37,16 +98,22 @@ function LeftPannel() {
             </MainPannelTop>
             <MainPannelBody>
                 <div className="main_pannel_top">
-                    <div className="main_pannel_body_progress">AGENDA 1</div>
+                    <div className="main_pannel_body_progress">
+                        AGENDA{' '}
+                        {activeIdx !== -1 ? activeIdx + 1 : agendas.length}
+                    </div>
                     <div className="main_pannel_body_sub_title">
-                        {mockActive?.agenda_title}
+                        {activeAgenda?.agenda_title}
                     </div>
                 </div>
                 <div>
-                    {mockActive?.setting_time &&
-                    mockActive.agenda_status != 'c' ? (
+                    {activeAgenda?.agenda_status == 'c' ? (
+                        <div>done</div>
+                    ) : activeAgenda?.setting_time &&
+                      activeAgenda?.agenda_status == 'p' ? (
                         <Timer
-                            duration={mockActive?.setting_time}
+                            duration={activeAgenda?.setting_time}
+                            progress={activeAgenda?.progress_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (

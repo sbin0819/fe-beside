@@ -7,6 +7,8 @@ import useMeetingActions from '@store/meeting/useMeetingActions'
 const MenulSteps = styled.div`
     display: flex;
     margin: 28px 0 32px;
+    width: 656px;
+    overflow: scroll;
     gap: 10px;
     .menu_step {
         display: flex;
@@ -25,20 +27,29 @@ const MenulSteps = styled.div`
         background: #384c6c;
         color: #fff;
     }
+    .menu_step.disabled {
+        border: solid 1px #f1f1f1;
+        color: #d6d6d7;
+    }
 `
 
 function MeetingStep() {
     const { agendas, agendaCursor } = useMeeting()
     const { setAgendaCursor } = useMeetingActions()
+
     return (
         <MenulSteps>
             {agendas.map((data, idx) => (
                 <div
                     className={`menu_step ${
                         agendaCursor === idx ? 'active' : ''
-                    }`}
+                    } ${data.agenda_status === 'y' && 'disabled'}`}
                     key={data.agenda_id}
-                    onClick={() => setAgendaCursor({ agendaCursor: idx })}
+                    onClick={() => {
+                        if (data.agenda_status !== 'y') {
+                            setAgendaCursor({ agendaCursor: idx })
+                        }
+                    }}
                 >
                     AGENDA {idx + 1}
                 </div>
