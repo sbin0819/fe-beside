@@ -19,7 +19,7 @@ function LeftPannel() {
     const { agendas } = useMeeting()
     const { setAgendaCursor } = useMeetingActions()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
-    const [activeIdx, setActiveIdx] = useState(0)
+    const [activeIdx, setActiveIdx] = useState<any>(null)
     const { agendaMutate } = agendasSWR(router.query.id)
     const [progressAgenda, setProgressAgenda] = useState<AgendaState>({})
 
