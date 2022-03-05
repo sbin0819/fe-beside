@@ -12,6 +12,7 @@ import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
 import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
+import Modal from './Modal'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -31,14 +32,17 @@ const GoalConatiner = styled.div`
 const ButtonContainer = styled.div`
     display: flex;
     gap: 24px;
+    font-size: 16px;
     .cancel_btn {
         width: 320px;
     }
     .submit_btn {
+        background: #162f55;
+        color: #fff;
     }
 `
 
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ background?: string }>`
     width: 100%;
     height: 52px;
     display: flex;
@@ -49,7 +53,7 @@ const StyledButton = styled.button`
     padding: 10px 20px;
     border-radius: 12px;
     border: solid 1px #d6d6d7;
-    background-color: #fff;
+    background-color: ${({ background }) => (background ? background : '#fff')};
     margin-top: 28px;
     cursor: pointer;
 `
@@ -86,6 +90,8 @@ function Body({
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
     const [remainTime, setRemainTime] = useState(60)
+    const [isShowModal, setIsShowModal] = useState(false)
+    const handleCloseMeeting = () => setIsShowModal(false)
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -157,6 +163,7 @@ function Body({
                 return acc
             }, {})
         )
+        setIsShowModal(true)
     }
 
     const fetchPostMeet = async (
@@ -206,86 +213,89 @@ function Body({
     }
 
     return (
-        <Container>
-            <div>
-                <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
-                <GoalConatiner>
-                    <SubTitleContainer>회의 목표</SubTitleContainer>
-                    <div style={{ position: 'relative' }}>
-                        <StyledInput
-                            placeholder="회의 목료를 입력하세요"
-                            value={goal.value}
-                            onChange={(e) => {
-                                setMeetForm((prev) => ({
-                                    ...prev,
-                                    goal: {
-                                        ...prev.goal,
-                                        value: e.target.value,
-                                    },
-                                }))
-                            }}
-                            isInValid={goal?.error}
-                            isFocus={goal?.focus}
-                            onFocus={(e) => {
-                                setMeetForm((prev) => ({
-                                    ...prev,
-                                    goal: {
-                                        ...prev.goal,
-                                        focus: true,
-                                        error: false,
-                                        message:
-                                            '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
-                                    },
-                                }))
-                            }}
-                            onBlur={(e) => {
-                                setMeetForm((prev) => ({
-                                    ...prev,
-                                    goal: {
-                                        ...prev.goal,
-                                        focus: false,
-                                        message: '',
-                                    },
-                                }))
-                            }}
+        <>
+            {isShowModal && <Modal onClose={handleCloseMeeting} />}
+            <Container>
+                <div>
+                    <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
+                    <GoalConatiner>
+                        <SubTitleContainer>회의 목표</SubTitleContainer>
+                        <div style={{ position: 'relative' }}>
+                            <StyledInput
+                                placeholder="회의 목료를 입력하세요"
+                                value={goal.value}
+                                onChange={(e) => {
+                                    setMeetForm((prev) => ({
+                                        ...prev,
+                                        goal: {
+                                            ...prev.goal,
+                                            value: e.target.value,
+                                        },
+                                    }))
+                                }}
+                                isInValid={goal?.error}
+                                isFocus={goal?.focus}
+                                onFocus={(e) => {
+                                    setMeetForm((prev) => ({
+                                        ...prev,
+                                        goal: {
+                                            ...prev.goal,
+                                            focus: true,
+                                            error: false,
+                                            message:
+                                                '이번 회의를 하면서 이루고자 하는 목표가 무엇인가요?',
+                                        },
+                                    }))
+                                }}
+                                onBlur={(e) => {
+                                    setMeetForm((prev) => ({
+                                        ...prev,
+                                        goal: {
+                                            ...prev.goal,
+                                            focus: false,
+                                            message: '',
+                                        },
+                                    }))
+                                }}
+                            />
+                            {(goal?.error || goal?.focus) && (
+                                <InputInfoContainer isInValid={goal?.error}>
+                                    {goal.message}
+                                </InputInfoContainer>
+                            )}
+                        </div>
+                    </GoalConatiner>
+                    <div style={{ marginTop: '32px' }}>
+                        <SubTitleContainer>AGENDA</SubTitleContainer>
+                        <AgendaInputs
+                            agendaForms={agendaForms}
+                            setAgendagendaForms={setAgendagendaForms}
+                            remainTime={remainTime}
+                            setRemainTime={setRemainTime}
                         />
-                        {(goal?.error || goal?.focus) && (
-                            <InputInfoContainer isInValid={goal?.error}>
-                                {goal.message}
-                            </InputInfoContainer>
-                        )}
                     </div>
-                </GoalConatiner>
-                <div style={{ marginTop: '32px' }}>
-                    <SubTitleContainer>AGENDA</SubTitleContainer>
-                    <AgendaInputs
-                        agendaForms={agendaForms}
-                        setAgendagendaForms={setAgendagendaForms}
-                        remainTime={remainTime}
-                        setRemainTime={setRemainTime}
-                    />
                 </div>
-            </div>
-            <InfoSection>
-                {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                <InfoSection>
+                    {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
                 설정해보세요!`}
-            </InfoSection>
-            <ButtonContainer>
-                <StyledButton
-                    className="cancel_btn"
-                    onClick={(e) => onSubmit(e, 'y')}
-                >
-                    나중에 할래요
-                </StyledButton>
-                {/* 버튼 disabled */}
-                <StyledButton
-                    className="submit_btn"
-                    onClick={(e) => onSubmit(e, 'p')}
-                >
-                    지금 바로 시작해요
-                </StyledButton>
-            </ButtonContainer>
-        </Container>
+                </InfoSection>
+                <ButtonContainer>
+                    <StyledButton
+                        className="cancel_btn"
+                        onClick={(e) => onSubmit(e, 'y')}
+                    >
+                        나중에 할래요
+                    </StyledButton>
+                    {/* 버튼 disabled */}
+                    <StyledButton
+                        className="submit_btn"
+                        onClick={(e) => onSubmit(e, 'p')}
+                    >
+                        지금 바로 시작해요
+                    </StyledButton>
+                </ButtonContainer>
+            </Container>
+        </>
     )
 }
 

@@ -34,6 +34,7 @@ export const Container = styled.div`
         .meeting_control_info {
             color: #87878b;
             cursor: pointer;
+            width: 80px;
             padding: 4px 12px;
             :hover {
                 border-radius: 12px;

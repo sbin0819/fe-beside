@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import useOnClickOutside from '@hooks/useOnClickOutside'
-import { useRouter } from 'next/router'
 
 const Container = styled.div`
     position: fixed;
@@ -10,6 +9,7 @@ const Container = styled.div`
     left: 0;
     bottom: 0;
     right: 0;
+    /* background: gold; */
     background: rgba(0, 0, 0, 0.34);
     z-index: 5;
 `
@@ -22,7 +22,7 @@ const ModalContainer = styled.div`
     box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.16);
     background-color: #fff;
     position: absolute;
-    top: 50%;
+    top: 34%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 32px 36px;
@@ -71,25 +71,19 @@ const ModalContainer = styled.div`
 interface DropdownMenuProps {
     onClose: () => void
 }
-function CloseMeetingModal({ onClose }: DropdownMenuProps) {
-    const router = useRouter()
+function Modal({ onClose }: DropdownMenuProps) {
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
         onClose()
     })
-    const onSave = () => {
-        router.replace('/')
-    }
+
     return (
         <Container>
             <ModalContainer ref={ref}>
-                <div className="body">회의를 정말로 종료하시겠습니까?</div>
+                <div className="body">입력하지 않은 내용이 있습니다.</div>
                 <div className="buttons">
-                    <button className="btn_cancel" onClick={() => onClose()}>
-                        취소
-                    </button>
-                    <button className="btn_save" onClick={onSave}>
-                        저장
+                    <button className="btn_save" onClick={() => onClose()}>
+                        확인
                     </button>
                 </div>
             </ModalContainer>
@@ -97,4 +91,4 @@ function CloseMeetingModal({ onClose }: DropdownMenuProps) {
     )
 }
 
-export default CloseMeetingModal
+export default Modal
