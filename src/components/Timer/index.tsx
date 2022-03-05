@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import useSWR from 'swr'
 import useSound from 'use-sound'
 import Bell from '@components/Bell'
+import { useRouter } from 'next/router'
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -77,14 +78,15 @@ const Container = styled.div`
 
 function AnimationTimer({
     duration,
+    progress,
     setTwentyPercentLeft,
 }: {
     duration: number
+    progress?: number
     setTwentyPercentLeft: any
 }) {
     const initRef = useRef(-1)
-    const audioRef = useRef<HTMLAudioElement>()
-    const [soundEffect, setSoundEffect] = useState<any>()
+    const router = useRouter()
     const [isSound, setIsSound] = useState(false)
     const [play] = useSound(
         'http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav',
@@ -104,6 +106,7 @@ function AnimationTimer({
     } = useTimer({
         autostart: true,
         duration: duration, // 프리패칭으로 처리해야하나?
+        progress,
         onCallback: (type: 'done' | 'left') => {
             if (type == 'done') {
                 return setIsSound(true)
@@ -113,15 +116,29 @@ function AnimationTimer({
             }
         },
     })
-    let isUnderMinute = () => {
+
+    const onPatchAgenda = async (time) => {
+        await axios.patch(
+            `http://localhost:8000/api/agenda/${router.query.id}/`,
+            {
+                progress_time: time,
+            }
+        )
+    }
+
+    const getRemainTime = () => {
+        return Math.round(remainingTime / 1000)
+    }
+
+    const isUnderMinute = () => {
         return 60 > Math.round(remainingTime / 1000)
     }
-    let remainPercent = () => {
+    const remainPercent = () => {
         return +overSeconds > 0
             ? 0
             : Math.floor((Math.round(remainingTime / 1000) / duration) * 100)
     }
-    let increasePercent = () => {
+    const increasePercent = () => {
         return +overSeconds > 0
             ? 100
             : 100 -
@@ -141,8 +158,10 @@ function AnimationTimer({
     }, [])
 
     // timer ui
+
     useEffect(() => {
         if (initRef.current > -1) {
+            // onPatchAgenda(duration - getRemainTime())
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
@@ -206,23 +225,6 @@ function AnimationTimer({
 
     return (
         <>
-            {/* <iframe
-                style={{ display: 'none' }}
-                src="silence.mp3"
-                allow="autoplay"
-                id="audio"
-            ></iframe>
-            <audio
-                style={{ display: 'none' }}
-                controls
-                autoPlay
-                src="http://psychic3d.free.fr/extra_fichiers/sons/alerte3.wav"
-                id="player"
-                ref={audioRef}
-            >
-                <code>audio</code> element.
-            </audio> */}
-
             <Container>
                 <svg
                     version="1.1"

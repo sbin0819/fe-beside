@@ -5,10 +5,16 @@ type Seconds = number
 type Props = {
     autostart?: boolean
     duration: Seconds
+    progress?: number
     onCallback: (type: string) => any
 }
 
-const useTimer = ({ autostart = false, duration = 0, onCallback }: Props) => {
+const useTimer = ({
+    autostart = false,
+    duration = 0,
+    progress = 0,
+    onCallback,
+}: Props) => {
     const [isRunning, setRunning] = useState(autostart)
     const [currentTime, setCurrentTime] = useState(Number(new Date()))
     const [endTime, setEndTime] = useState(currentTime + duration * 1000)
@@ -92,7 +98,9 @@ const useTimer = ({ autostart = false, duration = 0, onCallback }: Props) => {
                 setOverTime(over)
             }
         } else {
-            setRemainingTime(remaining)
+            // ? 중간에 들어올 경우
+            const offset = progress ? progress * 1000 : 0
+            setRemainingTime(remaining - offset)
             // 20% 남았을 때 한 번만 울리고 비교 x
             if (seconds == soundTiming && !isSoundRun) {
                 setIsSoundRun(true)

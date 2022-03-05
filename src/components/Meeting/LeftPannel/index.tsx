@@ -5,12 +5,18 @@ import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
 
 import Timer from '@components/Timer'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function LeftPannel() {
     const { agendas, agendaCursor } = useMeeting()
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
     const mockActive = agendas[agendaCursor]
+    const timerRef = useRef(null)
+    useEffect(() => {
+        if (!timerRef.current && mockActive) {
+            timerRef.current = mockActive
+        }
+    }, [agendas, mockActive])
     return (
         <MainPannelContainer>
             <MainPannelTop>
@@ -43,10 +49,13 @@ function LeftPannel() {
                     </div>
                 </div>
                 <div>
-                    {mockActive?.setting_time &&
-                    mockActive.agenda_status != 'c' ? (
+                    {mockActive?.agenda_status == 'c' ? (
+                        <div>done</div>
+                    ) : timerRef.current?.setting_time &&
+                      timerRef.current?.agenda_status != 'c' ? (
                         <Timer
-                            duration={mockActive?.setting_time}
+                            duration={timerRef.current?.setting_time}
+                            progress={timerRef.current?.progress_time}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (
