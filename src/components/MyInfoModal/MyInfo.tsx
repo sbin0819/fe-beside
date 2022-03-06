@@ -1,15 +1,36 @@
-import React, { PropsWithChildren, useState, useCallback } from 'react'
+import React, {
+    PropsWithChildren,
+    useState,
+    useCallback,
+    useEffect,
+} from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
 import { Google, googleViewBox } from '@svgs/Google'
 import { Xclick, xclickviewBox } from '@svgs/Xclick'
 import UserCancel from './UserCancel'
+import axios from '@axios'
 interface ModalDefaultType {
     onClickToggleModal: () => void
 }
 
 function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     const [isOpenModal, setOpenModal] = useState<boolean>(false)
+    const [userInfo, setUserInfo] = useState<Array<string>>([])
+
+    const [inputs, setInputs] = useState({
+        nickname: '',
+        email: '',
+        emoji: '',
+    })
+    const { nickname, email, emoji } = inputs
+    const onChange = (e) => {
+        const { value, name } = e.target
+        setInputs({
+            ...inputs,
+            [name]: value,
+        })
+    }
 
     const ClickToggleModal = useCallback(() => {
         setOpenModal(!isOpenModal)
@@ -89,6 +110,23 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
             emoji: '📖',
         },
     ]
+    const userUpdate = () => {
+        axios
+            .patch('http://127.0.0.1:8000/api/user/', {
+                email: email,
+                nickname: nickname,
+            })
+            .then((res) => {
+                console.log(res)
+            })
+    }
+
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+            console.log(res.data)
+            setInputs(res.data)
+        })
+    }, [])
 
     return (
         <div>
@@ -129,7 +167,9 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     <InfoBox style={{ top: '133px' }}>
                         <ModalH3>닉네임</ModalH3>
                         <input
-                            placeholder="10자 이내 입력"
+                            name="nickname"
+                            value={nickname}
+                            onChange={onChange}
                             style={{
                                 marginTop: '8px',
                                 width: '360px',
@@ -166,7 +206,7 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                         >
                             <Google />
                         </Svg>
-                        testeamil@gmail.com
+                        {email}
                     </InfoBox>
                     <InfoBox style={{ top: '500px' }}>
                         <ModalH3>계정 탈퇴</ModalH3>
@@ -206,10 +246,15 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             취소
                         </ModalBtn>
                         <ModalBtn
+                            onClick={(e) => {
+                                userUpdate()
+                                onClickToggleModal()
+                            }}
                             style={{
                                 backgroundColor: '#162f55',
                                 color: '#fff',
                                 marginRight: '12px',
+                                cursor: 'pointer',
                             }}
                         >
                             저장

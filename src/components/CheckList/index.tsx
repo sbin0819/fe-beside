@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useOnClickOutside from '@hooks/useOnClickOutside'
+import axios from '@axios'
 
 import RadarChart from '@components/RadarChart'
 
@@ -202,6 +203,7 @@ interface Props {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
+    const check1 = useRef<any>()
 
     const [checklistReslut, setChecklistResult] = useState(true)
     const [disable, setDisable] = useState(false)
@@ -217,6 +219,8 @@ function CheckListModal({ onClose }: Props) {
     const [efficiency, setEfficiency] = useState(null)
     const [productivity, setProductivity] = useState(null)
     const [check, setCheck] = useState(false)
+
+    // const [check1, setCheck1] = useState('')
 
     const ownerShipHandler = (checked, id) => {
         if (checked) {
@@ -253,6 +257,25 @@ function CheckListModal({ onClose }: Props) {
         efficiency,
         productivity,
     ]
+    const createCheckBtn = () => {
+        axios
+            .post('http://127.0.0.1:8000/api/selfcheck/', {
+                meet_id: 4,
+                ownership: [ownerShipCheck],
+                participation: [participationCheck],
+                efficiency: [efficiencyCheck],
+                productivity: [productivityCheck],
+            })
+            .then((res) => {
+                console.log(
+                    ownerShipCheck,
+                    participationCheck,
+                    efficiencyCheck,
+                    productivityCheck
+                )
+                console.log(res)
+            })
+    }
 
     const changeClick = () => {
         setOwnerShip(ownerShipCheck.length * 10)
@@ -262,6 +285,7 @@ function CheckListModal({ onClose }: Props) {
     }
     const resultdata = [ownerShip, participation, efficiency, productivity]
     const plusData = ownerShip + participation + efficiency + productivity
+    console.log('plusData', plusData)
 
     function resultText() {
         if (plusData >= 75) {
@@ -277,6 +301,32 @@ function CheckListModal({ onClose }: Props) {
     useOnClickOutside(ref, () => {
         onClose()
     })
+
+    useEffect(() => {
+        axios
+            .get('http://127.0.0.1:8000/api/selfcheck/?meet_id=3')
+            .then((res) => {
+                console.log('00', res.data)
+                if (plusData.length === 0) {
+                    console.log('11', res.data)
+                    setDisable(false)
+                    setChecklistResult(true)
+                    console.log('11')
+                } else {
+                    console.log('ddfdf')
+                    // setOwnerShipCheck((res.data.ownership || '').split(','))
+                    // setParticipationCheck(res.data.participation.split(','))
+                    // setEfficiencyCheck(res.data.efficiency.split(','))
+                    // setProductivityCheck(res.data.productivity.split(','))
+                    console.log('22', res.data)
+                    setDisable(true)
+                    setChecklistResult(false)
+                    // console.log('333', ownerShip.split(','))
+                    // console.log('22', res.data.ownership.split(','))
+                }
+            })
+    }, [])
+
     return (
         <Container>
             <ModalContainer ref={ref}>
@@ -305,6 +355,7 @@ function CheckListModal({ onClose }: Props) {
                                     }}
                                 >
                                     <input
+                                        ref={check1}
                                         className="checkcomm"
                                         type="checkbox"
                                         readOnly
@@ -596,6 +647,7 @@ function CheckListModal({ onClose }: Props) {
                                         setDisable(true)
                                         setChecklistResult(false)
                                         changeClick()
+                                        createCheckBtn()
                                     }}
                                 >
                                     자가진단 결과보기

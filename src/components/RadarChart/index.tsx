@@ -50,13 +50,18 @@ const options = {
         legend: {
             display: false,
         },
+        scales: {
+            ticks: {
+                min: 0,
+                stepSize: 30,
+            },
+        },
     },
 }
 export default function App(Props) {
     console.log('reusltdata', Props.data)
     return (
         <Radar
-            // data={data}
             data={{
                 labels: ['오너십', '참여도', '오너십3', '참여도4'],
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import axios from 'axios'
+import axios from '@axios'
 import moment from 'moment'
 import {
     TabContainer,
@@ -62,41 +62,11 @@ export const HoverBox = styled.div`
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyRemove(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
-    // const { data: meetDatas, error } = useSWR(
-    //     'http://127.0.0.1:8000/api/meet/?search=W',
-    //     fetcher,
-    //     { revalidateOnFocus: true }
-    // )
-
-    const meetDatas = [
-        {
-            user_id: 1,
-            meet_title: '제목입니다.',
-            meet_date: '2022-02-28T16:11:31.147Z',
-            meet_status: 'Y',
-            rm_status: 'Y',
-            participants: 'user',
-            goal: 'goal',
-        },
-        {
-            user_id: 1,
-            meet_title: '제목입니다.2',
-            meet_date: '2022-02-28T16:11:31.147Z',
-            meet_status: 'P',
-            rm_status: 'W',
-            participants: 'user',
-            goal: 'goal',
-        },
-        {
-            user_id: 1,
-            meet_title: '제목입니다.3',
-            meet_date: '2022-02-28T16:11:31.147Z',
-            meet_status: 'C',
-            rm_status: 'N',
-            participants: 'user',
-            goal: 'goal',
-        },
-    ]
+    const { data: meetDatas, error } = useSWR(
+        'http://127.0.0.1:8000/api/meet/?rm_status=W',
+        fetcher,
+        { revalidateOnFocus: true }
+    )
 
     const stateData = [
         {
@@ -149,11 +119,11 @@ function MyRemove(props: any) {
         async (meet_id: number) => {
             if (window.confirm('회의록을 삭제하시겠습니까?')) {
                 mutate(
-                    'http://127.0.0.1:8000/api/meet/?search=W',
+                    'http://127.0.0.1:8000/api/meet/?rm_status=W',
                     async (todos) => {
                         const updateList = await axios.patch(
-                            `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'N', rm_status: 'N' }
+                            `http://127.0.0.1:8000/api/meet/`,
+                            { rm_status: 'N', meet_id: meet_id }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
@@ -170,11 +140,11 @@ function MyRemove(props: any) {
         async (meet_id: number) => {
             if (window.confirm('회의록을 복구하시겠습니까?')) {
                 mutate(
-                    'http://127.0.0.1:8000/api/meet/?search=W',
+                    'http://127.0.0.1:8000/api/meet/?rm_status=W',
                     async (todos) => {
                         const updateList = await axios.patch(
-                            `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'Y', rm_status: 'Y' }
+                            `http://127.0.0.1:8000/api/meet/`,
+                            { rm_status: 'Y', meet_id: meet_id }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
