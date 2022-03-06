@@ -2,8 +2,9 @@ import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@components/common'
 import { Power, powerViewBox } from '@svgs/Power'
-import { Calendar, calendarViewBox } from '@svgs/Calendar'
-import { People, peopleViewBox } from '@svgs/People'
+import { CalendarGray, calendarGrayViewBox } from '@svgs/CalendarGray'
+import { PeopleGray, peopleGrayViewBox } from '@svgs/PeopleGray'
+
 import CloseMeetingModal from './CloseMeetingModal'
 import useMeeting from '@store/meeting/useMeeting'
 import moment from 'moment'
@@ -74,7 +75,6 @@ const MeetingInfo = styled.div`
         display: flex;
         align-items: center;
         svg {
-            background: gold;
         }
         .date {
             display: flex;
@@ -126,11 +126,12 @@ function Header() {
                                 <div className="inner_info">
                                     <div className="date">
                                         <Svg
-                                            viewBox={calendarViewBox}
+                                            viewBox={calendarGrayViewBox}
                                             width={'20'}
                                             height={'18'}
                                         >
-                                            <Calendar />
+                                            <CalendarGray />
+                                            calendarGrayViewBox
                                         </Svg>
                                         {moment(meet?.meet_date).format(
                                             'YYYY-MM-DD'
@@ -138,11 +139,11 @@ function Header() {
                                     </div>
                                     <div className="participants">
                                         <Svg
-                                            viewBox={peopleViewBox}
+                                            viewBox={peopleGrayViewBox}
                                             width={'16'}
                                             height={'16'}
                                         >
-                                            <People />
+                                            <PeopleGray />
                                         </Svg>
                                         {meet.participants.replace(/\,/g, ', ')}
                                     </div>

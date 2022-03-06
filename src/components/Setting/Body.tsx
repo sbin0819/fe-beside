@@ -91,7 +91,9 @@ function Body({
     const { meet_title, meet_date, participants, goal } = meetForm
     const [remainTime, setRemainTime] = useState(59)
     const [isShowModal, setIsShowModal] = useState(false)
-    const handleCloseMeeting = () => setIsShowModal(false)
+    const handleModalClose = () => setIsShowModal(false)
+    const handleModalOpen = () => setIsShowModal(true)
+
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -215,7 +217,7 @@ function Body({
 
     return (
         <>
-            {isShowModal && <Modal onClose={handleCloseMeeting} />}
+            {isShowModal && <Modal onClose={handleModalClose} />}
             <Container>
                 <div>
                     <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
@@ -273,6 +275,7 @@ function Body({
                             setAgendagendaForms={setAgendagendaForms}
                             remainTime={remainTime}
                             setRemainTime={setRemainTime}
+                            handleModalOpen={handleModalOpen}
                         />
                     </div>
                 </div>

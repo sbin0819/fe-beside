@@ -131,7 +131,7 @@ function LeftPannel() {
                       progressAgenda?.agenda_status == 'p' ? (
                         <Timer
                             agendaId={progressAgenda?.agenda_id}
-                            duration={10 || progressAgenda?.setting_time}
+                            duration={progressAgenda?.setting_time}
                             progress={progressAgenda?.progress_time}
                             alarmSoundControl={alarmSoundControl}
                             setTwentyPercentLeft={setTwentyPercentLeft}
