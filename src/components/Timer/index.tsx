@@ -79,12 +79,14 @@ function AnimationTimer({
     progress,
     alarmSoundControl,
     setTwentyPercentLeft,
+    handleProgressTime,
 }: {
     agendaId: number | string
     duration: number
     progress?: number
     alarmSoundControl?: boolean
     setTwentyPercentLeft: any
+    handleProgressTime: (time: number) => void
 }) {
     const initRef = useRef(-1)
     const [isSound, setIsSound] = useState(false)
@@ -157,6 +159,9 @@ function AnimationTimer({
             // onPatchAgenda(
             //     duration - getRemainTime() + Math.round(overTime / 1000)
             // )
+            handleProgressTime(
+                duration - getRemainTime() + Math.round(overTime / 1000)
+            )
             let box = document.querySelector<HTMLElement>('.box')
             var cnt = document.getElementById('count')
             var water = document.getElementById('water')
