@@ -60,7 +60,7 @@ function MeetingSummary() {
         <Container>
             <div style={{ width: '20', height: '20' }}>
                 <Image
-                    src="/image/assets/emoji-deco-megaphone@3x.png"
+                    src="/image/assets/megaphone/emoji-deco-megaphone@3x.png"
                     width={20}
                     height={20}
                 />

@@ -13,6 +13,7 @@ import AgendaInputs from './AgendaInputs'
 import { useRouter } from 'next/router'
 import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 import Modal from './Modal'
+import Image from 'next/image'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -74,6 +75,7 @@ const InfoSection = styled.div`
     line-height: 1.5;
     letter-spacing: normal;
     color: #000;
+    gap: 16px;
 `
 
 function Body({
@@ -280,8 +282,17 @@ function Body({
                     </div>
                 </div>
                 <InfoSection>
-                    {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                    <div style={{ width: '16', height: '16' }}>
+                        <Image
+                            src="/image/assets/pencil/emoji-deco-pencil@3x.png"
+                            width={16}
+                            height={16}
+                        />
+                    </div>
+                    <div>
+                        {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
                 설정해보세요!`}
+                    </div>
                 </InfoSection>
                 <ButtonContainer>
                     <StyledButton
