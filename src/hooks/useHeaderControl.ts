@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { Cookies } from 'react-cookie'
 const cookies = new Cookies()
@@ -23,10 +23,10 @@ function useIsHeader() {
     }
     const [isHeader, setIsHeader] = useState(false)
     const [descListKey, setDescListKey] = useState('')
-    const [auth, setAuth] = useState('')
+    const authRef = useRef<string>('')
     useEffect(() => {
-        if (cookies.get('Authorization') && auth === '') {
-            setAuth(cookies.get('Authorization'))
+        if (cookies.get('Authorization')) {
+            authRef.current = cookies.get('Authorization')
         }
         setDescListKey(() => {
             const arr = pathname.split('/')
@@ -43,7 +43,17 @@ function useIsHeader() {
         }
     }, [pathname])
 
-    return { isHeader, auth, desc: descList[descListKey] ?? '' }
+    useEffect(() => {
+        if (!authRef.current && pathname !== '/login') {
+            router.replace('/login')
+        }
+    }, [router])
+
+    return {
+        isHeader,
+        auth: authRef.current,
+        desc: descList[descListKey] ?? '',
+    }
 }
 
 export default useIsHeader
