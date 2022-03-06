@@ -24,6 +24,17 @@ function LeftPannel() {
     const [activeIdx, setActiveIdx] = useState<any>(null)
     const { agendaMutate } = agendasSWR(router.query.id)
     const [progressAgenda, setProgressAgenda] = useState<AgendaState>({})
+    const [progressTime, setProgressTime] = useState(0)
+    const handleProgressTime = (time) => {
+        setProgressTime(time)
+    }
+    const isLastAgenda = () => {
+        return (
+            agendas.findIndex((el) => el.agenda_status == 'p') + 1 ==
+                agendas.length ||
+            agendas.findIndex((el) => el.agenda_status == 'p') == -1
+        )
+    }
 
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
@@ -31,9 +42,10 @@ function LeftPannel() {
                 `http://localhost:8000/api/agenda/${progressAgenda?.agenda_id}/`,
                 {
                     agenda_status: 'c',
+                    progress_time: progressTime,
                 }
             )
-            if (activeIdx + 1 <= agendas.length) {
+            if (!isLastAgenda()) {
                 const idx = agendas.findIndex((el) => el.agenda_status == 'y')
                 const nextAgenda = agendas[idx]
                 await axios.patch(
@@ -101,12 +113,12 @@ function LeftPannel() {
                         cursor: 'pointer',
                     }}
                     onClick={() => {
-                        if (activeIdx + 1 <= agendas.length) {
-                            onEndAgenda()
-                        }
+                        onEndAgenda()
                     }}
                 >
-                    <span className="main_pannel_top_desc">NEXT AGENDA</span>
+                    <span className="main_pannel_top_desc">
+                        {isLastAgenda() ? '회의 종료' : 'NEXT AGENDA'}
+                    </span>
                     <span>
                         <Svg viewBox={nextViewBox} width={'20'} height={'20'}>
                             <Next />
@@ -135,6 +147,7 @@ function LeftPannel() {
                             progress={progressAgenda?.progress_time}
                             alarmSoundControl={alarmSoundControl}
                             setTwentyPercentLeft={setTwentyPercentLeft}
+                            handleProgressTime={handleProgressTime}
                         />
                     ) : (
                         <div>loading</div>
