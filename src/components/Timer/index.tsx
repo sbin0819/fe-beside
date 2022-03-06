@@ -77,11 +77,13 @@ function AnimationTimer({
     agendaId,
     duration,
     progress,
+    alarmSoundControl,
     setTwentyPercentLeft,
 }: {
     agendaId: number | string
     duration: number
     progress?: number
+    alarmSoundControl?: boolean
     setTwentyPercentLeft: any
 }) {
     const initRef = useRef(-1)
@@ -216,7 +218,7 @@ function AnimationTimer({
 
     useEffect(() => {
         let timeout
-        if (isSound) {
+        if (isSound && alarmSoundControl) {
             play()
             timeout = setTimeout(() => {
                 setIsSound(false)

@@ -1,5 +1,6 @@
 import { Svg } from '@components/common'
 import useMeeting from '@store/meeting/useMeeting'
+import { Alarmon, alarmonViewBox } from '@svgs/Alramon'
 import { Alarmoff, alarmoffViewBox } from '@svgs/Alarmoff'
 import { Next, nextViewBox } from '@svgs/Next'
 import { MainPannelContainer, MainPannelTop, MainPannelBody } from './styles'
@@ -18,6 +19,7 @@ function LeftPannel() {
     const router = useRouter()
     const { agendas } = useMeeting()
     const { setAgendaCursor } = useMeetingActions()
+    const [alarmSoundControl, setAlarm] = useState(true)
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
     const [activeIdx, setActiveIdx] = useState<any>(null)
     const { agendaMutate } = agendasSWR(router.query.id)
@@ -73,10 +75,24 @@ function LeftPannel() {
     return (
         <MainPannelContainer>
             <MainPannelTop>
-                <div>
-                    <Svg viewBox={alarmoffViewBox} width={'20'} height={'20'}>
-                        <Alarmoff />
-                    </Svg>
+                <div onClick={() => setAlarm((prev) => !prev)}>
+                    {alarmSoundControl ? (
+                        <Svg
+                            viewBox={alarmonViewBox}
+                            width={'20'}
+                            height={'20'}
+                        >
+                            <Alarmon />
+                        </Svg>
+                    ) : (
+                        <Svg
+                            viewBox={alarmoffViewBox}
+                            width={'20'}
+                            height={'20'}
+                        >
+                            <Alarmoff />
+                        </Svg>
+                    )}
                 </div>
                 <div
                     style={{
@@ -115,8 +131,9 @@ function LeftPannel() {
                       progressAgenda?.agenda_status == 'p' ? (
                         <Timer
                             agendaId={progressAgenda?.agenda_id}
-                            duration={progressAgenda?.setting_time}
+                            duration={10 || progressAgenda?.setting_time}
                             progress={progressAgenda?.progress_time}
+                            alarmSoundControl={alarmSoundControl}
                             setTwentyPercentLeft={setTwentyPercentLeft}
                         />
                     ) : (
