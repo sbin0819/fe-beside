@@ -346,6 +346,12 @@ function AgendaInputs({
                                                     form.order_number
                                                 )
                                             }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Tab') {
+                                                    onBlur(e, form.order_number)
+                                                    addAgendaInput()
+                                                }
+                                            }}
                                         />
                                     </div>
                                     {(form.validation?.setting_time?.error ||
