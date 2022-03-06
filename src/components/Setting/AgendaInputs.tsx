@@ -163,7 +163,7 @@ function AgendaInputs({
 
     const increaseRemainTime = (order_number) => {
         if (order_number === 1) {
-            setRemainTime(60)
+            setRemainTime(59)
         } else {
             setRemainTime(
                 (prev) => +prev + +agendaForms[order_number].setting_time

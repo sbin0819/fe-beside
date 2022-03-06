@@ -89,7 +89,7 @@ function Body({
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-    const [remainTime, setRemainTime] = useState(60)
+    const [remainTime, setRemainTime] = useState(59)
     const [isShowModal, setIsShowModal] = useState(false)
     const handleCloseMeeting = () => setIsShowModal(false)
     const checkValidMeetForms = () => {
