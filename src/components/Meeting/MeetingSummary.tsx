@@ -3,11 +3,10 @@ import { Svg } from '@components/common'
 import { Dropdown, dropdownViewBox } from '@svgs/Dropdown'
 import styled from 'styled-components'
 import useMeeting from '@store/meeting/useMeeting'
-
+import Image from 'next/image'
 const Container = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 656px;
     height: 72px;
     padding: 0 24px;
@@ -16,6 +15,7 @@ const Container = styled.div`
     box-shadow: 2px 4px 16px 0 rgba(0, 0, 0, 0.08);
     border: solid 1px #f1f1f1;
     background: #fff;
+    gap: 16px;
     .agenda_order {
         font-family: Pretendard;
         font-size: 14px;
@@ -55,27 +55,17 @@ const Container = styled.div`
     }
 `
 function MeetingSummary() {
-    const { meet, agendas } = useMeeting()
+    const { meet } = useMeeting()
     return (
         <Container>
-            {meet.goal}
-            {/* <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                }}
-            >
-                <div className="agenda_order">AGENDA1</div>
-                <div className="agenda_desc">{meet.goal}</div>
+            <div style={{ width: '20', height: '20' }}>
+                <Image
+                    src="/image/assets/megaphone/emoji-deco-megaphone@3x.png"
+                    width={20}
+                    height={20}
+                />
             </div>
-            <div className="summary_progress">
-                <div className="agenda_type">진행중</div>
-                <div>
-                    <Svg viewBox={dropdownViewBox} width={'20'} height={'18'}>
-                        <Dropdown />
-                    </Svg>
-                </div>
-            </div> */}
+            <div>{meet.goal}</div>
         </Container>
     )
 }

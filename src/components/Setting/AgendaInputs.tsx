@@ -82,11 +82,13 @@ function AgendaInputs({
     setAgendagendaForms,
     remainTime,
     setRemainTime,
+    handleModalOpen,
 }: {
     agendaForms: AgendaForms
     setAgendagendaForms: any
     remainTime: number
     setRemainTime: any
+    handleModalOpen: () => void
 }) {
     const formOrderRef = useRef(1)
     // const currRef = useRef('ready')
@@ -163,7 +165,7 @@ function AgendaInputs({
 
     const increaseRemainTime = (order_number) => {
         if (order_number === 1) {
-            setRemainTime(60)
+            setRemainTime(59)
         } else {
             setRemainTime(
                 (prev) => +prev + +agendaForms[order_number].setting_time
@@ -180,7 +182,7 @@ function AgendaInputs({
             !agendaForms[formOrderRef.current]?.setting_time ||
             agendaForms[formOrderRef.current]?.agenda_title === ''
         ) {
-            alert('입력하지 않은 필드가 있습니다.')
+            handleModalOpen()
             return
         }
         // if (remainTime - agendaForms[formOrderRef.current]?.setting_time < 0) {
@@ -345,6 +347,12 @@ function AgendaInputs({
                                                 decreaseRemainTime(
                                                     form.order_number
                                                 )
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Tab') {
+                                                    onBlur(e, form.order_number)
+                                                    addAgendaInput()
+                                                }
                                             }}
                                         />
                                     </div>

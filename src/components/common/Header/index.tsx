@@ -19,6 +19,7 @@ const Container = styled.div`
         height: 80px;
         .header_logo {
             font-weight: 900;
+            color: #0c254c;
             cursor: pointer;
         }
         .header_desc {

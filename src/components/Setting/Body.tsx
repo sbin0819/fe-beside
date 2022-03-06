@@ -13,6 +13,7 @@ import AgendaInputs from './AgendaInputs'
 import { useRouter } from 'next/router'
 import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 import Modal from './Modal'
+import Image from 'next/image'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -74,6 +75,7 @@ const InfoSection = styled.div`
     line-height: 1.5;
     letter-spacing: normal;
     color: #000;
+    gap: 16px;
 `
 
 function Body({
@@ -89,9 +91,11 @@ function Body({
 }) {
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
-    const [remainTime, setRemainTime] = useState(60)
+    const [remainTime, setRemainTime] = useState(59)
     const [isShowModal, setIsShowModal] = useState(false)
-    const handleCloseMeeting = () => setIsShowModal(false)
+    const handleModalClose = () => setIsShowModal(false)
+    const handleModalOpen = () => setIsShowModal(true)
+
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -215,7 +219,7 @@ function Body({
 
     return (
         <>
-            {isShowModal && <Modal onClose={handleCloseMeeting} />}
+            {isShowModal && <Modal onClose={handleModalClose} />}
             <Container>
                 <div>
                     <MainInfoTitle>회의 목표 및 AGENDA</MainInfoTitle>
@@ -273,12 +277,22 @@ function Body({
                             setAgendagendaForms={setAgendagendaForms}
                             remainTime={remainTime}
                             setRemainTime={setRemainTime}
+                            handleModalOpen={handleModalOpen}
                         />
                     </div>
                 </div>
                 <InfoSection>
-                    {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
+                    <div style={{ width: '16', height: '16' }}>
+                        <Image
+                            src="/image/assets/pencil/emoji-deco-pencil@3x.png"
+                            width={16}
+                            height={16}
+                        />
+                    </div>
+                    <div>
+                        {`지금부터 ${remainTime}분안에 회의를 완료할 수 있도록 Agenda를
                 설정해보세요!`}
+                    </div>
                 </InfoSection>
                 <ButtonContainer>
                     <StyledButton
