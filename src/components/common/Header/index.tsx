@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+import axios from '@axios'
 
 import DropdownMenu from './DropdownMenu'
 
@@ -40,11 +41,18 @@ interface HeaderProps {
 }
 function Header({ desc }: HeaderProps) {
     const [isOpenModal, setIsOpenModal] = useState(false)
+    const [username, setUserName] = useState('')
     const onCloseModal = () => setIsOpenModal(false)
     const mockData = {
         username: '오구민',
         icon: '😊',
     }
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+            console.log(res)
+            setUserName(res.data.nickname)
+        })
+    }, [])
     return (
         <Container>
             <div className="header_inner" style={{ width: '1140px' }}>
@@ -52,7 +60,7 @@ function Header({ desc }: HeaderProps) {
                     <Link href="/">59mins</Link>
                 </div>
                 <div className="header_desc">
-                    <div className="username">{mockData.username}</div>
+                    <div className="username">{username}</div>
                     <div className="description">{desc}</div>
                     <div style={{ position: 'relative' }}>
                         <div

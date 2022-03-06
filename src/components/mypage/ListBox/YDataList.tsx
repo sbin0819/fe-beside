@@ -28,7 +28,7 @@ import { Timer, timerViewBox } from '@svgs/Timer'
 import { Drafts, draftsViewBox } from '@svgs/Drafts'
 import { Delete, deleteViewBox } from '@svgs/Delete'
 import { mutate } from 'swr'
-import axios from 'axios'
+import axios from '@axios'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -138,11 +138,11 @@ function YDataList(props: any) {
         async (meet_id: number) => {
             if (window.confirm('회의록을 삭제하시겠습니까?')) {
                 mutate(
-                    'http://127.0.0.1:8000/api/meet/?search=Y',
+                    'http://127.0.0.1:8000/api/meet/?rm_status=Y',
                     async (todos) => {
                         const updateList = await axios.patch(
-                            `http://127.0.0.1:8000/api/meet/${meet_id}/`,
-                            { meet_status: 'W', rm_status: 'W' }
+                            `http://127.0.0.1:8000/api/meet/`,
+                            { rm_status: 'W', meet_id: meet_id }
                         )
                         console.log('result', updateList)
                         const filterList = todos.filter(
@@ -255,7 +255,10 @@ function YDataList(props: any) {
                                                     <Delete />
                                                 </Svg>
                                                 <div
-                                                    style={{ fontSize: '16px' }}
+                                                    style={{
+                                                        fontSize: '16px',
+                                                        marginTop: '7px',
+                                                    }}
                                                 >
                                                     삭제하기
                                                 </div>

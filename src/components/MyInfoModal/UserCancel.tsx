@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
+import { useForm, Controller } from 'react-hook-form'
 import { Xclick, xclickviewBox } from '@svgs/Xclick'
 interface ModalDefaultType {
     ClickToggleModal: () => void
@@ -56,18 +57,15 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                 <InfoBox style={{ top: '173px' }}>
                     <ModalH3>탈퇴이유</ModalH3>
                     <RadioBox>
-                        <LiBox>
-                            <RadioInput id="radio1" type="radio" />
-                            <label htmlFor="radio1">자주 이용하지 않음</label>
-                        </LiBox>
-                        <LiBox>
-                            <RadioInput type="radio" id="radio2" />
-                            <label htmlFor="radio2">개인정보 노출 걱정</label>
-                        </LiBox>
-                        <LiBox>
-                            <RadioInput type="radio" id="radio3" />
-                            <label>UI/UX 불편</label>
-                        </LiBox>
+                        <input id="radio1" type="radio" />
+                        <label htmlFor="radio1">자주 이용하지 않음</label>
+
+                        <input type="radio" id="radio2" />
+                        <label htmlFor="radio2">개인정보 노출 걱정</label>
+
+                        <input type="radio" id="radio3" />
+                        <label>UI/UX 불편</label>
+
                         <LiBox>
                             <RadioInput type="radio" />
                             <label>제공하는 기능 및 서비스 부족</label>
