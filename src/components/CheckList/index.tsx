@@ -288,44 +288,71 @@ function CheckListModal({ onClose }: Props) {
     console.log('plusData', plusData)
 
     function resultText() {
-        if (plusData >= 75) {
-            return <div>75점까지의 점수 설명입니다!</div>
+        if (plusData === 120) {
+            return (
+                <div>
+                    Wow! 흠잡을 곳 없이 완벽한 회의군요!👍👍👍 더할 나위 없이
+                    효율적인 회의를 한 우리 팀원들 모두 진정한 일잘러!
+                </div>
+            )
+        } else if (plusData >= 75) {
+            return (
+                <div>
+                    짝짝!👏 아주 좋아요! 약간의 아쉬운 부분만 채운다면 완벽한
+                    회의를 진행할 수 있을 것 같은데요?☺️
+                </div>
+            )
         } else if (plusData >= 50) {
-            return <div>50점까지의 점수 설명입니다!</div>
+            return (
+                <div>
+                    그럭저럭 효율적인 회의를 하셨네요! 부족한 부분이 무엇인지
+                    확인해보고 다음 번 회의 때 개선해보아요!{' '}
+                </div>
+            )
         } else if (plusData >= 25) {
-            return <div>25점까지의 점수 설명입니다!</div>
+            return (
+                <div>
+                    약간은 아쉬운 회의였네요😢 다음 회의에서는 어떤 부분을 좀 더
+                    충족시킬 수 있을지 팀원들과 함께 상의해보세요!
+                </div>
+            )
         } else if (plusData >= 0) {
-            return <div>0점까지의 점수 설명입니다!</div>
+            return (
+                <div>
+                    0오늘 회의는 다소 아쉽네요..😭 다음 회의는 좀 더 나아질 수
+                    있도록 팀원들과 함께 이번 회의를 회고해볼까요? 회의 회고란?
+                </div>
+            )
         }
     }
     useOnClickOutside(ref, () => {
         onClose()
     })
 
-    useEffect(() => {
-        axios
-            .get('http://127.0.0.1:8000/api/selfcheck/?meet_id=3')
-            .then((res) => {
-                console.log('00', res.data)
-                if (plusData.length === 0) {
-                    console.log('11', res.data)
-                    setDisable(false)
-                    setChecklistResult(true)
-                    console.log('11')
-                } else {
-                    console.log('ddfdf')
-                    // setOwnerShipCheck((res.data.ownership || '').split(','))
-                    // setParticipationCheck(res.data.participation.split(','))
-                    // setEfficiencyCheck(res.data.efficiency.split(','))
-                    // setProductivityCheck(res.data.productivity.split(','))
-                    console.log('22', res.data)
-                    setDisable(true)
-                    setChecklistResult(false)
-                    // console.log('333', ownerShip.split(','))
-                    // console.log('22', res.data.ownership.split(','))
-                }
-            })
-    }, [])
+    // useEffect(() => {
+    //     axios
+    //         .get('http://127.0.0.1:8000/api/selfcheck/?meet_id=3')
+    //         .then((res) => {
+    //             console.log('00', res.data)
+    //             if (plusData.length === 0) {
+    //                 console.log('11', res.data)
+    //                 setDisable(false)
+    //                 setChecklistResult(true)
+    //                 console.log('11')
+    //             } else {
+    //                 console.log('ddfdf')
+    //                 // setOwnerShipCheck((res.data.ownership || '').split(','))
+    //                 // setParticipationCheck(res.data.participation.split(','))
+    //                 // setEfficiencyCheck(res.data.efficiency.split(','))
+    //                 // setProductivityCheck(res.data.productivity.split(','))
+    //                 console.log('22', res.data)
+    //                 setDisable(true)
+    //                 setChecklistResult(false)
+    //                 // console.log('333', ownerShip.split(','))
+    //                 // console.log('22', res.data.ownership.split(','))
+    //             }
+    //         })
+    // }, [])
 
     return (
         <Container>

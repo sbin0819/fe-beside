@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from '@axios'
 import moment from 'moment'
+import Modal from './Modal'
 import {
     TabContainer,
     BoxContainer,
@@ -61,6 +62,9 @@ export const HoverBox = styled.div`
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyRemove(props: any) {
+    const [isShowModal, setIsShowModal] = useState(false)
+    const handleModalClose = () => setIsShowModal(false)
+    const handleModalOpen = () => setIsShowModal(true)
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
     const { data: meetDatas, error } = useSWR(
         'http://127.0.0.1:8000/api/meet/?rm_status=W',
@@ -160,6 +164,7 @@ function MyRemove(props: any) {
 
     return (
         <React.Fragment>
+            {isShowModal && <Modal onClose={handleModalClose} />}
             <TabContainer>
                 <ListBoxContainer>
                     {meetDatas &&
@@ -216,9 +221,10 @@ function MyRemove(props: any) {
                                                 </p>
                                             </HoverDiv>
                                             <DeleteHoverDiv
-                                                onClick={() =>
+                                                onClick={() => {
                                                     removeBtn(meetData.meet_id)
-                                                }
+                                                    handleModalOpen()
+                                                }}
                                             >
                                                 <Svg
                                                     viewBox={deleteViewBox}
