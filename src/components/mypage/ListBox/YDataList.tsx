@@ -29,6 +29,7 @@ import { Drafts, draftsViewBox } from '@svgs/Drafts'
 import { Delete, deleteViewBox } from '@svgs/Delete'
 import { mutate } from 'swr'
 import axios from '@axios'
+import Modal from '../Modal'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -57,6 +58,7 @@ export const HoverBox = styled.div`
 
 function YDataList(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
+
     let meetDatas = props.data
     console.log('props', props)
     const stateData = [

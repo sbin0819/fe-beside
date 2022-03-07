@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import axios from '@axios'
+import useSWR from 'swr'
 
 import DropdownMenu from './DropdownMenu'
 
@@ -47,7 +48,11 @@ function Header({ desc }: HeaderProps) {
         username: '오구민',
         icon: '😊',
     }
+    // const { data } = useSWR('http://127.0.0.1:8000/api/user/', (url) =>
+    //     axios.get(url)
+    // )
     useEffect(() => {
+        // console.log(data)
         axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
             console.log(res)
             setUserName(res.data.nickname)

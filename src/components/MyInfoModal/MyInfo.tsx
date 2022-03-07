@@ -113,7 +113,6 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     const userUpdate = () => {
         axios
             .patch('http://127.0.0.1:8000/api/user/', {
-                email: email,
                 nickname: nickname,
             })
             .then((res) => {
