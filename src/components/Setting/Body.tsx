@@ -196,11 +196,15 @@ function Body({
                 order_number: form.order_number,
                 agenda_status: form.order_number == 1 ? 'p' : 'y',
             }))
-            const agendasReqests = agendas.map((agenda) =>
-                axios.post('/api/agenda/', { ...agenda })
+            const agendaRes = await axios.post('/api/agenda/', agendas)
+            const actions = agendaRes.data.map((el) => {
+                return { agenda_id: el.agenda_id }
+            })
+            const actionsRequest = actions.map((action) =>
+                axios.post('/api/action/', { ...action })
             )
             // validation 처리
-            Promise.all(agendasReqests).then((res) => router.push('/'))
+            Promise.all(actionsRequest).then((res) => router.push('/'))
         } catch (error) {}
     }
 
