@@ -89,6 +89,7 @@ function Body({
     setMeetForm: any
     setAgendagendaForms: any
 }) {
+    // setting/[id] 일 경우는 meet_status 상태를 고쳐준다
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
     const [remainTime, setRemainTime] = useState(59)
@@ -203,7 +204,6 @@ function Body({
             const actionsRequest = actions.map((action) =>
                 axios.post('/api/action/', { ...action })
             )
-            // validation 처리
             Promise.all(actionsRequest).then((res) => router.push('/'))
         } catch (error) {}
     }
@@ -217,7 +217,14 @@ function Body({
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
         if (isCheckMeetForm && isAgendaFormsValid) {
-            fetchPostMeet(sortedAgendas, rm_status)
+            if (router?.query?.id) {
+                await axios.patch('/api/meet/', {
+                    meet_id: router?.query?.id,
+                    rm_status: 'p',
+                })
+            } else {
+                fetchPostMeet(sortedAgendas, rm_status)
+            }
         }
     }
 
