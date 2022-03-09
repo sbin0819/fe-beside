@@ -115,14 +115,11 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
             .patch('http://127.0.0.1:8000/api/user/', {
                 nickname: nickname,
             })
-            .then((res) => {
-                console.log(res)
-            })
+            .then((res) => {})
     }
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
-            console.log(res.data)
             setInputs(res.data)
         })
     }, [])

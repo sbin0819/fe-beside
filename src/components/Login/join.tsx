@@ -182,7 +182,7 @@ function Join() {
             .post('http://127.0.0.1:8000/api/user/', [userData])
             .then((res) => {
                 let token = res.data['token']
-                console.log('token', token)
+
                 setCookie('Authorization', token, {
                     path: '/',
                     maxAge: 1000 * 60 * 60 * 24 * 7,

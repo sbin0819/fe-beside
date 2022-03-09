@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import axios from '@axios'
 import useSWR from 'swr'
+// import { userSWR, userDataSWR } from '@api/user'
+// import { userInfo } from '@api/user'
 
 import DropdownMenu from './DropdownMenu'
 
@@ -41,6 +43,8 @@ interface HeaderProps {
     desc?: string
 }
 function Header({ desc }: HeaderProps) {
+    // const { userData } = userSWR()
+    // const { userInfo } = userDataSWR()
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [username, setUserName] = useState('')
     const onCloseModal = () => setIsOpenModal(false)
@@ -48,15 +52,22 @@ function Header({ desc }: HeaderProps) {
         username: '오구민',
         icon: '😊',
     }
-    // const { data } = useSWR('http://127.0.0.1:8000/api/user/', (url) =>
-    //     axios.get(url)
-    // )
-    useEffect(() => {
-        // console.log(data)
-        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
-            console.log(res)
+    const { data } = useSWR('http://127.0.0.1:8000/api/user/', (url) =>
+        axios.get(url).then((res) => {
+            // console.log('66', res.data)
+            res.data
             setUserName(res.data.nickname)
         })
+    )
+
+    useEffect(() => {
+        // console.log('userData', userData)
+        // console.log('userInfo', userInfo)
+        // console.log(data)
+        // axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+        //     console.log(res)
+        //     setUserName(res.data.nickname)
+        // })
     }, [])
     return (
         <Container>
