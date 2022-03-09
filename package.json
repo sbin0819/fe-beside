@@ -5,18 +5,16 @@
     "license": "MIT",
     "scripts": {
         "dev": "cross-env APP_ENV=dev next dev",
-        "prod": "cross-env APP_ENV=prod next dev",
+        "prod": "cross-env APP_ENV=production next dev",
         "build": "next build",
         "export": "next build && next export",
         "start": "next start",
         "lint": "next lint",
-        "prepare": "husky install",
         "cm": "cz",
-        "cy:open": "cypress open",
-        "cy:run": "cypress run",
         "test": "jest --watch",
         "docker:build": "docker build --tag mynextjs .",
-        "docker:run": "docker run -d -p 3000:3000 mynextjs"
+        "docker:run": "docker run -d -p 3000:3000 mynextjs",
+        "dev:up": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.7.1",
@@ -48,10 +46,6 @@
         "@babel/core": "^7.16.0",
         "@commitlint/cli": "^15.0.0",
         "@next/eslint-plugin-next": "^12.0.10",
-        "@storybook/addon-actions": "^6.4.7",
-        "@storybook/addon-essentials": "^6.4.7",
-        "@storybook/addon-links": "^6.4.7",
-        "@storybook/react": "^6.4.7",
         "@types/jest": "^27.4.0",
         "@types/node": "^16.11.11",
         "@types/prettier": "^2.4.2",
@@ -66,7 +60,6 @@
         "babel-preset-react-app": "^10.0.0",
         "commitizen": "^4.2.4",
         "commitlint-config-gitmoji": "^2.2.5",
-        "cypress": "^9.1.1",
         "cz-customizable": "^6.3.0",
         "eslint": "^8.7.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
@@ -76,7 +69,6 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "eslint-plugin-unused-imports": "^1.1.5",
         "file-loader": "^6.2.0",
-        "husky": "^7.0.0",
         "prettier": "^2.5.1",
         "typescript": "^4.5.2",
         "url-loader": "^4.1.1"
