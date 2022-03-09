@@ -89,7 +89,7 @@ function CloseMeetingModal({ onClose }: DropdownMenuProps) {
                         취소
                     </button>
                     <button className="btn_save" onClick={onSave}>
-                        저장
+                        종료
                     </button>
                 </div>
             </ModalContainer>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Svg } from '@components/common'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
@@ -9,6 +9,7 @@ import styled from 'styled-components'
 
 import axios from '@axios'
 import { actionsSWR } from '@api/actions'
+import moment from 'moment'
 
 const MenuContainer = styled.div<{ height?: number }>`
     margin-top: 20px;
@@ -78,6 +79,9 @@ function ActionItems({
     actionsData: ActionItems[]
 }) {
     const { agendaMutate } = actionsSWR(agendaId)
+    const [innerActions, setActions] = useState<{ [key: number]: ActionItems }>(
+        {}
+    )
     const addAction = async () => {
         await axios.post('/api/action/', {
             agenda_id: agendaId,
@@ -90,19 +94,49 @@ function ActionItems({
         agendaMutate()
     }
 
-    const updateAction = async (id) => {}
+    const updateAction = async () => {
+        const actions = Object.values(innerActions)
+        await axios.patch('/api/action/', actions)
+    }
 
-    const onChangeTitle = (e, id) => {}
+    const onChange = (e, id) => {
+        const { value, name } = e.target
+        setActions((prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [name]: value,
+            },
+        }))
+    }
+
+    const onChangeDate = (e, id) => {
+        const { value, name } = e.target
+        setActions((prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [name]: moment(value).format('YYYY-MM-DD') + ' 12:12:12',
+            },
+        }))
+    }
 
     useEffect(() => {
-        // const cleanTime = setTimeout(() => {
-        //     // updateAction()
-        // }, 300)
-        // return () => {
-        //     clearTimeout(cleanTime)
-        // }
-    }, [])
+        const cleanTime = setTimeout(() => {
+            updateAction()
+        }, 300)
+        return () => {
+            clearTimeout(cleanTime)
+        }
+    }, [onChange])
 
+    useEffect(() => {
+        const actionObj = actionsData.reduce((acc, curr) => {
+            acc[curr.action_id] = curr
+            return acc
+        }, {})
+        setActions(actionObj)
+    }, [actionsData])
     return (
         <>
             <MenuContainer>
@@ -120,66 +154,81 @@ function ActionItems({
                 </Header>
                 <Body>
                     <ItemList>
-                        {actionsData.map((el, idx) => (
-                            <Item key={el.action_id}>
-                                <div style={{ display: 'flex' }}>
-                                    <input
-                                        type="text"
-                                        placeholder="액션 아이템을 작성해주세요"
-                                        value={el.action_title}
-                                        name="title"
-                                        //  onChange={onChangeActionItems(key)}
-                                    />
-                                    {idx !== 0 && (
-                                        <div
-                                            onClick={() => {
-                                                deleteAction(el.action_id)
+                        {Object.entries(innerActions)?.map(
+                            ([key, value], idx) => (
+                                <Item key={key}>
+                                    <div style={{ display: 'flex' }}>
+                                        <input
+                                            type="text"
+                                            placeholder="액션 아이템을 작성해주세요"
+                                            value={value.action_title}
+                                            name="action_title"
+                                            onChange={(e) => {
+                                                onChange(e, value.action_id)
                                             }}
-                                        >
-                                            <Svg
-                                                viewBox={closeViewBox}
-                                                width={'20'}
-                                                height={'18'}
+                                        />
+                                        {idx !== 0 && (
+                                            <div
+                                                onClick={() => {
+                                                    deleteAction(
+                                                        value.action_id
+                                                    )
+                                                }}
                                             >
-                                                <Close />
-                                            </Svg>
-                                        </div>
-                                    )}
-                                </div>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <Svg
-                                        viewBox={peopleViewBox}
-                                        width={'16'}
-                                        height={'16'}
+                                                <Svg
+                                                    viewBox={closeViewBox}
+                                                    width={'20'}
+                                                    height={'18'}
+                                                >
+                                                    <Close />
+                                                </Svg>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div
+                                        style={{ display: 'flex', gap: '8px' }}
                                     >
-                                        <People />
-                                    </Svg>
-                                    <input
-                                        type="text"
-                                        placeholder="담당자"
-                                        value={el.person}
-                                        name="authors"
-                                        //  onChange={onChangeActionItems(key)}
-                                    />
-                                </div>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <Svg
-                                        viewBox={calendarViewBox}
-                                        width={'20'}
-                                        height={'18'}
+                                        <Svg
+                                            viewBox={peopleViewBox}
+                                            width={'16'}
+                                            height={'16'}
+                                        >
+                                            <People />
+                                        </Svg>
+                                        <input
+                                            type="text"
+                                            placeholder="담당자"
+                                            value={value.person}
+                                            name="person"
+                                            onChange={(e) => {
+                                                onChange(e, value.action_id)
+                                            }}
+                                        />
+                                    </div>
+                                    <div
+                                        style={{ display: 'flex', gap: '8px' }}
                                     >
-                                        <Calendar />
-                                    </Svg>
-                                    <input
-                                        type="date"
-                                        data-placeholder="마감기한"
-                                        value={el.dead_line}
-                                        name="date"
-                                        readOnly
-                                    />
-                                </div>
-                            </Item>
-                        ))}
+                                        <Svg
+                                            viewBox={calendarViewBox}
+                                            width={'20'}
+                                            height={'18'}
+                                        >
+                                            <Calendar />
+                                        </Svg>
+                                        <input
+                                            type="date"
+                                            data-placeholder="마감기한"
+                                            value={value.dead_line}
+                                            name="dead_line"
+                                            readOnly
+                                            // onChange={(e) => {
+                                            //     onChangeDate(e, value.action_id)
+                                            // }}
+                                        />
+                                    </div>
+                                </Item>
+                            )
+                        )}
                     </ItemList>
                     <AddButton
                         onClick={() => {
