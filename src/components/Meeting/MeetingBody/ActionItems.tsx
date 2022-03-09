@@ -63,20 +63,10 @@ const AddButton = styled.div`
 `
 
 function MeetingForm() {
-    const { agendas, agendaCursor } = useMeeting()
-    const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
     const actionInitId = nanoid()
     const [actionsForm, setActionsForm] = useState({
         [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
     })
-
-    const { setForm } = useMeetingActions()
-
-    useEffect(() => {
-        if (Array.isArray(agendas)) {
-            setActiveAgenda(agendas[agendaCursor])
-        }
-    }, [agendaCursor, activeAgenda])
 
     const addActionItems = () => {
         const id = nanoid()
@@ -101,6 +91,7 @@ function MeetingForm() {
             },
         }))
     }
+
     return (
         <>
             <MenuContainer>

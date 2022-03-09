@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Svg, TextArea } from '@components/common'
 import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { Pin, pinViewBox } from '@svgs/Pin'
-import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
-import { Add, addViewBox } from '@svgs/Add'
-import { Close, closeViewBox } from '@svgs/Close'
-import { Calendar, calendarViewBox } from '@svgs/Calendar'
-import { People, peopleViewBox } from '@svgs/People'
 
 import styled from 'styled-components'
 
@@ -16,6 +11,8 @@ import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
 import { baseURL } from '@api/index'
+
+import ActionItems from './ActionItems'
 
 const MenuTopContainer = styled.div`
     height: 24px;
@@ -89,10 +86,6 @@ function MeetingForm() {
     const { agendas, agendaCursor } = useMeeting()
     const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
     const [areaForm, setAreaForm] = useState({ discussion: '', decisions: '' })
-    const actionInitId = nanoid()
-    const [actionsForm, setActionsForm] = useState({
-        [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
-    })
 
     const { setForm } = useMeetingActions()
 
@@ -138,29 +131,6 @@ function MeetingForm() {
         setForm({ agendaCursor, newAgenda })
     }
 
-    const addActionItems = () => {
-        const id = nanoid()
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                id: id,
-                title: '',
-                authors: '',
-                date: '',
-            },
-        }))
-    }
-
-    const onChangeActionItems = (id) => (e) => {
-        const { value, name } = e.target
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                [name]: value,
-            },
-        }))
-    }
     return (
         <>
             <MenuTopContainer>{activeAgenda?.agenda_title}</MenuTopContainer>
@@ -210,88 +180,7 @@ function MeetingForm() {
                     />
                 </Body>
             </MenuContainer>
-            <MenuContainer>
-                <Header>
-                    <div>
-                        <Svg
-                            viewBox={actionItemViewBox}
-                            width={'20'}
-                            height={'18'}
-                        >
-                            <ActionItem />
-                        </Svg>
-                    </div>
-                    <div>액션 아이템</div>
-                </Header>
-                <Body>
-                    <ItemList>
-                        {Object.entries(actionsForm).map(([key, value]) => (
-                            <Item key={key}>
-                                <div style={{ display: 'flex' }}>
-                                    <input
-                                        type="text"
-                                        placeholder="액션 아이템을 작성해주세요"
-                                        value={value.title}
-                                        name="title"
-                                        onChange={onChangeActionItems(key)}
-                                    />
-                                    <Svg
-                                        viewBox={closeViewBox}
-                                        width={'20'}
-                                        height={'18'}
-                                    >
-                                        <Close />
-                                    </Svg>
-                                </div>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <Svg
-                                        viewBox={peopleViewBox}
-                                        width={'16'}
-                                        height={'16'}
-                                    >
-                                        <People />
-                                    </Svg>
-                                    <input
-                                        type="text"
-                                        placeholder="담당자"
-                                        value={value.authors}
-                                        name="authors"
-                                        onChange={onChangeActionItems(key)}
-                                    />
-                                </div>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <Svg
-                                        viewBox={calendarViewBox}
-                                        width={'20'}
-                                        height={'18'}
-                                    >
-                                        <Calendar />
-                                    </Svg>
-                                    <input
-                                        type="date"
-                                        data-placeholder="마감기한"
-                                        value={value.date}
-                                        name="date"
-                                        readOnly
-                                    />
-                                </div>
-                            </Item>
-                        ))}
-                    </ItemList>
-                    <AddButton onClick={() => addActionItems()}>
-                        <div>
-                            <Svg
-                                viewBox={addViewBox}
-                                width={'20'}
-                                height={'18'}
-                            >
-                                <Add />
-                            </Svg>
-                        </div>
-                        <div>액션 아이템 추가</div>
-                    </AddButton>
-                </Body>
-            </MenuContainer>
+            <ActionItems />
         </>
     )
 }
