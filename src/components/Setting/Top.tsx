@@ -187,6 +187,7 @@ function Top({ form, setForm }: { form: MeetForm; setForm: any }) {
                             type="date"
                             className="date_input"
                             name="meet_date"
+                            min={moment(new Date()).format('YYYY-MM-DD')}
                             onChange={(e) => {
                                 const { value } = e.target
                                 const offset = ' 12:12:12'
