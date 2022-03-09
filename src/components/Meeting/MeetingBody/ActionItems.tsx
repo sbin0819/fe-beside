@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Svg } from '@components/common'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
@@ -90,6 +91,17 @@ function ActionItems({
     }
 
     const updateAction = async (id) => {}
+
+    const onChangeTitle = (e, id) => {}
+
+    useEffect(() => {
+        // const cleanTime = setTimeout(() => {
+        //     // updateAction()
+        // }, 300)
+        // return () => {
+        //     clearTimeout(cleanTime)
+        // }
+    }, [])
 
     return (
         <>
