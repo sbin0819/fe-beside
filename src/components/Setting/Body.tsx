@@ -201,7 +201,7 @@ function Body({
                 return { agenda_id: el.agenda_id, dead_line: null }
             })
             await axios.post('/api/action/', actions)
-            router.push('/')
+            router.push(`/meeting/${data.meet_id}`)
         } catch (error) {}
     }
 
