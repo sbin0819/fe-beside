@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { withRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import axios from 'axios'
+import { baseURL } from '@api/index'
 
 const Container = styled.div`
     width: 100%;
@@ -178,21 +179,19 @@ function Join() {
             provider: 'google',
             img: img,
         }
-        axios
-            .post('http://127.0.0.1:8000/api/user/', [userData])
-            .then((res) => {
-                let token = res.data['token']
+        axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
+            let token = res.data['token']
 
-                setCookie('Authorization', token, {
-                    path: '/',
-                    maxAge: 1000 * 60 * 60 * 24 * 7,
-                    secure: true,
-                    SameSite: 'None',
-                })
-                if (res.data['success'] === true) {
-                    router.push('/home')
-                }
+            setCookie('Authorization', token, {
+                path: '/',
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                secure: true,
+                SameSite: 'None',
             })
+            if (res.data['success'] === true) {
+                router.push('/home')
+            }
+        })
     }
     return (
         <Container>

@@ -10,6 +10,7 @@ import { Google, googleViewBox } from '@svgs/Google'
 import { Xclick, xclickviewBox } from '@svgs/Xclick'
 import UserCancel from './UserCancel'
 import axios from '@axios'
+import { baseURL } from '@api/index'
 interface ModalDefaultType {
     onClickToggleModal: () => void
 }
@@ -112,14 +113,14 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     ]
     const userUpdate = () => {
         axios
-            .patch('http://127.0.0.1:8000/api/user/', {
+            .patch(`${baseURL}/api/user/`, {
                 nickname: nickname,
             })
             .then((res) => {})
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+        axios.get(`${baseURL}/api/user/`).then((res) => {
             setInputs(res.data)
         })
     }, [])

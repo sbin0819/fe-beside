@@ -8,6 +8,8 @@ import { GoogleBtnNone, googleBtnNoneViewBox } from '@svgs/googleBtnNone'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
+import { baseURL } from '@api/index'
+
 const clientId =
     '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
@@ -115,32 +117,30 @@ function Login() {
             provider: 'google',
             img: response.profileObj.imageUrl,
         }
-        await axios
-            .post('http://127.0.0.1:8000/api/user/', [userData])
-            .then((res) => {
-                if (res.data.db === 'None') {
-                    Router.push({
-                        pathname: '/login/join',
-                        query: {
-                            email: userData.email,
-                            nickname: userData.nickname,
-                            name: userData.name,
-                            password: userData.password,
-                            img: userData.img,
-                        },
-                    })
-                } else {
-                    let token = res.data['token']
+        await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
+            if (res.data.db === 'None') {
+                Router.push({
+                    pathname: '/login/join',
+                    query: {
+                        email: userData.email,
+                        nickname: userData.nickname,
+                        name: userData.name,
+                        password: userData.password,
+                        img: userData.img,
+                    },
+                })
+            } else {
+                let token = res.data['token']
 
-                    setCookie('Authorization', token, {
-                        path: '/',
-                        maxAge: 1000 * 60 * 60 * 24 * 7,
-                        secure: true,
-                        SameSite: 'None',
-                    })
-                    router.push('/home')
-                }
-            })
+                setCookie('Authorization', token, {
+                    path: '/',
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                    secure: true,
+                    SameSite: 'None',
+                })
+                router.push('/home')
+            }
+        })
 
         // Router.push({
         //     pathname: '/login/join',

@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { Xclick, xclickviewBox } from '@svgs/Xclick'
 import axios from '@axios'
 import { useRouter } from 'next/router'
-
+import { baseURL } from '@api/index'
 interface ModalDefaultType {
     ClickToggleModal: () => void
 }
@@ -30,12 +30,12 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     }
     const id = userId
     const deleteUser = () => {
-        axios.delete(`http://127.0.0.1:8000/api/user/${id}/`).then((res) => {
+        axios.delete(`${baseURL}/api/user/${id}/`).then((res) => {
             router.push('/login')
         })
     }
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+        axios.get(`${baseURL}/api/user/`).then((res) => {
             setUserId(res.data.id)
         })
     }, [])
