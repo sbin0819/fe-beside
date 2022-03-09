@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 import Modal from './Modal'
 import Image from 'next/image'
+import moment from 'moment'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -89,13 +90,13 @@ function Body({
     setMeetForm: any
     setAgendagendaForms: any
 }) {
+    // setting/[id] 일 경우는 meet_status 상태를 고쳐준다
     const router = useRouter()
     const { meet_title, meet_date, participants, goal } = meetForm
     const [remainTime, setRemainTime] = useState(59)
     const [isShowModal, setIsShowModal] = useState(false)
     const handleModalClose = () => setIsShowModal(false)
     const handleModalOpen = () => setIsShowModal(true)
-
     const checkValidMeetForms = () => {
         const meetFormsArr = Object.entries(meetForm).map(([k, v]) => {
             if (v.value === '') {
@@ -173,18 +174,20 @@ function Body({
 
     const fetchPostMeet = async (
         sortedAgendas: [string, AgendaWithValidation][],
-        rm_status: 'y' | 'p'
+        meet_status: 'y' | 'p'
     ) => {
         try {
             const meetResponse = await axios.post(
                 'http://localhost:8000/api/meet/',
                 {
                     meet_title: meet_title.value,
-                    meet_date: meet_date.value,
+                    meet_date:
+                        moment(meet_date.value).format('YYYY-MM-DD') +
+                        ' 12:12:12',
                     participants: participants.value,
                     goal: goal.value,
-                    meet_status: '0',
-                    rm_status: rm_status, // default
+                    rm_status: 'N',
+                    meet_status,
                 }
             )
             // validation 처리 해야함
@@ -196,15 +199,18 @@ function Body({
                 order_number: form.order_number,
                 agenda_status: form.order_number == 1 ? 'p' : 'y',
             }))
-            const agendasReqests = agendas.map((agenda) =>
-                axios.post('/api/agenda/', { ...agenda })
+            const agendaRes = await axios.post('/api/agenda/', agendas)
+            const actions = agendaRes.data.map((el) => {
+                return { agenda_id: el.agenda_id, dead_line: null }
+            })
+            const actionsRequest = actions.map((action) =>
+                axios.post('/api/action/', { ...action })
             )
-            // validation 처리
-            Promise.all(agendasReqests).then((res) => router.push('/'))
+            Promise.all(actionsRequest).then((res) => router.push('/'))
         } catch (error) {}
     }
 
-    const onSubmit = async (e, rm_status: 'y' | 'p') => {
+    const onSubmit = async (e, meet_status: 'y' | 'p') => {
         e.preventDefault()
         const sortedAgendas = Object.entries(agendaForms).sort(
             (a, b) => +a[0] - +b[0]
@@ -213,7 +219,12 @@ function Body({
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
         if (isCheckMeetForm && isAgendaFormsValid) {
-            fetchPostMeet(sortedAgendas, rm_status)
+            if (router?.query?.id) {
+                await axios.delete(`/api/meet/${router.query.id}`)
+                fetchPostMeet(sortedAgendas, meet_status)
+            } else {
+                fetchPostMeet(sortedAgendas, meet_status)
+            }
         }
     }
 
