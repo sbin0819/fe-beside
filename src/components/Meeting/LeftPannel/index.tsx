@@ -9,6 +9,7 @@ import Timer from '@components/Timer'
 import { useState } from 'react'
 
 import axios from '@axios'
+import { baseURL } from '@api/index'
 import { useEffect } from 'react'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
@@ -39,7 +40,7 @@ function LeftPannel() {
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
             await axios.patch(
-                `http://localhost:8000/api/agenda/${progressAgenda?.agenda_id}/`,
+                `${baseURL}/api/agenda/${progressAgenda?.agenda_id}/`,
                 {
                     agenda_status: 'c',
                     progress_time: progressTime,
@@ -52,7 +53,7 @@ function LeftPannel() {
                 const idx = agendas.findIndex((el) => el.agenda_status == 'y')
                 const nextAgenda = agendas[idx]
                 await axios.patch(
-                    `http://localhost:8000/api/agenda/${nextAgenda?.agenda_id}/`,
+                    `${baseURL}/api/agenda/${nextAgenda?.agenda_id}/`,
                     {
                         agenda_status: 'p',
                     }

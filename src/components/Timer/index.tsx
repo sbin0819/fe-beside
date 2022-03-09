@@ -119,12 +119,6 @@ function AnimationTimer({
         },
     })
 
-    // const onPatchAgenda = async (time) => {
-    //     await axios.patch(`http://localhost:8000/api/agenda/${agendaId}/`, {
-    //         progress_time: time,
-    //     })
-    // }
-
     const getRemainTime = () => {
         return Math.round(remainingTime / 1000)
     }

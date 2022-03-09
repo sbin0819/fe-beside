@@ -15,6 +15,7 @@ import useMeeting from '@store/meeting/useMeeting'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
+import { baseURL } from '@api/index'
 
 const MenuTopContainer = styled.div`
     height: 24px;
@@ -111,13 +112,10 @@ function MeetingForm() {
     }, [activeAgenda])
 
     const onPatchAgenda = async () => {
-        await axios.patch(
-            `http://localhost:8000/api/agenda/${activeAgenda?.agenda_id}/`,
-            {
-                discussion: areaForm.discussion,
-                decisions: areaForm.decisions,
-            }
-        )
+        await axios.patch(`${baseURL}/api/agenda/${activeAgenda?.agenda_id}/`, {
+            discussion: areaForm.discussion,
+            decisions: areaForm.decisions,
+        })
     }
 
     useEffect(() => {

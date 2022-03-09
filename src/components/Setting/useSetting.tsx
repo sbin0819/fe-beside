@@ -4,6 +4,8 @@ import useSWR from 'swr'
 import { AgendaState, MeetState } from '@store/meeting/meetingSlice'
 import { nanoid } from '@reduxjs/toolkit'
 import { agendasSWR } from '@api/agenda'
+import { baseURL } from '@api/index'
+
 interface Form {
     value: string
     error: boolean
@@ -56,7 +58,7 @@ function useSetting() {
     const router = useRouter()
     const { id } = router.query
     const { data: meetData } = useSWR<MeetState>(
-        id ? `http://localhost:8000/api/meet/?meet_id=${id.toString()}` : null
+        id ? `${baseURL}/api/meet/?meet_id=${id.toString()}` : null
     )
     const { agendasData } = agendasSWR(id)
     const [meetForm, setMeetForm] = useState<MeetForm>({
