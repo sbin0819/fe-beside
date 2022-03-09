@@ -115,7 +115,7 @@ function Login() {
             email: 'user1@gmail.com',
             password: 'password',
             provider: 'google',
-            img: '',
+            img: 'aaa',
         }
         // const userData: any = {
         //     name: response.Ju.sf,
