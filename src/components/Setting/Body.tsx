@@ -8,6 +8,7 @@ import {
     InputInfoContainer,
 } from './style'
 import axios from '@axios'
+import { baseURL } from '@api/index'
 import AgendaInputs from './AgendaInputs'
 
 import { useRouter } from 'next/router'
@@ -177,19 +178,15 @@ function Body({
         meet_status: 'y' | 'p'
     ) => {
         try {
-            const meetResponse = await axios.post(
-                'http://localhost:8000/api/meet/',
-                {
-                    meet_title: meet_title.value,
-                    meet_date:
-                        moment(meet_date.value).format('YYYY-MM-DD') +
-                        ' 12:12:12',
-                    participants: participants.value,
-                    goal: goal.value,
-                    rm_status: 'N',
-                    meet_status,
-                }
-            )
+            const meetResponse = await axios.post(`${baseURL}/api/meet/`, {
+                meet_title: meet_title.value,
+                meet_date:
+                    moment(meet_date.value).format('YYYY-MM-DD') + ' 12:12:12',
+                participants: participants.value,
+                goal: goal.value,
+                rm_status: 'N',
+                meet_status,
+            })
             // validation 처리 해야함
             const { data } = meetResponse
             const agendas = sortedAgendas.slice().map(([_, form]) => ({
