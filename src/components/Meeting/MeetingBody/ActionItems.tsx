@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Svg } from '@components/common'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
+import { Close, closeViewBox } from '@svgs/Close'
+import { People, peopleViewBox } from '@svgs/People'
+import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import styled from 'styled-components'
 
-import { nanoid } from '@reduxjs/toolkit'
-import useMeeting from '@store/meeting/useMeeting'
-import { AgendaState } from '@store/meeting/meetingSlice'
-import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
+import { actionsSWR } from '@api/actions'
 
 const MenuContainer = styled.div<{ height?: number }>`
     margin-top: 20px;
@@ -62,45 +62,47 @@ const AddButton = styled.div`
     cursor: pointer;
 `
 
-function MeetingForm() {
-    const { agendas, agendaCursor } = useMeeting()
-    const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
-    const actionInitId = nanoid()
-    const [actionsForm, setActionsForm] = useState({
-        [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
-    })
+interface ActionItems {
+    action_id: number
+    action_title: string
+    agenda_id: string
+    dead_line: any
+    person: string
+}
 
-    const { setForm } = useMeetingActions()
+function ActionItems({
+    agendaId,
+    actionsData,
+}: {
+    agendaId: number
+    actionsData: ActionItems[]
+}) {
+    const { agendaMutate } = actionsSWR(agendaId)
+    const addAction = async () => {
+        await axios.post('/api/action/', {
+            agenda_id: agendaId,
+            dead_line: null,
+        })
+        agendaMutate()
+    }
+    const deleteAction = async (id) => {
+        await axios.delete(`/api/action/${id}`)
+        agendaMutate()
+    }
+
+    const updateAction = async (id) => {}
+
+    const onChangeTitle = (e, id) => {}
 
     useEffect(() => {
-        if (Array.isArray(agendas)) {
-            setActiveAgenda(agendas[agendaCursor])
-        }
-    }, [agendaCursor, activeAgenda])
+        // const cleanTime = setTimeout(() => {
+        //     // updateAction()
+        // }, 300)
+        // return () => {
+        //     clearTimeout(cleanTime)
+        // }
+    }, [])
 
-    const addActionItems = () => {
-        const id = nanoid()
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                id: id,
-                title: '',
-                authors: '',
-                date: '',
-            },
-        }))
-    }
-
-    const onChangeActionItems = (id) => (e) => {
-        const { value, name } = e.target
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                [name]: value,
-            },
-        }))
-    }
     return (
         <>
             <MenuContainer>
@@ -118,31 +120,60 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <ItemList>
-                        {Object.entries(actionsForm).map(([key, value]) => (
-                            <Item key={key}>
-                                <div>
+                        {actionsData.map((el, idx) => (
+                            <Item key={el.action_id}>
+                                <div style={{ display: 'flex' }}>
                                     <input
                                         type="text"
                                         placeholder="액션 아이템을 작성해주세요"
-                                        value={value.title}
+                                        value={el.action_title}
                                         name="title"
-                                        onChange={onChangeActionItems(key)}
+                                        //  onChange={onChangeActionItems(key)}
                                     />
+                                    {idx !== 0 && (
+                                        <div
+                                            onClick={() => {
+                                                deleteAction(el.action_id)
+                                            }}
+                                        >
+                                            <Svg
+                                                viewBox={closeViewBox}
+                                                width={'20'}
+                                                height={'18'}
+                                            >
+                                                <Close />
+                                            </Svg>
+                                        </div>
+                                    )}
                                 </div>
-                                <div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg
+                                        viewBox={peopleViewBox}
+                                        width={'16'}
+                                        height={'16'}
+                                    >
+                                        <People />
+                                    </Svg>
                                     <input
                                         type="text"
-                                        placeholder="A 담당자"
-                                        value={value.authors}
+                                        placeholder="담당자"
+                                        value={el.person}
                                         name="authors"
-                                        onChange={onChangeActionItems(key)}
+                                        //  onChange={onChangeActionItems(key)}
                                     />
                                 </div>
-                                <div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg
+                                        viewBox={calendarViewBox}
+                                        width={'20'}
+                                        height={'18'}
+                                    >
+                                        <Calendar />
+                                    </Svg>
                                     <input
                                         type="date"
-                                        data-placeholder="B 마감기한"
-                                        value={value.date}
+                                        data-placeholder="마감기한"
+                                        value={el.dead_line}
                                         name="date"
                                         readOnly
                                     />
@@ -150,7 +181,11 @@ function MeetingForm() {
                             </Item>
                         ))}
                     </ItemList>
-                    <AddButton onClick={() => addActionItems()}>
+                    <AddButton
+                        onClick={() => {
+                            addAction()
+                        }}
+                    >
                         <div>
                             <Svg
                                 viewBox={addViewBox}
@@ -168,4 +203,4 @@ function MeetingForm() {
     )
 }
 
-export default MeetingForm
+export default ActionItems
