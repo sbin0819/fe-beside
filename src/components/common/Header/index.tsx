@@ -55,7 +55,7 @@ function Header({ desc }: HeaderProps) {
     }
     const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
         axios.get(url).then((res) => {
-            // console.log('66', res.data)
+            console.log('66', res.data)
             res.data
             setUserName(res.data.nickname)
         })

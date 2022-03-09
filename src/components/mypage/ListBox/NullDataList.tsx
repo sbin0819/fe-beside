@@ -8,8 +8,10 @@ import {
     NullTabContainer,
 } from '../styles'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 function NullDataList() {
+    const router = useRouter()
     return (
         <div>
             {' '}
@@ -22,7 +24,10 @@ function NullDataList() {
                     </p>
                     <button
                         className="dataNullBtn"
-                        style={{ marginTop: '36px' }}
+                        style={{ marginTop: '36px', cursor: 'pointer' }}
+                        onClick={() => {
+                            router.push('/setting')
+                        }}
                     >
                         회의 시작하기
                     </button>

@@ -189,7 +189,7 @@ function Join() {
                 SameSite: 'None',
             })
             if (res.data['success'] === true) {
-                router.push('/home')
+                router.push('/')
             }
         })
     }

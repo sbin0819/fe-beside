@@ -115,7 +115,9 @@ function Login() {
             email: 'user1@gmail.com',
             password: 'password',
             provider: 'google',
+
             img: 'aaa',
+
         }
         // const userData: any = {
         //     name: response.Ju.sf,
@@ -129,11 +131,13 @@ function Login() {
                 Router.push({
                     pathname: '/login/join',
                     query: {
+
                         email: tempUserData.email,
                         nickname: '',
                         name: tempUserData.name,
                         password: tempUserData.password,
                         img: tempUserData.img,
+
                     },
                 })
             } else {
@@ -145,7 +149,7 @@ function Login() {
                     secure: true,
                     SameSite: 'None',
                 })
-                router.push('/home')
+                window.location.href = '/'
             }
         })
 
