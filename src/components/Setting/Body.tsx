@@ -200,10 +200,8 @@ function Body({
             const actions = agendaRes.data.map((el) => {
                 return { agenda_id: el.agenda_id, dead_line: null }
             })
-            const actionsRequest = actions.map((action) =>
-                axios.post('/api/action/', { ...action })
-            )
-            Promise.all(actionsRequest).then((res) => router.push('/'))
+            await axios.post('/api/agenda/', actions)
+            router.push('/')
         } catch (error) {}
     }
 
