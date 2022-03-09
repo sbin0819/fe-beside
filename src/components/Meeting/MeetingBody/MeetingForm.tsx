@@ -5,13 +5,13 @@ import { Pin, pinViewBox } from '@svgs/Pin'
 
 import styled from 'styled-components'
 
-import { nanoid } from '@reduxjs/toolkit'
 import useMeeting from '@store/meeting/useMeeting'
 import { AgendaState } from '@store/meeting/meetingSlice'
 import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
 import { baseURL } from '@api/index'
 
+import { actionsSWR } from '@api/actions'
 import ActionItems from './ActionItems'
 
 const MenuTopContainer = styled.div`
@@ -44,50 +44,13 @@ const Body = styled.div`
     }
 `
 
-const ItemList = styled.div`
-    margin: 12px 0;
-    border-top: solid 1px #f1f1f1;
-    border-left: solid 1px #f1f1f1;
-    border-right: solid 1px #f1f1f1;
-`
-
-const Item = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 103px;
-    padding: 16px 16px 17px 20px;
-    border-bottom: solid 1px #f1f1f1;
-    background-color: #fff;
-    input[type='date']::before {
-        content: attr(data-placeholder);
-        width: 100%;
-        color: gray;
-    }
-    input[type='date']:focus::before {
-        display: none;
-    }
-    input[type='date']:valid::before {
-        display: none;
-    }
-`
-
-const AddButton = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 13px;
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(60, 60, 67, 0.6);
-    cursor: pointer;
-`
-
 function MeetingForm() {
     const { agendas, agendaCursor } = useMeeting()
     const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
     const [areaForm, setAreaForm] = useState({ discussion: '', decisions: '' })
-
     const { setForm } = useMeetingActions()
+
+    const { actionsData } = actionsSWR(activeAgenda?.agenda_id)
 
     useEffect(() => {
         if (Array.isArray(agendas)) {
@@ -180,7 +143,14 @@ function MeetingForm() {
                     />
                 </Body>
             </MenuContainer>
-            <ActionItems />
+            {activeAgenda?.agenda_id && actionsData ? (
+                <ActionItems
+                    agendaId={activeAgenda?.agenda_id as number}
+                    actionsData={actionsData}
+                />
+            ) : (
+                <div>loading...</div>
+            )}
         </>
     )
 }

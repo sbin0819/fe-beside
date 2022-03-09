@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Svg } from '@components/common'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { Add, addViewBox } from '@svgs/Add'
 import styled from 'styled-components'
 
-import { nanoid } from '@reduxjs/toolkit'
-import useMeeting from '@store/meeting/useMeeting'
-import { AgendaState } from '@store/meeting/meetingSlice'
-import useMeetingActions from '@store/meeting/useMeetingActions'
 import axios from '@axios'
+import { actionsSWR } from '@api/actions'
 
 const MenuContainer = styled.div<{ height?: number }>`
     margin-top: 20px;
@@ -62,36 +58,33 @@ const AddButton = styled.div`
     cursor: pointer;
 `
 
-function MeetingForm() {
-    const actionInitId = nanoid()
-    const [actionsForm, setActionsForm] = useState({
-        [actionInitId]: { id: actionInitId, title: '', authors: '', date: '' },
-    })
+interface ActionItems {
+    action_id: number
+    action_title: string
+    agenda_id: string
+    dead_line: any
+    person: string
+}
 
-    const addActionItems = () => {
-        const id = nanoid()
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                id: id,
-                title: '',
-                authors: '',
-                date: '',
-            },
-        }))
+function ActionItems({
+    agendaId,
+    actionsData,
+}: {
+    agendaId: number
+    actionsData: ActionItems[]
+}) {
+    const { agendaMutate } = actionsSWR(agendaId)
+    const addAgenda = async () => {
+        await axios.post('/api/action/', {
+            agenda_id: agendaId,
+            dead_line: null,
+        })
+        agendaMutate()
     }
-
-    const onChangeActionItems = (id) => (e) => {
-        const { value, name } = e.target
-        setActionsForm((prev) => ({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                [name]: value,
-            },
-        }))
+    const deleteAgenda = async (id) => {
+        await axios.delete(`/api/action/${id}`)
+        agendaMutate()
     }
-
     return (
         <>
             <MenuContainer>
@@ -109,39 +102,41 @@ function MeetingForm() {
                 </Header>
                 <Body>
                     <ItemList>
-                        {Object.entries(actionsForm).map(([key, value]) => (
-                            <Item key={key}>
+                        {actionsData.map((el, idx) => (
+                            <Item key={el.action_id}>
                                 <div>
                                     <input
                                         type="text"
                                         placeholder="액션 아이템을 작성해주세요"
-                                        value={value.title}
-                                        name="title"
-                                        onChange={onChangeActionItems(key)}
+                                        value={el.action_title}
+                                        name="action_title"
                                     />
                                 </div>
                                 <div>
                                     <input
                                         type="text"
                                         placeholder="A 담당자"
-                                        value={value.authors}
-                                        name="authors"
-                                        onChange={onChangeActionItems(key)}
+                                        value={el.person}
+                                        name="person"
                                     />
                                 </div>
                                 <div>
                                     <input
                                         type="date"
                                         data-placeholder="B 마감기한"
-                                        value={value.date}
-                                        name="date"
+                                        value={el.dead_line}
+                                        name="dead_line"
                                         readOnly
                                     />
                                 </div>
                             </Item>
                         ))}
                     </ItemList>
-                    <AddButton onClick={() => addActionItems()}>
+                    <AddButton
+                        onClick={() => {
+                            addAgenda()
+                        }}
+                    >
                         <div>
                             <Svg
                                 viewBox={addViewBox}
@@ -159,4 +154,4 @@ function MeetingForm() {
     )
 }
 
-export default MeetingForm
+export default ActionItems
