@@ -115,7 +115,7 @@ function Login() {
             email: response.profileObj.email,
             password: response.profileObj.googleId,
             provider: 'google',
-            img: response.profileObj.imageUrl,
+            // img: response.profileObj.imageUrl,
         }
         await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             if (res.data.db === 'None') {
@@ -126,7 +126,7 @@ function Login() {
                         nickname: userData.nickname,
                         name: userData.name,
                         password: userData.password,
-                        img: userData.img,
+                        // img: userData.img,
                     },
                 })
             } else {
@@ -138,7 +138,7 @@ function Login() {
                     secure: true,
                     SameSite: 'None',
                 })
-                router.push('/home')
+                window.location.href = '/'
             }
         })
 

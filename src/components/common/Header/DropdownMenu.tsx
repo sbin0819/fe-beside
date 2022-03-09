@@ -4,7 +4,8 @@ import { Svg } from '@common'
 import { Signout, signoutViewBox } from '@svgs/Signout'
 import { Profile, profileViewBox } from '@svgs/Profile'
 import MyInfo from '@components/MyInfoModal/MyInfo'
-
+import { removeCookie } from '../../utils/Cookie'
+import { useRouter } from 'next/router'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 
 const DropDownContainer = styled.div`
@@ -44,6 +45,7 @@ interface DropdownMenuProps {
     onClose: () => void
 }
 function DropdownMenu({ onClose }: DropdownMenuProps) {
+    const router = useRouter()
     const [isOpenModal, setOpenModal] = useState<boolean>(false)
 
     const onClickToggleModal = useCallback(() => {
@@ -54,6 +56,10 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
     useOnClickOutside(ref, () => {
         onClose()
     })
+    const logOutBtn = () => {
+        removeCookie('Authorization')
+        router.push('/login')
+    }
     return (
         <div ref={ref}>
             <DropDownContainer>
@@ -69,7 +75,7 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
                 <div className="item">
                     <span className="box"></span>About 59mins
                 </div>
-                <div className="item">
+                <div className="item" onClick={() => logOutBtn()}>
                     <Svg viewBox={signoutViewBox} width={'20'} height={'18'}>
                         <Signout />
                     </Svg>

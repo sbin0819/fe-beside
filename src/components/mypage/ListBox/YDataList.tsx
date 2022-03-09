@@ -31,6 +31,7 @@ import { mutate } from 'swr'
 import axios from '@axios'
 import Modal from '../Modal'
 import { baseURL } from '@api/index'
+import { useRouter } from 'next/router'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -58,6 +59,7 @@ export const HoverBox = styled.div`
 `
 
 function YDataList(props: any) {
+    const router = useRouter()
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
 
     let meetDatas = props.data
@@ -104,7 +106,7 @@ function YDataList(props: any) {
             meet_status: 'y',
             stateDiv: <p>회의세팅</p>,
             stateImg: (
-                <HoverImgStatus>
+                <HoverImgStatus onClick={() => router.push('/setting')}>
                     <Svg viewBox={draftsViewBox} width={'32'} height={'32'}>
                         <Drafts />
                     </Svg>
