@@ -32,6 +32,7 @@ import axios from '@axios'
 import Modal from '../Modal'
 import { baseURL } from '@api/index'
 import { useRouter } from 'next/router'
+import { meetsYSWR } from '@api/meet'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -60,7 +61,7 @@ export const HoverBox = styled.div`
 
 function YDataList(props: any) {
     const router = useRouter()
-    const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
+    const { meetYmutate } = meetsYSWR()
 
     let meetDatas = props.data
 
@@ -139,35 +140,15 @@ function YDataList(props: any) {
         },
     ]
 
-    // const removeBtn = useCallback(
-    //     async (meet_id: number) => {
-    //         mutate(
-    //             'http://127.0.0.1:8000/api/meet/?rm_status=Y',
-    //             async (todos) => {
-    //                 const updateList = await axios.patch(
-    //                     `http://127.0.0.1:8000/api/meet/`,
-    //                     { rm_status: 'W', meet_id: meet_id }
-    //                 )
-    //                 console.log('result', updateList)
-    //                 const filterList = todos.filter(
-    //                     (todo) => todo.meet_id !== meet_id
-    //                 )
-    //                 return [...filterList, updateList]
-    //             }
-    //         )
-    //     },
-    //     [meetDatas]
-    // )
-
     const removeBtn = (meet_id: number) => {
-        mutate(`${baseURL}/api/meet/?rm_status=y`, async (todos) => {
-            const updateTodos = await axios.patch(`${baseURL}/api/meet/`, {
+        axios
+            .patch(`${baseURL}/api/meet/`, {
                 rm_status: 'w',
                 meet_id: meet_id,
             })
-            const filterdTodos = todos.filter((todo) => todo.meet_id != '1')
-            return [...filterdTodos, updateTodos]
-        })
+            .then(() => {
+                meetYmutate()
+            })
     }
 
     return (
@@ -176,6 +157,7 @@ function YDataList(props: any) {
                 <ListBoxContainer>
                     <BoxContainer>
                         <div
+                            onClick={() => router.push('/setting')}
                             className="meetCraete"
                             style={{
                                 justifyContent: 'center',

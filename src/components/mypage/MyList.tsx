@@ -17,25 +17,20 @@ import moment from 'moment'
 import NullDataList from './ListBox/NullDataList'
 import YDataList from './ListBox/YDataList'
 import { baseURL } from '@api/index'
+import { meetsYSWR } from '@api/meet'
 
-const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
-    const [testData, setTestData] = useState(undefined)
-    const { data, error } = useSWR(
-        `${baseURL}/api/meet/?user_id=1&rm_status=y`,
-        fetcher,
-        { revalidateOnFocus: true }
-    )
+    const { meetYdata } = meetsYSWR()
 
     return (
         <React.Fragment>
             <ListBoxContainer>
-                {data === undefined ||
-                data.success === false ||
-                data.length === 0 ? (
+                {meetYdata === undefined ||
+                meetYdata.success === false ||
+                meetYdata.length === 0 ? (
                     <NullDataList />
                 ) : (
-                    <YDataList data={data} />
+                    <YDataList data={meetYdata} />
                 )}
             </ListBoxContainer>
         </React.Fragment>

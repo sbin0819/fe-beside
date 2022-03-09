@@ -6,6 +6,8 @@ import useSWR from 'swr'
 // import { userSWR, userDataSWR } from '@api/user'
 // import { userInfo } from '@api/user'
 import { baseURL } from '@api/index'
+// import { userSWR } from '../../../pages/userapi'
+import { userSWR } from '@api/user'
 
 import DropdownMenu from './DropdownMenu'
 
@@ -44,31 +46,28 @@ interface HeaderProps {
     desc?: string
 }
 function Header({ desc }: HeaderProps) {
-    // const { userData } = userSWR()
+    const { userData } = userSWR()
     // const { userInfo } = userDataSWR()
+    // const [userName, setUserName] = useState()
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const [username, setUserName] = useState('')
+    // const [username, setUserName] = useState(userData.nickname)
     const onCloseModal = () => setIsOpenModal(false)
     const mockData = {
         username: '오구민',
         icon: '😊',
     }
-    const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
-        axios.get(url).then((res) => {
-            console.log('66', res.data)
-            res.data
-            setUserName(res.data.nickname)
-        })
-    )
+    // const userName = userData.nickname
+    // const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
+    //     axios.get(url).then((res) => {
+    //         console.log('66', res.data)
+    //         res.data
+    //         setUserName(res.data.nickname)
+    //     })
+    // )
 
     useEffect(() => {
-        // console.log('userData', userData)
-        // console.log('userInfo', userInfo)
-        // console.log(data)
-        // axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
-        //     console.log(res)
-        //     setUserName(res.data.nickname)
-        // })
+        console.log('userData', userData)
+        // console.log('userData --- ', userData.nickname)
     }, [])
     return (
         <Container>
@@ -77,7 +76,7 @@ function Header({ desc }: HeaderProps) {
                     <Link href="/">59mins</Link>
                 </div>
                 <div className="header_desc">
-                    <div className="username">{username}</div>
+                    {/* <div className="username">{username}</div> */}
                     <div className="description">{desc}</div>
                     <div style={{ position: 'relative' }}>
                         <div
