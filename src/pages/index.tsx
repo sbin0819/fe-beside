@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
+import { meetsSWR } from '@api/meet'
 import { Cookies } from 'react-cookie'
 
 const cookies = new Cookies()
@@ -53,16 +53,7 @@ interface Meet {
 
 const Home = () => {
     const router = useRouter()
-    const { data: meets, error } = useSWR(
-        'http://localhost:8000/api/meet/',
-        (url) =>
-            fetch(url, {
-                headers: {
-                    Authorization: cookies.get('Authorization'),
-                },
-                credentials: 'include',
-            }).then((res) => res.json())
-    )
+    const { data: meets, error } = meetsSWR()
 
     if (!Array.isArray(meets)) {
         return <div>loading...</div>
