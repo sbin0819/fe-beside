@@ -110,34 +110,23 @@ interface UserProps {
 function Login() {
     const router = useRouter()
     const onSuccess = async (response) => {
-        const tempUserData = {
-            name: 'name',
-            email: 'user1@gmail.com',
-            password: 'password',
+        const userData: any = {
+            name: response.Ju.sf,
+            email: response.profileObj.email,
+            password: response.profileObj.googleId,
             provider: 'google',
-
-            img: 'aaa',
-
+            img: response.profileObj.imageUrl,
         }
-        // const userData: any = {
-        //     name: response.Ju.sf,
-        //     email: response.profileObj.email,
-        //     password: response.profileObj.googleId,
-        //     provider: 'google',
-        //     img: response.profileObj.imageUrl,
-        // }
-        await axios.post(`${baseURL}/api/user/`, [tempUserData]).then((res) => {
+        await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             if (res.data.db === 'None') {
                 Router.push({
                     pathname: '/login/join',
                     query: {
-
-                        email: tempUserData.email,
-                        nickname: '',
-                        name: tempUserData.name,
-                        password: tempUserData.password,
-                        img: tempUserData.img,
-
+                        email: userData.email,
+                        nickname: userData.nickname,
+                        name: userData.name,
+                        password: userData.password,
+                        img: userData.img,
                     },
                 })
             } else {
@@ -187,8 +176,7 @@ function Login() {
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
                         로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    <div onClick={() => onSuccess('test')}>임시로그인</div>
-                    {/* <GoogleLogin
+                    <GoogleLogin
                         clientId={clientId}
                         className="GoogleBtn"
                         responseType={'id_token'}
@@ -211,7 +199,7 @@ function Login() {
                                 </Svg>
                             </GoogleLoginBtn>
                         )}
-                    /> */}
+                    />
                 </div>
             </RightContainer>
         </Container>
