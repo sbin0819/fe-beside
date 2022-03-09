@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { meetsSWR } from '@api/meet'
-import { Cookies } from 'react-cookie'
-
-const cookies = new Cookies()
 
 const CardContainer = styled.div`
     margin: 40px auto;
@@ -53,7 +49,7 @@ interface Meet {
 
 const Home = () => {
     const router = useRouter()
-    const { data: meets, error } = meetsSWR()
+    const { data: meets } = meetsSWR()
 
     if (!Array.isArray(meets)) {
         return <div>loading...</div>

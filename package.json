@@ -13,7 +13,8 @@
         "cm": "cz",
         "test": "jest --watch",
         "docker:build": "docker build --tag mynextjs .",
-        "docker:run": "docker run -d -p 3000:3000 mynextjs"
+        "docker:run": "docker run -d -p 3000:3000 mynextjs",
+        "dev:up": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.7.1",
