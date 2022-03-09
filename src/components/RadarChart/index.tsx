@@ -59,7 +59,7 @@ const options = {
     },
 }
 export default function App(Props) {
-    console.log('reusltdata', Props.data)
+    // console.log('reusltdata', Props.data)
     return (
         <Radar
             data={{

@@ -60,10 +60,10 @@ function YDataList(props: any) {
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
 
     let meetDatas = props.data
-    console.log('props', props)
+
     const stateData = [
         {
-            meet_status: 'P',
+            meet_status: 'p',
             stateDiv: <BoxstatusW>회의예정</BoxstatusW>,
             stateImg: (
                 <ImgStatus>
@@ -74,7 +74,7 @@ function YDataList(props: any) {
             ),
         },
         {
-            meet_status: 'Y',
+            meet_status: 'y',
             stateDiv: <BoxstatusY>회의진행중</BoxstatusY>,
             stateImg: (
                 <ImgStatus>
@@ -85,7 +85,7 @@ function YDataList(props: any) {
             ),
         },
         {
-            meet_status: 'C',
+            meet_status: 'c',
             stateDiv: <BoxstatusE>회의완료</BoxstatusE>,
             stateImg: (
                 <ImgStatus>
@@ -100,7 +100,7 @@ function YDataList(props: any) {
     const hoverStateData = [
         {
             id: 0,
-            meet_status: 'Y',
+            meet_status: 'y',
             stateDiv: <p>회의세팅</p>,
             stateImg: (
                 <HoverImgStatus>
@@ -112,7 +112,7 @@ function YDataList(props: any) {
         },
         {
             id: 1,
-            meet_status: 'P',
+            meet_status: 'p',
             stateDiv: <p>회의진행</p>,
             stateImg: (
                 <HoverImgStatus>
@@ -124,7 +124,7 @@ function YDataList(props: any) {
         },
         {
             id: 2,
-            meet_status: 'C',
+            meet_status: 'c',
             stateDiv: <p>회의록</p>,
             stateImg: (
                 <HoverImgStatus>
@@ -136,27 +136,36 @@ function YDataList(props: any) {
         },
     ]
 
-    const removeBtn = useCallback(
-        async (meet_id: number) => {
-            if (window.confirm('회의록을 삭제하시겠습니까?')) {
-                mutate(
-                    'http://127.0.0.1:8000/api/meet/?rm_status=Y',
-                    async (todos) => {
-                        const updateList = await axios.patch(
-                            `http://127.0.0.1:8000/api/meet/`,
-                            { rm_status: 'W', meet_id: meet_id }
-                        )
-                        console.log('result', updateList)
-                        const filterList = todos.filter(
-                            (todo) => todo.meet_id !== '1'
-                        )
-                        return [...filterList, updateList]
-                    }
-                )
-            }
-        },
-        [meetDatas]
-    )
+    // const removeBtn = useCallback(
+    //     async (meet_id: number) => {
+    //         mutate(
+    //             'http://127.0.0.1:8000/api/meet/?rm_status=Y',
+    //             async (todos) => {
+    //                 const updateList = await axios.patch(
+    //                     `http://127.0.0.1:8000/api/meet/`,
+    //                     { rm_status: 'W', meet_id: meet_id }
+    //                 )
+    //                 console.log('result', updateList)
+    //                 const filterList = todos.filter(
+    //                     (todo) => todo.meet_id !== meet_id
+    //                 )
+    //                 return [...filterList, updateList]
+    //             }
+    //         )
+    //     },
+    //     [meetDatas]
+    // )
+
+    const removeBtn = (meet_id: number) => {
+        mutate('http://127.0.0.1:8000/api/meet/?rm_status=y', async (todos) => {
+            const updateTodos = await axios.patch(
+                `http://127.0.0.1:8000/api/meet/`,
+                { rm_status: 'w', meet_id: meet_id }
+            )
+            const filterdTodos = todos.filter((todo) => todo.meet_id != '1')
+            return [...filterdTodos, updateTodos]
+        })
+    }
 
     return (
         <React.Fragment>
@@ -195,15 +204,15 @@ function YDataList(props: any) {
                             return (
                                 <BoxContainer key={meetData.meet_id}>
                                     <div className="box-class">
-                                        {meetData.meet_status === 'Y' && [
+                                        {meetData.meet_status === 'y' && [
                                             stateData[0].stateDiv,
                                             stateData[0].stateImg,
                                         ]}
-                                        {meetData.meet_status === 'P' && [
+                                        {meetData.meet_status === 'p' && [
                                             stateData[1].stateDiv,
                                             stateData[1].stateImg,
                                         ]}
-                                        {meetData.meet_status === 'C' && [
+                                        {meetData.meet_status === 'c' && [
                                             stateData[2].stateDiv,
                                             stateData[2].stateImg,
                                         ]}
@@ -229,17 +238,17 @@ function YDataList(props: any) {
                                         <HoverBox>
                                             <HoverDiv>
                                                 {meetData.meet_status ===
-                                                    'Y' && [
+                                                    'y' && [
                                                     hoverStateData[0].stateImg,
                                                     hoverStateData[0].stateDiv,
                                                 ]}
                                                 {meetData.meet_status ===
-                                                    'P' && [
+                                                    'p' && [
                                                     hoverStateData[1].stateImg,
                                                     hoverStateData[1].stateDiv,
                                                 ]}
                                                 {meetData.meet_status ===
-                                                    'C' && [
+                                                    'c' && [
                                                     hoverStateData[2].stateImg,
                                                     hoverStateData[2].stateDiv,
                                                 ]}

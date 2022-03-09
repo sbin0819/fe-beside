@@ -267,13 +267,13 @@ function CheckListModal({ onClose }: Props) {
                 productivity: [productivityCheck],
             })
             .then((res) => {
-                console.log(
-                    ownerShipCheck,
-                    participationCheck,
-                    efficiencyCheck,
-                    productivityCheck
-                )
-                console.log(res)
+                // console.log(
+                //     ownerShipCheck,
+                //     participationCheck,
+                //     efficiencyCheck,
+                //     productivityCheck
+                // )
+                // console.log(res)
             })
     }
 
@@ -285,7 +285,7 @@ function CheckListModal({ onClose }: Props) {
     }
     const resultdata = [ownerShip, participation, efficiency, productivity]
     const plusData = ownerShip + participation + efficiency + productivity
-    console.log('plusData', plusData)
+    // console.log('plusData', plusData)
 
     function resultText() {
         if (plusData === 120) {
@@ -394,7 +394,6 @@ function CheckListModal({ onClose }: Props) {
                                                 'check1'
                                             )
                                             setCheck(check ? false : true)
-                                            console.log(check)
                                         }}
                                         checked={
                                             ownerShipCheck.includes('check1')
@@ -421,7 +420,6 @@ function CheckListModal({ onClose }: Props) {
                                                 'check2'
                                             )
                                             setCheck(check ? false : true)
-                                            console.log(check)
                                         }}
                                         checked={
                                             ownerShipCheck.includes('check2')

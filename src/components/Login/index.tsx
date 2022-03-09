@@ -108,10 +108,8 @@ interface UserProps {
 function Login() {
     const router = useRouter()
     const onSuccess = async (response) => {
-        console.log('구글 로그인 -- ', response)
         const userData: any = {
             name: response.Ju.sf,
-            // nickname: response.Ju.hY,
             email: response.profileObj.email,
             password: response.profileObj.googleId,
             provider: 'google',
@@ -133,7 +131,7 @@ function Login() {
                     })
                 } else {
                     let token = res.data['token']
-                    console.log('token', token)
+
                     setCookie('Authorization', token, {
                         path: '/',
                         maxAge: 1000 * 60 * 60 * 24 * 7,

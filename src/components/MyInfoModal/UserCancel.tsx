@@ -1,18 +1,44 @@
-import React, { PropsWithChildren, useState, useRef } from 'react'
+import React, { PropsWithChildren, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
 import { useForm, Controller } from 'react-hook-form'
 import { Xclick, xclickviewBox } from '@svgs/Xclick'
+import axios from '@axios'
+import { useRouter } from 'next/router'
+
 interface ModalDefaultType {
     ClickToggleModal: () => void
 }
 
 function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
+    const router = useRouter()
     const [selectedDrink, setSelectedDrink] = useState<String>()
 
     const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedDrink(event.target.value)
     }
+    const [select, setSelect] = useState('자주 이용하지 않음')
+    const [userId, setUserId] = useState('')
+    const [inputHide, setInputHide] = useState(false)
+    const handleselectChange = (e) => {
+        const value = e.target.value
+
+        setSelect(value)
+    }
+    const toggleHide = () => {
+        setInputHide((inputHide) => !inputHide)
+    }
+    const id = userId
+    const deleteUser = () => {
+        axios.delete(`http://127.0.0.1:8000/api/user/${id}/`).then((res) => {
+            router.push('/login')
+        })
+    }
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/user/').then((res) => {
+            setUserId(res.data.id)
+        })
+    }, [])
 
     return (
         <ModalContainer>
@@ -57,34 +83,99 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                 <InfoBox style={{ top: '173px' }}>
                     <ModalH3>탈퇴이유</ModalH3>
                     <RadioBox>
-                        <input id="radio1" type="radio" />
-                        <label htmlFor="radio1">자주 이용하지 않음</label>
-
-                        <input type="radio" id="radio2" />
-                        <label htmlFor="radio2">개인정보 노출 걱정</label>
-
-                        <input type="radio" id="radio3" />
-                        <label>UI/UX 불편</label>
-
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>제공하는 기능 및 서비스 부족</label>
+                            <RadioInput
+                                type="radio"
+                                name="radio"
+                                id="radio"
+                                value="자주 이용하지 않음"
+                                checked={select === '자주 이용하지 않음'}
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio">자주 이용하지 않음</label>
                         </LiBox>
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>고객센터 응대 불만</label>
+                            <RadioInput
+                                type="radio"
+                                name="radio1"
+                                id="radio1"
+                                value="개인정보 노출 걱정"
+                                checked={select === '개인정보 노출 걱정'}
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio1">개인정보 노출 걱정</label>
                         </LiBox>
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>사이트 시스템의 에러 불만</label>
+                            <RadioInput
+                                type="radio"
+                                name="radio3"
+                                id="radio3"
+                                value="UI/UX 불편"
+                                checked={select === 'UI/UX 불편'}
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio3">UI/UX 불편</label>
                         </LiBox>
                         <LiBox>
-                            <RadioInput type="radio" />
-                            <label>기타</label>
+                            <RadioInput
+                                type="radio"
+                                name="radio4"
+                                id="radio4"
+                                value="제공하는 기능 및 서비스 부족"
+                                checked={
+                                    select === '제공하는 기능 및 서비스 부족'
+                                }
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio4">
+                                제공하는 기능 및 서비스 부족
+                            </label>
+                        </LiBox>
+                        <LiBox>
+                            <RadioInput
+                                type="radio"
+                                name="radio5"
+                                id="radio5"
+                                value="고객센터 응대 불만"
+                                checked={select === '고객센터 응대 불만'}
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio5">고객센터 응대 불만</label>
+                        </LiBox>
+                        <LiBox>
+                            <RadioInput
+                                type="radio"
+                                name="radio6"
+                                id="radio6"
+                                value="사이트 시스템의 에러 불만"
+                                checked={select === '사이트 시스템의 에러 불만'}
+                                onChange={(e) => handleselectChange(e)}
+                            />
+                            <label htmlFor="radio6">
+                                사이트 시스템의 에러 불만
+                            </label>
+                        </LiBox>
+                        <LiBox>
+                            <RadioInput
+                                type="radio"
+                                name="radio7"
+                                id="radio7"
+                                value="기타"
+                                checked={select === '기타'}
+                                onChange={(e) => handleselectChange(e)}
+                                onClick={toggleHide}
+                            />
+                            <label htmlFor="radio7">기타</label>
+                            {inputHide && (
+                                <HideInput
+                                    placeholder="회원탈퇴 사유를 입력해주세요."
+                                    onChange={(e) => setSelect(e.target.value)}
+                                />
+                            )}
                         </LiBox>
                     </RadioBox>
                 </InfoBox>
-                <InfoBox style={{ top: '353px' }}>
+                <InfoBox style={{ top: '433px' }}>
                     <ModalH3>탈퇴하시기 전에 꼭 확인해주세요!</ModalH3>
                     <TextUi>
                         <TextLi>
@@ -134,6 +225,7 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                         취소
                     </button>
                     <button
+                        onClick={deleteUser}
                         style={{
                             width: '72px',
                             height: '40px',
@@ -175,7 +267,7 @@ const ModalContainer = styled.div`
 
 const DialogBox = styled.dialog`
     width: 556px;
-    height: 645px;
+    height: 695px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,6 +329,16 @@ const Backdrop = styled.div`
     top: 0;
     z-index: 10000;
     background-color: rgba(0, 0, 0, 0.2);
+`
+const HideInput = styled.input`
+    width: 452px;
+    height: 80px;
+    flex-grow: 0;
+    margin: 8px 6px 29px;
+    padding: 14px 264px 46px 20px;
+    border-radius: 12px;
+    border: solid 1px #d6d6d7;
+    background-color: #fff;
 `
 
 export default UserCancel

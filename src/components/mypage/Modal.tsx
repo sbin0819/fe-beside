@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import styled from 'styled-components'
-
+import useSWR, { mutate } from 'swr'
+import axios from '@axios'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 
 const Container = styled.div`
@@ -73,12 +74,24 @@ const ModalContainer = styled.div`
 `
 interface DropdownMenuProps {
     onClose: () => void
+    data: any
 }
-function Modal({ onClose }: DropdownMenuProps) {
+function Modal({ onClose }: DropdownMenuProps, Props) {
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
         onClose()
     })
+    const removeBtn = () => async (meet_id: number) => {
+        mutate('http://127.0.0.1:8000/api/meet/?rm_status=w', async (todos) => {
+            const updateList = await axios.patch(
+                `http://127.0.0.1:8000/api/meet/`,
+                { rm_status: 'N', meet_id: meet_id }
+            )
+
+            const filterList = todos.filter((todo) => todo.meet_id !== '1')
+            return [...filterList, updateList]
+        })
+    }
 
     return (
         <Container>
@@ -91,7 +104,13 @@ function Modal({ onClose }: DropdownMenuProps) {
                     <button className="btn_cancel" onClick={() => onClose()}>
                         취소
                     </button>
-                    <button className="btn_save" onClick={() => onClose()}>
+                    <button
+                        className="btn_save"
+                        onClick={() => {
+                            removeBtn()
+                            onClose()
+                        }}
+                    >
                         확인
                     </button>
                 </div>

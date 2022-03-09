@@ -21,19 +21,17 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
     const [testData, setTestData] = useState(undefined)
     const { data, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?user_id=1&rm_status=Y',
+        'http://127.0.0.1:8000/api/meet/?user_id=1&rm_status=y',
         fetcher,
         { revalidateOnFocus: true }
     )
 
-    React.useEffect(() => {
-        console.log('겟 미트 api1', data)
-    }, [])
-
     return (
         <React.Fragment>
             <ListBoxContainer>
-                {data === undefined || data.length === 0 ? (
+                {data === undefined ||
+                data.success === false ||
+                data.length === 0 ? (
                     <NullDataList />
                 ) : (
                     <YDataList data={data} />
