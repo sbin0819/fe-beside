@@ -5,6 +5,7 @@ import { StyledInput, InputInfoContainer } from './style'
 import { Svg } from '@common'
 import { closeViewBox, Close } from '@svgs/Close'
 import { AgendaForms } from './useSetting'
+import { useRouter } from 'next/router'
 
 const AgendaContainer = styled.div`
     /* margin-top: 32px; */
@@ -390,7 +391,8 @@ function AgendaInputs({
                                 </div>
                             </div>
                         </AgendaContainer>
-                        {formOrderRef.current == idx + 1 && (
+                        {/* formOrderRef.current == idx + 1 */}
+                        {Object.entries(agendaForms).length == idx + 1 && (
                             <AgendaAddContainer onClick={addAgendaInput}>
                                 + 액션 아이템 추가
                             </AgendaAddContainer>
