@@ -45,6 +45,9 @@ function LeftPannel() {
                     progress_time: progressTime,
                 }
             )
+            if (isLastAgenda()) {
+                router.push('/')
+            }
             if (!isLastAgenda()) {
                 const idx = agendas.findIndex((el) => el.agenda_status == 'y')
                 const nextAgenda = agendas[idx]
@@ -55,6 +58,7 @@ function LeftPannel() {
                     }
                 )
             }
+
             setActiveIdx(activeIdx)
             agendaMutate()
             setTwentyPercentLeft(false)
