@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 import axios from '@axios'
+import { baseURL } from '@api/index'
 
 import RadarChart from '@components/RadarChart'
 
@@ -259,7 +260,7 @@ function CheckListModal({ onClose }: Props) {
     ]
     const createCheckBtn = () => {
         axios
-            .post('http://127.0.0.1:8000/api/selfcheck/', {
+            .post(`${baseURL}/api/selfcheck/`, {
                 meet_id: 4,
                 ownership: [ownerShipCheck],
                 participation: [participationCheck],

@@ -30,6 +30,7 @@ import { Delete, deleteViewBox } from '@svgs/Delete'
 import { mutate } from 'swr'
 import axios from '@axios'
 import Modal from '../Modal'
+import { baseURL } from '@api/index'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -157,11 +158,11 @@ function YDataList(props: any) {
     // )
 
     const removeBtn = (meet_id: number) => {
-        mutate('http://127.0.0.1:8000/api/meet/?rm_status=y', async (todos) => {
-            const updateTodos = await axios.patch(
-                `http://127.0.0.1:8000/api/meet/`,
-                { rm_status: 'w', meet_id: meet_id }
-            )
+        mutate(`${baseURL}/api/meet/?rm_status=y`, async (todos) => {
+            const updateTodos = await axios.patch(`${baseURL}/api/meet/`, {
+                rm_status: 'w',
+                meet_id: meet_id,
+            })
             const filterdTodos = todos.filter((todo) => todo.meet_id != '1')
             return [...filterdTodos, updateTodos]
         })

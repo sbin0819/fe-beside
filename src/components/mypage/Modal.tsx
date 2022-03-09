@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import useSWR, { mutate } from 'swr'
 import axios from '@axios'
 import useOnClickOutside from '@hooks/useOnClickOutside'
-
+import { baseURL } from '@api/index'
 const Container = styled.div`
     position: fixed;
     top: 0;
@@ -82,11 +82,11 @@ function Modal({ onClose }: DropdownMenuProps, Props) {
         onClose()
     })
     const removeBtn = () => async (meet_id: number) => {
-        mutate('http://127.0.0.1:8000/api/meet/?rm_status=w', async (todos) => {
-            const updateList = await axios.patch(
-                `http://127.0.0.1:8000/api/meet/`,
-                { rm_status: 'N', meet_id: meet_id }
-            )
+        mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
+            const updateList = await axios.patch(`${baseURL}/api/meet/`, {
+                rm_status: 'N',
+                meet_id: meet_id,
+            })
 
             const filterList = todos.filter((todo) => todo.meet_id !== '1')
             return [...filterList, updateList]

@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import axios from '@axios'
 import moment from 'moment'
 import Modal from './Modal'
+import { baseURL } from '@api/index'
 import {
     TabContainer,
     BoxContainer,
@@ -69,7 +70,7 @@ function MyRemove() {
     const handleModalOpen = () => setIsShowModal(true)
     const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
     const { data: meetDatas, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?rm_status=w',
+        `${baseURL}/api/meet/?rm_status=w`,
         fetcher,
         { revalidateOnFocus: true }
     )
@@ -123,40 +124,32 @@ function MyRemove() {
 
     const removeBtn = useCallback(
         async (meet_id: number) => {
-            mutate(
-                'http://127.0.0.1:8000/api/meet/?rm_status=w',
-                async (todos) => {
-                    const updateList = await axios.patch(
-                        `http://127.0.0.1:8000/api/meet/`,
-                        { rm_status: 'n', meet_id: meet_id }
-                    )
+            mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
+                const updateList = await axios.patch(`${baseURL}/api/meet/`, {
+                    rm_status: 'n',
+                    meet_id: meet_id,
+                })
 
-                    const filterList = todos.filter(
-                        (todo) => todo.meet_id !== '1'
-                    )
-                    return [...filterList, updateList]
-                }
-            )
+                const filterList = todos.filter((todo) => todo.meet_id !== '1')
+                return [...filterList, updateList]
+            })
         },
         [meetDatas]
     )
     const updateBtn = useCallback(
         async (meet_id: number) => {
             if (window.confirm('회의록을 복구하시겠습니까?')) {
-                mutate(
-                    'http://127.0.0.1:8000/api/meet/?rm_status=w',
-                    async (todos) => {
-                        const updateList = await axios.patch(
-                            `http://127.0.0.1:8000/api/meet/`,
-                            { rm_status: 'y', meet_id: meet_id }
-                        )
+                mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
+                    const updateList = await axios.patch(
+                        `${baseURL}/api/meet/`,
+                        { rm_status: 'y', meet_id: meet_id }
+                    )
 
-                        const filterList = todos.filter(
-                            (todo) => todo.meet_id !== '1'
-                        )
-                        return [...filterList, updateList]
-                    }
-                )
+                    const filterList = todos.filter(
+                        (todo) => todo.meet_id !== '1'
+                    )
+                    return [...filterList, updateList]
+                })
             }
         },
         [meetDatas]

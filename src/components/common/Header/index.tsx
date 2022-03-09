@@ -5,6 +5,7 @@ import axios from '@axios'
 import useSWR from 'swr'
 // import { userSWR, userDataSWR } from '@api/user'
 // import { userInfo } from '@api/user'
+import { baseURL } from '@api/index'
 
 import DropdownMenu from './DropdownMenu'
 
@@ -52,7 +53,7 @@ function Header({ desc }: HeaderProps) {
         username: '오구민',
         icon: '😊',
     }
-    const { data } = useSWR('http://127.0.0.1:8000/api/user/', (url) =>
+    const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
         axios.get(url).then((res) => {
             // console.log('66', res.data)
             res.data

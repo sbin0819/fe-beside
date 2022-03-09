@@ -16,12 +16,13 @@ import axios from '@axios'
 import moment from 'moment'
 import NullDataList from './ListBox/NullDataList'
 import YDataList from './ListBox/YDataList'
+import { baseURL } from '@api/index'
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyList() {
     const [testData, setTestData] = useState(undefined)
     const { data, error } = useSWR(
-        'http://127.0.0.1:8000/api/meet/?user_id=1&rm_status=y',
+        `${baseURL}/api/meet/?user_id=1&rm_status=y`,
         fetcher,
         { revalidateOnFocus: true }
     )
