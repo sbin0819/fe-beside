@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 import axios from '@axios'
 import { baseURL } from '@api/index'
-
+import { checkSWR } from '@api/checklist'
 import RadarChart from '@components/RadarChart'
 
 const Container = styled.div`
@@ -204,7 +204,19 @@ interface Props {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
-    const check1 = useRef<any>()
+    const { checkData } = checkSWR()
+    // const check1 = useRef<any>()
+
+    const [check1, setCheck1] = useState(false)
+    const [check2, setCheck2] = useState(false)
+    const [check3, setCheck3] = useState(false)
+    const [check4, setCheck4] = useState(false)
+    const [check5, setCheck5] = useState(false)
+    const [check6, setCheck6] = useState(false)
+    const [check7, setCheck7] = useState(false)
+    const [check8, setCheck8] = useState(false)
+    const [check9, setCheck9] = useState(false)
+    const [check10, setCheck10] = useState(false)
 
     const [checklistReslut, setChecklistResult] = useState(true)
     const [disable, setDisable] = useState(false)
@@ -330,30 +342,12 @@ function CheckListModal({ onClose }: Props) {
         onClose()
     })
 
-    // useEffect(() => {
-    //     axios
-    //         .get('http://127.0.0.1:8000/api/selfcheck/?meet_id=3')
-    //         .then((res) => {
-    //             console.log('00', res.data)
-    //             if (plusData.length === 0) {
-    //                 console.log('11', res.data)
-    //                 setDisable(false)
-    //                 setChecklistResult(true)
-    //                 console.log('11')
-    //             } else {
-    //                 console.log('ddfdf')
-    //                 // setOwnerShipCheck((res.data.ownership || '').split(','))
-    //                 // setParticipationCheck(res.data.participation.split(','))
-    //                 // setEfficiencyCheck(res.data.efficiency.split(','))
-    //                 // setProductivityCheck(res.data.productivity.split(','))
-    //                 console.log('22', res.data)
-    //                 setDisable(true)
-    //                 setChecklistResult(false)
-    //                 // console.log('333', ownerShip.split(','))
-    //                 // console.log('22', res.data.ownership.split(','))
-    //             }
-    //         })
-    // }, [])
+    useEffect(() => {
+        axios.get(`${baseURL}/api/selfcheck/`).then((res) => {
+            console.log(res.data)
+        })
+        console.log('checkData', checkData)
+    }, [])
 
     return (
         <Container>
@@ -383,24 +377,12 @@ function CheckListModal({ onClose }: Props) {
                                     }}
                                 >
                                     <input
-                                        ref={check1}
                                         className="checkcomm"
                                         type="checkbox"
                                         readOnly
-                                        id="check1"
-                                        disabled={disable}
-                                        onChange={(e) => {
-                                            ownerShipHandler(
-                                                e.currentTarget.checked,
-                                                'check1'
-                                            )
-                                            setCheck(check ? false : true)
-                                        }}
-                                        checked={
-                                            ownerShipCheck.includes('check1')
-                                                ? true
-                                                : false
-                                        }
+                                        value={'Y'}
+                                        checked={check1}
+                                        onChange={(e) => setCheck1(e.checked)}
                                     />
                                     나는, 회의에서 무엇에 대한 결정을
                                     내려야하는지 명확히 알고 있었어요.

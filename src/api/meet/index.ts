@@ -27,3 +27,29 @@ export const meetsSWR = () => {
     )
     return { data, error }
 }
+
+export const meetsYSWR = () => {
+    const { data: meetYdata, mutate: meetYmutate } = useSWR(
+        `${baseURL}/api/meet/?rm_status=y`,
+        (url) =>
+            fetch(url, {
+                headers: {
+                    Authorization: cookies.get('Authorization'),
+                },
+            }).then((res) => res.json())
+    )
+    return { meetYdata, meetYmutate }
+}
+
+export const meetsWSWR = () => {
+    const { data: meetWdata, mutate: meetWmutate } = useSWR(
+        `${baseURL}/api/meet/?rm_status=w`,
+        (url) =>
+            fetch(url, {
+                headers: {
+                    Authorization: cookies.get('Authorization'),
+                },
+            }).then((res) => res.json())
+    )
+    return { meetWdata, meetWmutate }
+}

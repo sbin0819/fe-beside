@@ -36,6 +36,7 @@ import { Delete, deleteViewBox } from '@svgs/Delete'
 import { DeleteGray, deleteGrayViewBox } from '@svgs/DeleteGray'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 import { mutate } from 'swr'
+import { meetsWSWR } from '@api/meet'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -64,16 +65,13 @@ export const HoverBox = styled.div`
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 function MyRemove() {
+    const { meetWdata, meetWmutate } = meetsWSWR()
     const ref = useRef<any>()
     const [isShowModal, setIsShowModal] = useState(false)
     const handleModalClose = () => setIsShowModal(false)
     const handleModalOpen = () => setIsShowModal(true)
-    const [hoverStyle, setHoverStyle] = useState({ opacity: 0 })
-    const { data: meetDatas, error } = useSWR(
-        `${baseURL}/api/meet/?rm_status=w`,
-        fetcher,
-        { revalidateOnFocus: true }
-    )
+
+    const meetDatas = meetWdata
 
     const stateData = [
         {
@@ -136,24 +134,16 @@ function MyRemove() {
         },
         [meetDatas]
     )
-    const updateBtn = useCallback(
-        async (meet_id: number) => {
-            if (window.confirm('회의록을 복구하시겠습니까?')) {
-                mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
-                    const updateList = await axios.patch(
-                        `${baseURL}/api/meet/`,
-                        { rm_status: 'y', meet_id: meet_id }
-                    )
-
-                    const filterList = todos.filter(
-                        (todo) => todo.meet_id !== '1'
-                    )
-                    return [...filterList, updateList]
-                })
-            }
-        },
-        [meetDatas]
-    )
+    const updateBtn = (meet_id: number) => {
+        axios
+            .patch(`${baseURL}/api/meet/`, {
+                rm_status: 'y',
+                meet_id: meet_id,
+            })
+            .then(() => {
+                meetWmutate()
+            })
+    }
 
     return (
         <React.Fragment>
@@ -241,7 +231,6 @@ function MyRemove() {
                                             </HoverDiv>
                                             <DeleteHoverDiv
                                                 onClick={() => {
-                                                    // removeBtn(meetData.meet_id)
                                                     handleModalOpen()
                                                 }}
                                             >
