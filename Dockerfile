@@ -1,17 +1,15 @@
 FROM node:alpine
 
-ENV PORT 3000
+WORKDIR /app
 
-WORKDIR /usr/src/app
+COPY package.json ./
 
-COPY package*.json ./
-COPY ./ ./
-RUN npm install -g npm@8.5.3
-RUN npm install
+COPY yarn.lock ./
 
+RUN yarn install --frozen-lockfile
 
-ENV NODE_ENV production
+COPY . .
 
-# RUN npm run build
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
