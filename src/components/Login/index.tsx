@@ -182,7 +182,7 @@ function Login() {
                         responseType={'id_token'}
                         onSuccess={onSuccess}
                         onFailure={onFailure}
-                        // cookiePolicy={'single_host_origin'}
+                        cookiePolicy={'single_host_origin'}
                         // scope="profile"
                         render={({ onClick }) => (
                             <GoogleLoginBtn
