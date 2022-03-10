@@ -149,7 +149,7 @@ function Login() {
         // Router.push(`/login/join?userName=${userData.username}`)
     }
     const onFailure = (error) => {
-        console.log(error)
+        console.log('error', error)
     }
     useEffect(() => {
         // axios.get('http://127.0.0.1:8000/api/meet').then((res) => {
@@ -183,6 +183,7 @@ function Login() {
                         onSuccess={onSuccess}
                         onFailure={onFailure}
                         cookiePolicy={'single_host_origin'}
+                        scope="profile"
                         render={({ onClick }) => (
                             <GoogleLoginBtn
                                 onClick={(e) => {
