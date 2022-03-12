@@ -97,12 +97,12 @@ function ActionItems({
     }
 
     const updateAction = async () => {
-        if (currentActionId && currentActionIdIdx) {
+        if (currentActionId !== null && currentActionIdIdx !== null) {
             // 빈 값 일 때도 동작 해야함
             const targetAction = Object.values(innerActions)[currentActionIdIdx]
             const validAction = Object.entries(targetAction)
                 .filter(([k, v]) => {
-                    if (k !== 'agenda_id' && v) return true
+                    if (k !== 'agenda_id') return true
                 })
                 .reduce((acc, curr) => {
                     acc[curr[0]] = curr[1]
