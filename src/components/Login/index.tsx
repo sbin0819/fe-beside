@@ -9,7 +9,7 @@ import Router from 'next/router'
 import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
-
+import { signIn, useSession } from 'next-auth/react'
 const clientId =
     '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
@@ -109,6 +109,7 @@ interface UserProps {
 }
 function Login({ providers }: { providers: any }) {
     const router = useRouter()
+    const { data: session, status } = useSession()
     const onSuccess = async (response) => {
         const userData: any = {
             name: response.Ju.sf,
@@ -151,12 +152,41 @@ function Login({ providers }: { providers: any }) {
     const onFailure = (error) => {
         console.log('error', error)
     }
+
+    const fetchLogin = async () => {
+        const userData: any = {
+            name: session?.user?.name,
+            email: session?.user?.email,
+            password: 'password!@3', // accesToken
+            provider: 'google',
+            img: 'img',
+        }
+
+        await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
+            if (res.data.db === 'None') {
+                Router.push({
+                    pathname: '/login/join',
+                })
+            } else {
+                let token = res.data['token']
+
+                setCookie('Authorization', token, {
+                    path: '/',
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                    secure: true,
+                    SameSite: 'None',
+                })
+                window.location.href = '/'
+            }
+        })
+    }
+
     useEffect(() => {
-        // axios.get('http://127.0.0.1:8000/api/meet').then((res) => {
-        // console.log('meet list', res)
-        // })
-        // console.log('---', userData.userName)
-    }, [])
+        if (session) {
+            console.log(session)
+            fetchLogin()
+        }
+    }, [session])
     return (
         <Container>
             <LeftContainer>
@@ -176,7 +206,7 @@ function Login({ providers }: { providers: any }) {
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
                         로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    <GoogleLogin
+                    {/* <GoogleLogin
                         clientId={clientId}
                         className="GoogleBtn"
                         responseType={'id_token'}
@@ -200,7 +230,26 @@ function Login({ providers }: { providers: any }) {
                                 </Svg>
                             </GoogleLoginBtn>
                         )}
-                    />
+                    /> */}
+                    {Object.values(providers).map((provider: any) => (
+                        <div
+                            key={provider.name}
+                            style={{
+                                padding: '20px 30px',
+                                border: '1px solid black',
+                            }}
+                        >
+                            <button
+                                onClick={() =>
+                                    signIn(provider.id, {
+                                        callbackUrl: '/login',
+                                    })
+                                }
+                            >
+                                구글 로그인
+                            </button>
+                        </div>
+                    ))}
                 </div>
             </RightContainer>
         </Container>

@@ -166,17 +166,17 @@ function Join() {
     const { data: session, status } = useSession()
 
     const [inputName, setInputName] = useState((session?.name as string) || '')
-
     const inputBorder = inputName.length === 0
     const loginBtn = () => {
         const userData: any = {
             name: session?.user?.name,
             nickname: inputName,
             email: session?.user?.email,
-            password: session?.accessToken, // accesToken
+            password: 'password!@3', //session.accesToken
             provider: 'google',
             img: 'img',
         }
+
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
 

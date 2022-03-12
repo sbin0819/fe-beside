@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Login from '@components/Login/index'
 import { Cookies } from 'react-cookie'
 const cookies = new Cookies()
-import { getProviders, signIn } from 'next-auth/react'
+import { getProviders } from 'next-auth/react'
 function LogingPage({ providers }: { providers: any }) {
     const router = useRouter()
     // 이런 느낌으로 login, join 페이지에 넣어 주면 좋을 거 같네요
@@ -12,7 +12,7 @@ function LogingPage({ providers }: { providers: any }) {
             router.back()
         }
     }, [])
-    return <Login />
+    return <Login providers={providers} />
 }
 
 export default LogingPage
