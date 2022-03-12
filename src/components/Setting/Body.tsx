@@ -200,8 +200,13 @@ function Body({
             const actions = agendaRes.data.map((el) => {
                 return { agenda_id: el.agenda_id, dead_line: null }
             })
+
             await axios.post('/api/action/', actions)
-            router.push(`/meeting/${data.meet_id}`)
+            if (meet_status === 'p') {
+                router.push(`/meeting/${data.meet_id}`)
+            } else {
+                router.push(`/`)
+            }
         } catch (error) {}
     }
 

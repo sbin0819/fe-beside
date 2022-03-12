@@ -12,7 +12,7 @@ export default function SignIn({ providers }: { providers: any }) {
                             })
                         }
                     >
-                        Sign in with {provider.name}
+                        Sign in with
                     </button>
                 </div>
             ))}

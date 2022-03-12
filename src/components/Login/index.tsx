@@ -107,7 +107,7 @@ interface UserProps {
     provider?: string
     img?: string
 }
-function Login() {
+function Login({ providers }: { providers: any }) {
     const router = useRouter()
     const onSuccess = async (response) => {
         const userData: any = {

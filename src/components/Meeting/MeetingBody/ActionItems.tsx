@@ -115,14 +115,16 @@ function ActionItems({
     }
     const deleteAction = async (id) => {
         await axios.delete(`/api/action/${id}`)
+        // delete 시 currentActionId, currentActionIdidx null
         agendaMutate()
     }
 
     const updateAction = async () => {
         if (currentActionId !== null && currentActionIdIdx !== null) {
             // 빈 값 일 때도 동작 해야함
-            const targetAction = Object.values(innerActions)[currentActionIdIdx]
-            const validAction = Object.entries(targetAction)
+            const targetAction =
+                Object?.values(innerActions)[currentActionIdIdx]
+            const validAction = Object?.entries(targetAction)
                 .filter(([k, v]) => {
                     if (k !== 'agenda_id') return true
                 })
@@ -130,6 +132,7 @@ function ActionItems({
                     acc[curr[0]] = curr[1]
                     return acc
                 }, {})
+
             await axios.patch(`/api/action/${currentActionId}/`, validAction)
         }
     }
