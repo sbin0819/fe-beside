@@ -119,7 +119,8 @@ function Login() {
         }
         await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             if (res.data.db === 'None') {
-                Router.push({
+                console.log('replace, none')
+                router.replace({
                     pathname: '/login/join',
                     query: {
                         email: userData.email,
@@ -131,6 +132,7 @@ function Login() {
                 })
             } else {
                 let token = res.data['token']
+                console.log('data, ok')
 
                 setCookie('Authorization', token, {
                     path: '/',
