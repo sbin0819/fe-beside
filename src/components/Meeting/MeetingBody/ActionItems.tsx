@@ -79,6 +79,8 @@ function ActionItems({
     actionsData: ActionItems[]
 }) {
     const { agendaMutate } = actionsSWR(agendaId)
+    const [currentActionIdIdx, setCurrentActionIdIdx] = useState(null)
+    const [currentActionId, setCurrentActionId] = useState(null)
     const [innerActions, setActions] = useState<{ [key: number]: ActionItems }>(
         {}
     )
@@ -95,12 +97,29 @@ function ActionItems({
     }
 
     const updateAction = async () => {
-        const actions = Object.values(innerActions)
-        await axios.patch('/api/action/', actions)
+        if (currentActionId !== null && currentActionIdIdx !== null) {
+            // 빈 값 일 때도 동작 해야함
+            const targetAction = Object.values(innerActions)[currentActionIdIdx]
+            const validAction = Object.entries(targetAction)
+                .filter(([k, v]) => {
+                    if (k !== 'agenda_id') return true
+                })
+                .reduce((acc, curr) => {
+                    acc[curr[0]] = curr[1]
+                    return acc
+                }, {})
+            await axios.patch(`/api/action/${currentActionId}/`, validAction)
+        }
     }
 
-    const onChange = (e, id) => {
+    const onChange = (e, id, idx) => {
         const { value, name } = e.target
+        if (id !== currentActionId) {
+            setCurrentActionId(id)
+        }
+        if (idx !== currentActionIdIdx) {
+            setCurrentActionIdIdx(idx)
+        }
         setActions((prev) => ({
             ...prev,
             [id]: {
@@ -164,7 +183,11 @@ function ActionItems({
                                             value={value.action_title}
                                             name="action_title"
                                             onChange={(e) => {
-                                                onChange(e, value.action_id)
+                                                onChange(
+                                                    e,
+                                                    value.action_id,
+                                                    idx
+                                                )
                                             }}
                                         />
                                         {idx !== 0 && (
@@ -201,7 +224,11 @@ function ActionItems({
                                             value={value.person}
                                             name="person"
                                             onChange={(e) => {
-                                                onChange(e, value.action_id)
+                                                onChange(
+                                                    e,
+                                                    value.action_id,
+                                                    idx
+                                                )
                                             }}
                                         />
                                     </div>
