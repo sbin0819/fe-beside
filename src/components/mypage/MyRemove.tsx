@@ -80,11 +80,7 @@ function MyRemove() {
             stateDiv: <BoxstatusX>회의진행중</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
-                    <Svg
-                        viewBox={progressDimViewBox}
-                        width={'32'}
-                        height={'32'}
-                    >
+                    <Svg viewBox={progressDimViewBox} width={'32'} height={'32'}>
                         <ProgressDim />
                     </Svg>
                 </ImgStatus>
@@ -96,11 +92,7 @@ function MyRemove() {
             stateDiv: <BoxstatusX>회의예정</BoxstatusX>,
             stateImg: (
                 <ImgStatus>
-                    <Svg
-                        viewBox={scheduleDimViewBox}
-                        width={'32'}
-                        height={'32'}
-                    >
+                    <Svg viewBox={scheduleDimViewBox} width={'32'} height={'32'}>
                         <ScheduleDim />
                     </Svg>
                 </ImgStatus>
@@ -122,9 +114,9 @@ function MyRemove() {
 
     const removeBtn = useCallback(
         async (meet_id: number) => {
-            mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
+            mutate(`${baseURL}/api/meet/?rm_status=W`, async (todos) => {
                 const updateList = await axios.patch(`${baseURL}/api/meet/`, {
-                    rm_status: 'n',
+                    rm_status: 'Y',
                     meet_id: meet_id,
                 })
 
@@ -137,7 +129,7 @@ function MyRemove() {
     const updateBtn = (meet_id: number) => {
         axios
             .patch(`${baseURL}/api/meet/`, {
-                rm_status: 'y',
+                rm_status: 'N',
                 meet_id: meet_id,
             })
             .then(() => {
@@ -155,10 +147,7 @@ function MyRemove() {
                             삭제된 회의록은 복구할 수 없습니다.
                         </div>
                         <div className="buttons">
-                            <button
-                                className="btn_cancel"
-                                onClick={() => handleModalClose()}
-                            >
+                            <button className="btn_cancel" onClick={() => handleModalClose()}>
                                 취소
                             </button>
                             <button
@@ -213,11 +202,7 @@ function MyRemove() {
 
                                     <HoverBoxContainer>
                                         <HoverBox>
-                                            <HoverDiv
-                                                onClick={() =>
-                                                    updateBtn(meetData.meet_id)
-                                                }
-                                            >
+                                            <HoverDiv onClick={() => updateBtn(meetData.meet_id)}>
                                                 <Svg
                                                     viewBox={recoverViewBox}
                                                     width={'32'}
@@ -225,9 +210,7 @@ function MyRemove() {
                                                 >
                                                     <Recover />
                                                 </Svg>
-                                                <p style={{ fontSize: '16px' }}>
-                                                    복구하기
-                                                </p>
+                                                <p style={{ fontSize: '16px' }}>복구하기</p>
                                             </HoverDiv>
                                             <DeleteHoverDiv
                                                 onClick={() => {
@@ -241,9 +224,7 @@ function MyRemove() {
                                                 >
                                                     <Delete />
                                                 </Svg>
-                                                <p style={{ fontSize: '16px' }}>
-                                                    삭제하기
-                                                </p>
+                                                <p style={{ fontSize: '16px' }}>삭제하기</p>
                                             </DeleteHoverDiv>
                                         </HoverBox>
                                     </HoverBoxContainer>
@@ -253,24 +234,19 @@ function MyRemove() {
                                                 <div className="body">
                                                     회의록을 <span>삭제</span>
                                                     하시겠습니까? <br />
-                                                    삭제된 회의록은 복구할 수
-                                                    없습니다.
+                                                    삭제된 회의록은 복구할 수 없습니다.
                                                 </div>
                                                 <div className="buttons">
                                                     <button
                                                         className="btn_cancel"
-                                                        onClick={() =>
-                                                            handleModalClose()
-                                                        }
+                                                        onClick={() => handleModalClose()}
                                                     >
                                                         취소
                                                     </button>
                                                     <button
                                                         className="btn_save"
                                                         onClick={() => {
-                                                            removeBtn(
-                                                                meetData.meet_id
-                                                            )
+                                                            removeBtn(meetData.meet_id)
                                                             handleModalClose()
                                                         }}
                                                     >

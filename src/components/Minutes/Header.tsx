@@ -4,6 +4,8 @@ import axios from '@axios'
 import { Svg } from '@components/common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import { People, peopleViewBox } from '@svgs/People'
+import { meetSWR } from '@api/meet'
+import moment from 'moment'
 
 const BoxContainer = styled.div`
     position: absolute;
@@ -39,10 +41,19 @@ const ChartBox = styled.div`
 `
 
 function Header() {
+    let id = 4
+    const { meetData } = meetSWR(id)
+
+    useEffect(() => {
+        console.log('meetData', meetData)
+
+        // console.log('meetData', meetData.meet_title)
+    }, [])
+
     return (
         <BoxContainer>
             <div style={{ float: 'left' }}>
-                <TitleText>칠성 사이다 - 9차 정기 주간회의</TitleText>
+                <TitleText>{meetData?.[0].meet_title}</TitleText>
                 <TitleSubText style={{ marginBottom: '12px' }}>
                     <Svg
                         viewBox={calendarViewBox}
@@ -52,7 +63,7 @@ function Header() {
                     >
                         <Calendar />
                     </Svg>
-                    2021-01-03
+                    {moment(meetData?.meet_date).format('YYYY-MM-DD')}
                 </TitleSubText>
                 <TitleSubText>
                     <Svg
@@ -63,7 +74,7 @@ function Header() {
                     >
                         <People />
                     </Svg>
-                    김철수, 이짱구
+                    {meetData?.[0].participants}
                 </TitleSubText>
             </div>
             <ChartBox>차트임다</ChartBox>

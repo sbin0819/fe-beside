@@ -82,7 +82,7 @@ function Modal({ onClose }: DropdownMenuProps, Props) {
         onClose()
     })
     const removeBtn = () => async (meet_id: number) => {
-        mutate(`${baseURL}/api/meet/?rm_status=w`, async (todos) => {
+        mutate(`${baseURL}/api/meet/?rm_status=W`, async (todos) => {
             const updateList = await axios.patch(`${baseURL}/api/meet/`, {
                 rm_status: 'N',
                 meet_id: meet_id,

@@ -163,7 +163,7 @@ export const AgendaTitle = styled.div`
         color: #3c3c43;
     }
 `
-export const AgendaBodyTime = styled.div`
+export const AgendaBodyGoodTime = styled.div`
     width: 1076px;
     flex-grow: 0;
     margin: 0 auto;
@@ -188,7 +188,7 @@ export const AgendaBodyTime = styled.div`
         font-size: 28px;
         font-weight: 500;
     }
-    .agenda-body-message {
+    .agenda-body-good-message {
         width: 100%;
         font-size: 20px;
         font-stretch: normal;
@@ -197,6 +197,45 @@ export const AgendaBodyTime = styled.div`
         letter-spacing: normal;
         text-align: left;
         color: #00957e;
+        span {
+            font-weight: bold;
+        }
+    }
+`
+export const AgendaBodyBadTime = styled.div`
+    width: 1076px;
+    flex-grow: 0;
+    margin: 0 auto;
+    padding: 18px 28px 19px 28px;
+    border-radius: 12px;
+    background-color: #fef4ee;
+    height: 80px;
+    display: flex;
+    flex-direction: rows;
+    .agenda-body-time {
+        font-weight: 800;
+        color: #3c3c43;
+        font-size: 28px;
+        margin-left: 18px;
+        line-height: 1.4;
+        font-weight: 500;
+        width: 200px;
+    }
+    .agenda-body-time span {
+        font-weight: 800;
+        color: #87878b;
+        font-size: 28px;
+        font-weight: 500;
+    }
+    .agenda-body-bad-message {
+        width: 100%;
+        font-size: 20px;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.8;
+        letter-spacing: normal;
+        text-align: left;
+        color: #e24646;
         span {
             font-weight: bold;
         }
@@ -282,4 +321,47 @@ export const FixBox = styled.div`
 export const ActionUi = styled.li`
     margin-left: 76px;
     list-style-type: disc;
+`
+export const ButtonBox = styled.div`
+    width: 366px;
+    height: 52px;
+    display: flex;
+    flex-direction: row;
+    margin: 84px auto 66px auto;
+    .cancel-btn {
+        width: 170px;
+        height: 52px;
+        margin-right: 24px;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: solid 1px #d6d6d7;
+        background-color: #fff;
+    }
+    .okay-btn {
+        width: 170px;
+        height: 52px;
+        color: #fff;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 12px;
+        background-color: #162f55;
+    }
+`
+export const MeetDelete = styled.div`
+    width: 64px;
+    height: 20px;
+    flex-grow: 0;
+    float: right;
+    margin: 0 0 0 8px;
+    cursor: pointer;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: left;
+    color: #e2464d;
 `

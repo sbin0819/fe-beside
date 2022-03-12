@@ -17,20 +17,20 @@ import moment from 'moment'
 import NullDataList from './ListBox/NullDataList'
 import YDataList from './ListBox/YDataList'
 import { baseURL } from '@api/index'
-import { meetsYSWR } from '@api/meet'
+import { meetsNSWR } from '@api/meet'
 
 function MyList() {
-    const { meetYdata } = meetsYSWR()
+    const { meetNdata } = meetsNSWR()
 
     return (
         <React.Fragment>
             <ListBoxContainer>
-                {meetYdata === undefined ||
-                meetYdata.success === false ||
-                meetYdata.length === 0 ? (
+                {meetNdata === undefined ||
+                meetNdata.success === false ||
+                meetNdata.length === 0 ? (
                     <NullDataList />
                 ) : (
-                    <YDataList data={meetYdata} />
+                    <YDataList data={meetNdata} />
                 )}
             </ListBoxContainer>
         </React.Fragment>

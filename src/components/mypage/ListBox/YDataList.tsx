@@ -32,7 +32,7 @@ import axios from '@axios'
 import Modal from '../Modal'
 import { baseURL } from '@api/index'
 import { useRouter } from 'next/router'
-import { meetsYSWR } from '@api/meet'
+import { meetsNSWR } from '@api/meet'
 
 export const HoverBoxContainer = styled.div`
     border: 1px solid #f1f1f1;
@@ -61,7 +61,7 @@ export const HoverBox = styled.div`
 
 function YDataList(props: any) {
     const router = useRouter()
-    const { meetYmutate } = meetsYSWR()
+    const { meetNmutate } = meetsNSWR()
 
     let meetDatas = props.data
 
@@ -143,11 +143,11 @@ function YDataList(props: any) {
     const removeBtn = (meet_id: number) => {
         axios
             .patch(`${baseURL}/api/meet/`, {
-                rm_status: 'w',
+                rm_status: 'W',
                 meet_id: meet_id,
             })
             .then(() => {
-                meetYmutate()
+                meetNmutate()
             })
     }
 
@@ -222,26 +222,21 @@ function YDataList(props: any) {
                                     <HoverBoxContainer>
                                         <HoverBox>
                                             <HoverDiv>
-                                                {meetData.meet_status ===
-                                                    'y' && [
+                                                {meetData.meet_status === 'y' && [
                                                     hoverStateData[0].stateImg,
                                                     hoverStateData[0].stateDiv,
                                                 ]}
-                                                {meetData.meet_status ===
-                                                    'p' && [
+                                                {meetData.meet_status === 'p' && [
                                                     hoverStateData[1].stateImg,
                                                     hoverStateData[1].stateDiv,
                                                 ]}
-                                                {meetData.meet_status ===
-                                                    'c' && [
+                                                {meetData.meet_status === 'c' && [
                                                     hoverStateData[2].stateImg,
                                                     hoverStateData[2].stateDiv,
                                                 ]}
                                             </HoverDiv>
                                             <DeleteHoverDiv
-                                                onClick={() =>
-                                                    removeBtn(meetData.meet_id)
-                                                }
+                                                onClick={() => removeBtn(meetData.meet_id)}
                                             >
                                                 <Svg
                                                     viewBox={deleteViewBox}
