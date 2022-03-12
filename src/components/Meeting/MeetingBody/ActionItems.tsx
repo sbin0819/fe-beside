@@ -40,16 +40,38 @@ const Item = styled.div`
     padding: 16px 16px 17px 20px;
     border: solid 1px #f1f1f1;
     background-color: #fff;
-    input[type='date']::before {
+    /* input[type='date']::before {
         content: attr(data-placeholder);
         width: 100%;
         color: gray;
-    }
-    input[type='date']:focus::before {
+    } */
+    /* input[type='date']:focus::before {
         display: none;
     }
     input[type='date']:valid::before {
         display: none;
+    } */
+`
+
+const StyledDateInput = styled.div<{ isValue?: boolean }>`
+    position: relative;
+    input[type='date'] {
+        color: ${({ isValue }) => (isValue ? 'inherit' : '#c0c0c2')};
+    }
+    input[type='date'] {
+    }
+    input[type='date']::-webkit-inner-spin-button,
+    input[type='date']::-webkit-calendar-picker-indicator {
+        background: transparent;
+        bottom: 0;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
     }
 `
 
@@ -124,18 +146,10 @@ function ActionItems({
             ...prev,
             [id]: {
                 ...prev[id],
-                [name]: value,
-            },
-        }))
-    }
-
-    const onChangeDate = (e, id) => {
-        const { value, name } = e.target
-        setActions((prev) => ({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                [name]: moment(value).format('YYYY-MM-DD') + ' 12:12:12',
+                [name]:
+                    name === 'dead_line'
+                        ? moment(value).format('YYYY-MM-DD') + ' 12:12:12'
+                        : value,
             },
         }))
     }
@@ -156,6 +170,7 @@ function ActionItems({
         }, {})
         setActions(actionObj)
     }, [actionsData])
+
     return (
         <>
             <MenuContainer>
@@ -242,16 +257,30 @@ function ActionItems({
                                         >
                                             <Calendar />
                                         </Svg>
-                                        <input
-                                            type="date"
-                                            data-placeholder="마감기한"
-                                            value={value.dead_line}
-                                            name="dead_line"
-                                            readOnly
-                                            // onChange={(e) => {
-                                            //     onChangeDate(e, value.action_id)
-                                            // }}
-                                        />
+                                        <StyledDateInput
+                                            isValue={
+                                                value.dead_line ? true : false
+                                            }
+                                        >
+                                            <input
+                                                type="date"
+                                                // data-placeholder="마감기한"
+                                                min={moment(new Date()).format(
+                                                    'YYYY-MM-DD'
+                                                )}
+                                                value={moment(
+                                                    value.dead_line
+                                                ).format('YYYY-MM-DD')}
+                                                name="dead_line"
+                                                onChange={(e) => {
+                                                    onChange(
+                                                        e,
+                                                        value.action_id,
+                                                        idx
+                                                    )
+                                                }}
+                                            />
+                                        </StyledDateInput>
                                     </div>
                                 </Item>
                             )
