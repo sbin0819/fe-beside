@@ -162,11 +162,14 @@ interface UserProps {
 }
 function Join() {
     const router = useRouter()
-    let email = router.query.email
-    let name = router.query.name
-    let nickname = router.query.nickname
-    let password = router.query.password
-    let img = router.query.img
+    const [forms, setForms] = useState({
+        email: '',
+        name: '',
+        nickname: '',
+        password: '',
+        img: '',
+    })
+    const { email, name, nickname, password, img } = forms
 
     // const [inputName, setInputName] = useState(name)
     const [inputName, setInputName] = useState(name || '')
@@ -195,6 +198,19 @@ function Join() {
             }
         })
     }
+
+    useEffect(() => {
+        if (router.isReady) {
+            setForms((prev) => ({
+                ...prev,
+                email: router.query.email as string,
+                name: router.query.name as string,
+                password: router.query.password as string,
+                nickname: router.query.nickname as string,
+                img: router.query.img as string,
+            }))
+        }
+    }, [router.isReady])
     return (
         <Container>
             <LeftContainer>
