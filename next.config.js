@@ -13,6 +13,10 @@ const nextConfig = {
     env: {
         APP_ENV: String(process.env.APP_ENV),
     },
+    images: {
+        loader: 'akamai',
+        path: '/',
+    }
 }
 
 module.exports = nextConfig

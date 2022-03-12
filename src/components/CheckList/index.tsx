@@ -382,7 +382,7 @@ function CheckListModal({ onClose }: Props) {
                                         readOnly
                                         value={'Y'}
                                         checked={check1}
-                                        onChange={(e) => setCheck1(e.checked)}
+                                        // onChange={(e) => setCheck1(e.checked)} // 잠시꺼두겠습니다
                                     />
                                     나는, 회의에서 무엇에 대한 결정을
                                     내려야하는지 명확히 알고 있었어요.
