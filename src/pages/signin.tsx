@@ -8,7 +8,7 @@ export default function SignIn({ providers }: { providers: any }) {
                     <button
                         onClick={() =>
                             signIn(provider.id, {
-                                callbackUrl: '/',
+                                callbackUrl: '/login/join',
                             })
                         }
                     >
