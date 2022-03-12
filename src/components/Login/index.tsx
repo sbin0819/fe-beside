@@ -132,7 +132,7 @@ function Login() {
                 })
             } else {
                 let token = res.data['token']
-                console.log('data, ok')
+                console.log('data, ok', res.data)
 
                 setCookie('Authorization', token, {
                     path: '/',
