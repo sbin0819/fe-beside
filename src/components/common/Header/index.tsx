@@ -8,9 +8,10 @@ import useSWR from 'swr'
 import { baseURL } from '@api/index'
 // import { userSWR } from '../../../pages/userapi'
 import { userSWR } from '@api/user'
-
+import { Svg } from '@components/common'
+import { LogoDark, logoDarkViewBox } from '@svgs/LogoDark'
 import DropdownMenu from './DropdownMenu'
-
+import { useRouter } from 'next/router'
 const Container = styled.div`
     background: linear-gradient(
         90deg,
@@ -47,6 +48,7 @@ interface HeaderProps {
 }
 function Header({ desc }: HeaderProps) {
     const { userData } = userSWR()
+    const router = useRouter()
     // const { userInfo } = userDataSWR()
     // const [userName, setUserName] = useState()
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -73,7 +75,11 @@ function Header({ desc }: HeaderProps) {
         <Container>
             <div className="header_inner" style={{ width: '1140px' }}>
                 <div className="header_logo">
-                    <Link href="/">59mins</Link>
+                    <Svg viewBox={logoDarkViewBox} width={'56'} height={'24'}>
+                        <Link href="/">
+                            <LogoDark />
+                        </Link>
+                    </Svg>
                 </div>
                 <div className="header_desc">
                     {/* <div className="username">{userName}</div> */}

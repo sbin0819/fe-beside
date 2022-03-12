@@ -1,12 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import {
-    MainInfoTitle,
-    StyledInput,
-    SubTitleContainer,
-    InputInfoContainer,
-} from './style'
+import { MainInfoTitle, StyledInput, SubTitleContainer, InputInfoContainer } from './style'
 import axios from '@axios'
 import { baseURL } from '@api/index'
 import AgendaInputs from './AgendaInputs'
@@ -109,8 +104,7 @@ function Body({
             }
             return [k, v]
         })
-        const isValid =
-            meetFormsArr.filter(([_, v]) => v.error).length > 0 ? false : true
+        const isValid = meetFormsArr.filter(([_, v]) => v.error).length > 0 ? false : true
         if (!isValid) {
             const newMeetForms = meetFormsArr.reduce((acc, curr) => {
                 acc[curr[0]] = curr[1]
@@ -125,10 +119,8 @@ function Body({
 
     const checkValidAgendaForms = (forms: [string, AgendaWithValidation][]) => {
         const isValid =
-            forms.filter(
-                ([_, value]) =>
-                    value.agenda_title === '' || value.setting_time === 0
-            ).length > 0
+            forms.filter(([_, value]) => value.agenda_title === '' || value.setting_time === 0)
+                .length > 0
                 ? false
                 : true
         if (!isValid) {
@@ -139,9 +131,7 @@ function Body({
         }
     }
 
-    const changeInvalidAgendaStatus = (
-        forms: [string, AgendaWithValidation][]
-    ) => {
+    const changeInvalidAgendaStatus = (forms: [string, AgendaWithValidation][]) => {
         // Deep copy 해야 함
         const vaildEmptyAgendaInputs = JSON.parse(JSON.stringify(forms)).map(
             ([key, value]: [key: string, value: AgendaWithValidation]) => {
@@ -180,8 +170,7 @@ function Body({
         try {
             const meetResponse = await axios.post(`${baseURL}/api/meet/`, {
                 meet_title: meet_title.value,
-                meet_date:
-                    moment(meet_date.value).format('YYYY-MM-DD') + ' 12:12:12',
+                meet_date: moment(meet_date.value).format('YYYY-MM-DD') + ' 12:12:12',
                 participants: participants.value,
                 goal: goal.value,
                 rm_status: 'N',
@@ -207,9 +196,7 @@ function Body({
 
     const onSubmit = async (e, meet_status: 'y' | 'p') => {
         e.preventDefault()
-        const sortedAgendas = Object.entries(agendaForms).sort(
-            (a, b) => +a[0] - +b[0]
-        )
+        const sortedAgendas = Object.entries(agendaForms).sort((a, b) => +a[0] - +b[0])
         const isCheckMeetForm = checkValidMeetForms()
         const isAgendaFormsValid = checkValidAgendaForms(sortedAgendas)
 
@@ -301,17 +288,11 @@ function Body({
                     </div>
                 </InfoSection>
                 <ButtonContainer>
-                    <StyledButton
-                        className="cancel_btn"
-                        onClick={(e) => onSubmit(e, 'y')}
-                    >
+                    <StyledButton className="cancel_btn" onClick={(e) => onSubmit(e, 'y')}>
                         나중에 할래요
                     </StyledButton>
                     {/* 버튼 disabled */}
-                    <StyledButton
-                        className="submit_btn"
-                        onClick={(e) => onSubmit(e, 'p')}
-                    >
+                    <StyledButton className="submit_btn" onClick={(e) => onSubmit(e, 'p')}>
                         지금 바로 시작해요
                     </StyledButton>
                 </ButtonContainer>

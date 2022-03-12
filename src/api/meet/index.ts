@@ -28,9 +28,9 @@ export const meetsSWR = () => {
     return { data, error }
 }
 
-export const meetsYSWR = () => {
-    const { data: meetYdata, mutate: meetYmutate } = useSWR(
-        `${baseURL}/api/meet/?rm_status=y`,
+export const meetsNSWR = () => {
+    const { data: meetNdata, mutate: meetNmutate } = useSWR(
+        `${baseURL}/api/meet/?rm_status=N`,
         (url) =>
             fetch(url, {
                 headers: {
@@ -38,12 +38,12 @@ export const meetsYSWR = () => {
                 },
             }).then((res) => res.json())
     )
-    return { meetYdata, meetYmutate }
+    return { meetNdata, meetNmutate }
 }
 
 export const meetsWSWR = () => {
     const { data: meetWdata, mutate: meetWmutate } = useSWR(
-        `${baseURL}/api/meet/?rm_status=w`,
+        `${baseURL}/api/meet/?rm_status=W`,
         (url) =>
             fetch(url, {
                 headers: {
