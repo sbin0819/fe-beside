@@ -44,11 +44,11 @@ function useIsHeader() {
         }
     }, [pathname])
 
-    // useEffect(() => {
-    //     if (!authRef.current && !pathname.includes('/login')) {
-    //         router.replace('/login')
-    //     }
-    // }, [router])
+    useEffect(() => {
+        if (!authRef.current && !pathname.includes('/login')) {
+            router.replace('/login')
+        }
+    }, [router])
 
     return {
         isHeader,
