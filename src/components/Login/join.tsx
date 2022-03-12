@@ -6,6 +6,7 @@ import { withRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import axios from 'axios'
 import { baseURL } from '@api/index'
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Container = styled.div`
     width: 100%;
@@ -162,25 +163,20 @@ interface UserProps {
 }
 function Join() {
     const router = useRouter()
-    let email = router.query.email
-    let name = router.query.name
-    let nickname = router.query.nickname
-    let password = router.query.password
-    let img = router.query.img
+    const { data: session, status } = useSession()
 
-    // const [inputName, setInputName] = useState(name)
-    const [inputName, setInputName] = useState(name || '')
-
+    const [inputName, setInputName] = useState((session?.name as string) || '')
     const inputBorder = inputName.length === 0
     const loginBtn = () => {
         const userData: any = {
-            name: name,
+            name: session?.user?.name,
             nickname: inputName,
-            email: email,
-            password: password,
+            email: session?.user?.email,
+            password: 'password!@3', //session.accesToken
             provider: 'google',
-            img: img,
+            img: 'img',
         }
+
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
 
@@ -261,4 +257,4 @@ const ImageBox = styled.img`
     right: 100px;
 `
 
-export default withRouter(Join)
+export default Join
