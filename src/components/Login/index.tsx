@@ -123,7 +123,8 @@ function Login() {
                     pathname: '/login/join',
                     query: {
                         email: userData.email,
-                        nickname: userData.nickname,
+                        // nickname: userData.nickname,
+                        nickname: 'nickname',
                         name: userData.name,
                         password: userData.password,
                         img: userData.img,
