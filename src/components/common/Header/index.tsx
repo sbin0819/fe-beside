@@ -76,7 +76,7 @@ function Header({ desc }: HeaderProps) {
                     <Link href="/">59mins</Link>
                 </div>
                 <div className="header_desc">
-                    {/* <div className="username">{username}</div> */}
+                    {/* <div className="username">{userName}</div> */}
                     <div className="description">{desc}</div>
                     <div style={{ position: 'relative' }}>
                         <div
