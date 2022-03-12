@@ -7,8 +7,22 @@ import { GoogleBtn, googleBtnViewBox } from '@svgs/googleBtn'
 import { GoogleBtnNone, googleBtnNoneViewBox } from '@svgs/googleBtnNone'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
-import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
+
+import { Cookies } from 'react-cookie'
+
+const cookies = new Cookies()
+
+export const setCookie = (name, value, option) => {
+    return cookies.set(name, value, { ...option })
+}
+
+export const getCookie = (name) => {
+    return cookies.get(name)
+}
+export const removeCookie = (name) => {
+    return cookies.remove(name)
+}
 
 const clientId =
     '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
@@ -111,27 +125,27 @@ function Login() {
     const router = useRouter()
     const onSuccess = async (response) => {
         const userData: any = {
-            name: response.Ju.sf,
+            name: response.Ju.sf || 'test',
             email: response.profileObj.email,
             password: response.profileObj.googleId,
             provider: 'google',
-            img: response.profileObj.imageUrl,
+            nickname: 'test',
+            img: response.profileObj.imageUrl || 'test',
         }
         await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             if (res.data.db === 'None') {
-                Router.push({
-                    pathname: '/login/join',
-                    query: {
-                        email: userData.email,
-                        nickname: userData.nickname,
-                        name: userData.name,
-                        password: userData.password,
-                        img: userData.img,
-                    },
-                })
+                // Router.push({
+                //     pathname: '/login/join',
+                //     query: {
+                //         email: userData.email,
+                //         nickname: userData.nickname,
+                //         name: userData.name,
+                //         password: userData.password,
+                //         img: userData.img,
+                //     },
+                // })
             } else {
                 let token = res.data['token']
-
                 setCookie('Authorization', token, {
                     path: '/',
                     maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -151,12 +165,7 @@ function Login() {
     const onFailure = (error) => {
         console.log('error', error)
     }
-    useEffect(() => {
-        // axios.get('http://127.0.0.1:8000/api/meet').then((res) => {
-        // console.log('meet list', res)
-        // })
-        // console.log('---', userData.userName)
-    }, [])
+
     return (
         <Container>
             <LeftContainer>
