@@ -186,7 +186,7 @@ function Join() {
         }
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
-
+            console.log('res', res.data)
             setCookie('Authorization', token, {
                 path: '/',
                 maxAge: 1000 * 60 * 60 * 24 * 7,
