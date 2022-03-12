@@ -110,48 +110,6 @@ interface UserProps {
 function Login({ providers }: { providers: any }) {
     const router = useRouter()
     const { data: session, status } = useSession()
-    const onSuccess = async (response) => {
-        const userData: any = {
-            name: response.Ju.sf,
-            email: response.profileObj.email,
-            password: response.profileObj.googleId,
-            provider: 'google',
-            img: response.profileObj.imageUrl,
-        }
-        await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
-            if (res.data.db === 'None') {
-                Router.push({
-                    pathname: '/login/join',
-                    query: {
-                        email: userData.email,
-                        nickname: userData.nickname,
-                        name: userData.name,
-                        password: userData.password,
-                        img: userData.img,
-                    },
-                })
-            } else {
-                let token = res.data['token']
-
-                setCookie('Authorization', token, {
-                    path: '/',
-                    maxAge: 1000 * 60 * 60 * 24 * 7,
-                    secure: true,
-                    SameSite: 'None',
-                })
-                window.location.href = '/'
-            }
-        })
-
-        // Router.push({
-        //     pathname: '/login/join',
-        //     query: { userName: googleUserName },
-        // })
-        // Router.push(`/login/join?userName=${userData.username}`)
-    }
-    const onFailure = (error) => {
-        console.log('error', error)
-    }
 
     const fetchLogin = async () => {
         const userData: any = {
@@ -169,14 +127,13 @@ function Login({ providers }: { providers: any }) {
                 })
             } else {
                 let token = res.data['token']
-
                 setCookie('Authorization', token, {
                     path: '/',
                     maxAge: 1000 * 60 * 60 * 24 * 7,
                     secure: true,
                     SameSite: 'None',
                 })
-                window.location.href = '/'
+                // window.location.href = '/'
             }
         })
     }

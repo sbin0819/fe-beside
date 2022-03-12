@@ -11,9 +11,8 @@
         "start": "next start",
         "lint": "next lint",
         "test": "jest --watch",
-        "docker:build": "docker build --tag next .",
-        "docker:run": "docker run -d -p 3000:3000 next",
-        "dev:up": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up"
+        "docker:build": "docker-compose up --build -d",
+        "docker:run": "docker-compose up -d"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.7.1",
