@@ -115,7 +115,7 @@ function Login({ providers }: { providers: any }) {
         const userData: any = {
             name: session?.user?.name,
             email: session?.user?.email,
-            password: 'password!@3', // accesToken
+            password: 'Y', // accesToken
             provider: 'google',
             img: 'img',
         }
@@ -133,14 +133,13 @@ function Login({ providers }: { providers: any }) {
                     secure: true,
                     SameSite: 'None',
                 })
-                // window.location.href = '/'
+                router.replace('/')
             }
         })
     }
 
     useEffect(() => {
         if (session) {
-            console.log(session)
             fetchLogin()
         }
     }, [session])
