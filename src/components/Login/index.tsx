@@ -111,11 +111,16 @@ function Login() {
     const router = useRouter()
     const onSuccess = async (response) => {
         const userData: any = {
-            name: response.Ju.sf,
+            // name: response.Ju.sf,
+            // email: response.profileObj.email,
+            // password: response.profileObj.googleId,
+            // provider: 'google',
+            // img: response.profileObj.imageUrl,
+            name: 'test',
             email: response.profileObj.email,
-            password: response.profileObj.googleId,
+            password: 'test',
             provider: 'google',
-            img: response.profileObj.imageUrl,
+            img: 'test',
         }
         await axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             if (res.data.db === 'None') {
