@@ -28,7 +28,6 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
     useOnClickOutside(ref, () => {
         onClose()
     })
-
     const [checklistReslut, setChecklistResult] = useState(true)
     const [disable, setDisable] = useState(false)
     // 오너십 3
@@ -382,7 +381,9 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
                     <button
                         className="success-btn"
                         style={{ backgroundColor: '#bac0cc', color: '#fff' }}
-                        onClick={() => onClose()}
+                        onClick={() => {
+                            onClose()
+                        }}
                     >
                         자가진단 완료
                     </button>

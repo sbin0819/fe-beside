@@ -34,8 +34,9 @@ interface CheckProps {
     check10?: string
     success?: any
 }
-function CheckListModal({ onClose }: Props) {
+function CheckListModal(idData, { onClose }: Props) {
     const ref = useRef<any>()
+    console.log('요기는?', onClose)
     const router = useRouter()
     const { id } = router.query
     // const { checkData } = checkSWR(id)
@@ -43,14 +44,11 @@ function CheckListModal({ onClose }: Props) {
     const [checkResult, setCheckResult] = useState(null)
     useEffect(() => {
         // console.log(checkData)
-        axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
+        axios.get(`${baseURL}/api/selfcheck/?meet_id=${idData.idData}`).then((res) => {
             // console.log('check-', res.data)
             setCheckData(res.data)
             setCheckResult(res.data.success)
         })
-
-        // console.log('checkResult', checkData)
-        // console.log('---', checkData.length)
     }, [])
 
     return (
@@ -58,7 +56,7 @@ function CheckListModal({ onClose }: Props) {
             {checkData === null || checkData.success === false ? (
                 <CheckNull onClose={onClose} />
             ) : (
-                <CheckData checkData={checkData} onClose={onClose} />
+                <CheckData onClose={onClose} checkData={checkData} />
             )}
         </Container>
     )
