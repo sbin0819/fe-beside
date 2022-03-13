@@ -10,8 +10,7 @@ import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
 import { signIn, useSession } from 'next-auth/react'
-const clientId =
-    '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
+const clientId = '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
     width: 100%;
     height: 100%;
@@ -143,6 +142,7 @@ function Login({ providers }: { providers: any }) {
             fetchLogin()
         }
     }, [session])
+
     return (
         <Container>
             <LeftContainer>
@@ -162,48 +162,19 @@ function Login({ providers }: { providers: any }) {
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />
                         로그인 후 효율적인 회의를 진행해보세요.
                     </p>
-                    {/* <GoogleLogin
-                        clientId={clientId}
-                        className="GoogleBtn"
-                        responseType={'id_token'}
-                        onSuccess={onSuccess}
-                        onFailure={onFailure}
-                        cookiePolicy={'single_host_origin'}
-                        // scope="profile"
-                        render={({ onClick }) => (
-                            <GoogleLoginBtn
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    onClick()
-                                }}
-                            >
-                                <Svg
-                                    viewBox={googleBtnViewBox}
-                                    width={'364'}
-                                    height={'52'}
-                                >
-                                    <GoogleBtn />
-                                </Svg>
-                            </GoogleLoginBtn>
-                        )}
-                    /> */}
                     {Object.values(providers).map((provider: any) => (
                         <div
                             key={provider.name}
-                            style={{
-                                padding: '20px 30px',
-                                border: '1px solid black',
-                            }}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() =>
+                                signIn(provider.id, {
+                                    callbackUrl: '/login',
+                                })
+                            }
                         >
-                            <button
-                                onClick={() =>
-                                    signIn(provider.id, {
-                                        callbackUrl: '/login',
-                                    })
-                                }
-                            >
-                                구글 로그인
-                            </button>
+                            <Svg viewBox={googleBtnViewBox} width={'364'} height={'52'}>
+                                <GoogleBtn />
+                            </Svg>
                         </div>
                     ))}
                 </div>
