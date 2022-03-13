@@ -12,14 +12,7 @@ import {
 
 import { Radar } from 'react-chartjs-2'
 
-ChartJS.register(
-    RadialLinearScale,
-    PointElement,
-    LineElement,
-    Filler,
-    Tooltip,
-    Legend
-)
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
 interface Props {
     ownerShip: number

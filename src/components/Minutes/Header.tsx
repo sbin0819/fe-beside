@@ -91,43 +91,46 @@ function Header() {
     }, [])
 
     return (
-        <BoxContainer>
-            <div style={{ float: 'left' }}>
-                <TitleText>{meetData?.[0].meet_title}</TitleText>
-                <TitleSubText style={{ marginBottom: '12px' }}>
-                    <Svg
-                        viewBox={calendarViewBox}
-                        width={'15'}
-                        height={'15'}
-                        style={{ marginRight: '15px' }}
-                    >
-                        <Calendar />
-                    </Svg>
-                    {moment(meetData?.meet_date).format('YYYY-MM-DD')}
-                </TitleSubText>
-                <TitleSubText>
-                    <Svg
-                        viewBox={peopleViewBox}
-                        width={'15'}
-                        height={'15'}
-                        style={{ marginRight: '15px' }}
-                    >
-                        <People />
-                    </Svg>
-                    {meetData?.[0].participants}
-                </TitleSubText>
-            </div>
-            {isOpen && <CheckList onClose={handleClose} />}
-            <ChartBox
-                onClick={() => {
-                    router.push(`/result/${id}`)
-                    setIsOpen(true)
-                }}
-            >
-                회의 자가진단 결과
-                <ResultText>{resultScore}점</ResultText>
-            </ChartBox>
-        </BoxContainer>
+        <div>
+            {isOpen && <CheckList idData={id} onClose={handleClose} />}
+            <BoxContainer>
+                <div style={{ float: 'left' }}>
+                    <TitleText>{meetData?.[0].meet_title}</TitleText>
+                    <TitleSubText style={{ marginBottom: '12px' }}>
+                        <Svg
+                            viewBox={calendarViewBox}
+                            width={'15'}
+                            height={'15'}
+                            style={{ marginRight: '15px' }}
+                        >
+                            <Calendar />
+                        </Svg>
+                        {moment(meetData?.meet_date).format('YYYY-MM-DD')}
+                    </TitleSubText>
+                    <TitleSubText>
+                        <Svg
+                            viewBox={peopleViewBox}
+                            width={'15'}
+                            height={'15'}
+                            style={{ marginRight: '15px' }}
+                        >
+                            <People />
+                        </Svg>
+                        {meetData?.[0].participants}
+                    </TitleSubText>
+                </div>
+
+                <ChartBox
+                    onClick={() => {
+                        // router.push(`/result/${id}`)
+                        setIsOpen(true)
+                    }}
+                >
+                    회의 자가진단 결과
+                    <ResultText>{resultScore}점</ResultText>
+                </ChartBox>
+            </BoxContainer>
+        </div>
     )
 }
 

@@ -51,7 +51,7 @@ function Body() {
             })
     }
     useEffect(() => {
-        console.log('===', agendasData)
+        // console.log('===', agendasData)
     }, [])
 
     return (

@@ -22,6 +22,7 @@ interface BooProps {
 }
 function CheckData(CheckProps, { onClose }: Props) {
     const ref = useRef<any>()
+
     useOnClickOutside(ref, () => {
         onClose()
     })
@@ -271,9 +272,9 @@ function CheckData(CheckProps, { onClose }: Props) {
                 <FooterContainer>
                     <button className="none-btn">다시 할게요</button>
                     <button
+                        onClick={() => onClose()}
                         className="success-btn"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => onClose()}
                     >
                         자가진단 완료
                     </button>
