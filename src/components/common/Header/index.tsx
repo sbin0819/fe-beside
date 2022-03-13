@@ -50,7 +50,7 @@ function Header({ desc }: HeaderProps) {
     const { userData } = userSWR()
     const router = useRouter()
     // const { userInfo } = userDataSWR()
-    // const [userName, setUserName] = useState()
+    const [userName, setUserName] = useState()
     const [isOpenModal, setIsOpenModal] = useState(false)
     // const [username, setUserName] = useState(userData.nickname)
     const onCloseModal = () => setIsOpenModal(false)
@@ -59,13 +59,13 @@ function Header({ desc }: HeaderProps) {
         icon: '😊',
     }
     // const userName = userData.nickname
-    // const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
-    //     axios.get(url).then((res) => {
-    //         console.log('66', res.data)
-    //         res.data
-    //         setUserName(res.data.nickname)
-    //     })
-    // )
+    const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
+        axios.get(url).then((res) => {
+            console.log('66', res.data)
+            res.data
+            setUserName(res.data.nickname)
+        })
+    )
 
     useEffect(() => {
         console.log('userData', userData)
@@ -82,7 +82,7 @@ function Header({ desc }: HeaderProps) {
                     </Svg>
                 </div>
                 <div className="header_desc">
-                    {/* <div className="username">{userName}</div> */}
+                    <div className="username">{userData?.nickname}</div>
                     <div className="description">{desc}</div>
                     <div style={{ position: 'relative' }}>
                         <div

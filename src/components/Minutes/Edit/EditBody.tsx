@@ -30,14 +30,12 @@ import { actionsSWR } from '@api/actions'
 import { useRouter } from 'next/router'
 import axios from '@axios'
 import { baseURL } from '@api/index'
-import BodyAgenda from './BodyAgenda'
-import BodyAction from './BodyAction'
 
 function Body() {
     const router = useRouter()
-    const id = 14
-    const { meetData, meetMutate } = meetSWR(id)
+    const id = 4
     const { agendasData } = agendasSWR(id)
+    const { meetData, meetMutate } = meetSWR(id)
     const { actionsData } = actionsSWR(id)
 
     const removeBtn = (meet_id: number) => {
@@ -52,8 +50,8 @@ function Body() {
     }
 
     useEffect(() => {
-        console.log('agendasData --- ', agendasData)
-        console.log('확인', meetData)
+        console.log('agendasData', agendasData)
+        console.log('확인', meetData?.goal)
         console.log('actionsData', actionsData)
     }, [])
 
@@ -77,11 +75,11 @@ function Body() {
             </TopBox>
             {/* 아젠다 박스 */}
             {agendasData &&
-                agendasData?.map((datas, index) => {
+                agendasData.map((datas) => {
                     return (
                         <AgendaBox key={datas.agenda_id}>
                             <AgendaTitle>
-                                <AgendaId>AGENDA {datas?.order_number}</AgendaId>
+                                <AgendaId>AGENDA {datas?.agenda_id}</AgendaId>
                                 <div className="agenda-title">{datas?.agenda_title}</div>
                             </AgendaTitle>
                             {datas?.progress_time <= datas?.setting_time ? (
@@ -130,9 +128,38 @@ function Body() {
                                     >
                                         <ActionItem />
                                     </Svg>
-                                    액션 아이템 {datas?.agenda_id}
+                                    액션 아이템
                                 </ActionItemText>
-                                <BodyAction actionsDatas={datas?.agenda_id} />
+                                <ActionItemEl>
+                                    <div className="action-item-title">
+                                        회의 진행 화면 UI 피드백 반영 후 개발팀 공유
+                                    </div>
+                                    <div className="action-item-member">
+                                        <Svg
+                                            viewBox={peopleViewBox}
+                                            width={'15'}
+                                            height={'15'}
+                                            style={{
+                                                marginRight: '15px',
+                                            }}
+                                        >
+                                            <People />
+                                        </Svg>
+                                        김철수, 안철수, 오철수
+                                    </div>
+                                    <div className="action-item-time">
+                                        {' '}
+                                        <Svg
+                                            viewBox={calendarViewBox}
+                                            width={'15'}
+                                            height={'15'}
+                                            style={{ marginRight: '15px' }}
+                                        >
+                                            <Calendar />
+                                        </Svg>
+                                        20-02-11
+                                    </div>
+                                </ActionItemEl>
                             </ActionItemBox>
                             <FixBox>
                                 <ActionItemText>
@@ -149,11 +176,12 @@ function Body() {
                                     </Svg>
                                     결정된 사항
                                 </ActionItemText>
-                                <div className="action-middle-title">{datas?.decisions}</div>
+                                <div className="action-middle-title">회의 진행 화면</div>
                                 <ul>
-                                    <ActionUi>{datas?.discussion}</ActionUi>
+                                    <ActionUi>타이머 관련 : png 시컨스로 애니메이션 전달</ActionUi>
                                 </ul>
                             </FixBox>
+
                             <FixBox>
                                 <ActionItemText>
                                     <Svg
@@ -169,14 +197,20 @@ function Body() {
                                     </Svg>
                                     논의 내용
                                 </ActionItemText>
-                                <BodyAgenda datas={agendasData} />
+                                <div className="action-middle-title">회의록 목록</div>
+                                <ul>
+                                    <ActionUi>
+                                        hover시 나오는 버튼 옵션 : 회의록 설정 / 삭제 / 회의록
+                                        세가지
+                                    </ActionUi>
+                                </ul>
                             </FixBox>
                         </AgendaBox>
                     )
                 })}
             <MeetDelete
                 onClick={() => {
-                    removeBtn(meetData?.[0].meet_id)
+                    removeBtn(id)
                     router.push('/')
                 }}
             >

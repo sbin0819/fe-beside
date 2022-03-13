@@ -57,6 +57,7 @@ const AutoResizeTextArea = styled.textarea`
     resize: none;
     /* overflow: hidden; */
     display: block;
+    background-color: transparent;
     outline: none;
     padding: 12px 0;
     min-height: 38px;

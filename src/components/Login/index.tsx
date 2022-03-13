@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
 import { signIn, useSession } from 'next-auth/react'
+import { LogoWh, logoWhViewBox } from '@svgs/LogoWh'
 const clientId = '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
     width: 100%;
@@ -148,7 +149,12 @@ function Login({ providers }: { providers: any }) {
     return (
         <Container>
             <LeftContainer>
-                <h2 className="mins">59mins</h2>
+                <h2 className="mins">
+                    {' '}
+                    <Svg viewBox={logoWhViewBox} width={'56'} height={'24'}>
+                        <LogoWh />
+                    </Svg>
+                </h2>
             </LeftContainer>
             <RightContainer>
                 <div className="servies">

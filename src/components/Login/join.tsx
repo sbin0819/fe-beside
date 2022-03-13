@@ -6,6 +6,8 @@ import { withRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import axios from 'axios'
 import { baseURL } from '@api/index'
+import { Svg } from '@components/common'
+import { LogoWh, logoWhViewBox } from '@svgs/LogoWh'
 import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Container = styled.div`
@@ -194,7 +196,11 @@ function Join() {
     return (
         <Container>
             <LeftContainer>
-                <h2 className="mins">59mins</h2>
+                <h2 className="mins">
+                    <Svg viewBox={logoWhViewBox} width={'56'} height={'24'}>
+                        <LogoWh />
+                    </Svg>
+                </h2>
                 <ImageBox src="/image/img_login.png" />
             </LeftContainer>
             <RightContainer>
@@ -217,9 +223,7 @@ function Join() {
                             onChange={(e) => setInputName(e.target.value)}
                         />
                         {inputName.length > 10 && (
-                            <p className="nicknameLength">
-                                닉네임은 10자 이내만 입력 가능합니다.
-                            </p>
+                            <p className="nicknameLength">닉네임은 10자 이내만 입력 가능합니다.</p>
                         )}
                         {inputName === null ||
                             (inputName.length === 0 && (
@@ -238,8 +242,7 @@ function Join() {
                             시작할게요
                         </button>
                         <p className="sign-text">
-                            가입시, 59mins의{' '}
-                            <span>개인정보처리방침, 서비스 이용약관</span>에
+                            가입시, 59mins의 <span>개인정보처리방침, 서비스 이용약관</span>에
                             동의합니다.
                         </p>
                     </SignInput>

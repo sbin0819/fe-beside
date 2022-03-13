@@ -4,6 +4,7 @@ export const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
     width: 1140px;
+    border: 1px solid yellow;
     left: 50%;
     top: 267px;
 `
