@@ -172,7 +172,7 @@ function Join() {
             name: session?.user?.name,
             nickname: inputName,
             email: session?.user?.email,
-            password: 'password123YN!', //session.accesToken
+            password: 'Y', //session.accesToken
             provider: 'google',
             img: 'img',
         }

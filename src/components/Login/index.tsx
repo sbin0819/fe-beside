@@ -114,6 +114,7 @@ function Login({ providers }: { providers: any }) {
         const userData: any = {
             name: session?.user?.name,
             email: session?.user?.email,
+            password: 'Y', // accesToken
             provider: 'google',
             img: 'img',
         }
