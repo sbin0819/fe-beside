@@ -18,8 +18,10 @@ import NullDataList from './ListBox/NullDataList'
 import YDataList from './ListBox/YDataList'
 import { baseURL } from '@api/index'
 import { meetsNSWR } from '@api/meet'
+import { userSWR } from '@api/user'
 
 function MyList() {
+    // const { userData } = userSWR()
     const { meetNdata } = meetsNSWR()
 
     return (

@@ -44,12 +44,12 @@ function CheckListModal({ onClose }: Props) {
     useEffect(() => {
         // console.log(checkData)
         axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
-            console.log('check-', res.data)
+            // console.log('check-', res.data)
             setCheckData(res.data)
             setCheckResult(res.data.success)
         })
 
-        console.log('checkResult', checkData)
+        // console.log('checkResult', checkData)
         // console.log('---', checkData.length)
     }, [])
 
