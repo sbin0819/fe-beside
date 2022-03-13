@@ -6,7 +6,7 @@ const cookies = new Cookies()
 
 export const checkSWR = (id) => {
     const { data: checkData, mutate: checkMutate } = useSWR(
-        id ? `${baseURL}/api/selfcheck/${id}/` : null,
+        id ? `${baseURL}/api/selfcheck/?meet_id=${id}` : null,
         (url) =>
             fetch(url, {
                 headers: {

@@ -50,6 +50,9 @@ function Body() {
                 meetMutate()
             })
     }
+    useEffect(() => {
+        console.log('===', agendasData)
+    }, [])
 
     return (
         <BoxContainer>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from '@axios'
+import { baseURL } from '@api/index'
 import { Svg } from '@components/common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import { People, peopleViewBox } from '@svgs/People'
 import { meetSWR } from '@api/meet'
+import { checkSWR } from '@api/checklist'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import CheckList from '@components/CheckList'
@@ -41,14 +43,52 @@ const ChartBox = styled.div`
     border: solid 1px #f1f1f1;
     background-color: #fff;
 `
+const ResultText = styled.div`
+    font-size: 32px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.31;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c43;
+    margin-top: 20px;
+`
 
 function Header() {
     const router = useRouter()
     const { id } = router.query
     const { meetData } = meetSWR(id)
+    const { checkData } = checkSWR(id)
 
     const [isOpen, setIsOpen] = useState(false)
     const handleClose = () => setIsOpen(false)
+    const [checkDatas, setCheckDatas] = useState(null)
+
+    const tenResullt = [
+        checkDatas?.check1,
+        checkDatas?.check2,
+        checkDatas?.check3,
+        checkDatas?.check8,
+        checkDatas?.check9,
+        checkDatas?.check10,
+    ]
+    const fiveResult = [
+        checkDatas?.check4,
+        checkDatas?.check5,
+        checkDatas?.check6,
+        checkDatas?.check7,
+    ]
+    const ten_length = tenResullt.filter((check) => check === 'Y')
+    const five_length = fiveResult.filter((check) => check === 'Y')
+    const tenScore = ten_length.length * 10
+    const fiveScore = five_length.length * 15
+    const resultScore = tenScore + fiveScore
+    useEffect(() => {
+        axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
+            setCheckDatas(res.data?.[0])
+        })
+    }, [])
 
     return (
         <BoxContainer>
@@ -85,6 +125,7 @@ function Header() {
                 }}
             >
                 회의 자가진단 결과
+                <ResultText>{resultScore}점</ResultText>
             </ChartBox>
         </BoxContainer>
     )
