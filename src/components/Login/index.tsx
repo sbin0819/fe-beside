@@ -126,17 +126,16 @@ function Login({ providers }: { providers: any }) {
                 })
             } else {
                 let token = res.data['token']
-                if (
-                    res.data['token'] !== 'user_info errors' &&
-                    res.data['token'].success === true
-                ) {
+                if (res.data['token'] !== 'user_info errors') {
                     setCookie('Authorization', token, {
                         path: '/',
                         maxAge: 1000 * 60 * 60 * 24 * 7,
                         secure: true,
                         SameSite: 'None',
                     })
-                    router.replace('/')
+                    if (getCookie('Authorization')) {
+                        router.replace('/')
+                    }
                 } else {
                     alert(JSON.stringify(res.data, null, 2))
                 }
