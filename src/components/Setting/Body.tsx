@@ -11,6 +11,11 @@ import { MeetForm, AgendaWithValidation, AgendaForms } from './useSetting'
 import Modal from './Modal'
 import Image from 'next/image'
 import moment from 'moment'
+import { Cookies } from 'react-cookie'
+
+const cookies = new Cookies()
+axios.defaults.headers.common['Authorization'] = cookies.get('Authorization')
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
