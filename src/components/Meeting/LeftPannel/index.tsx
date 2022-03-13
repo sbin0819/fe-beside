@@ -31,33 +31,27 @@ function LeftPannel() {
     }
     const isLastAgenda = () => {
         return (
-            agendas.findIndex((el) => el.agenda_status == 'p') + 1 ==
-                agendas.length ||
+            agendas.findIndex((el) => el.agenda_status == 'p') + 1 == agendas.length ||
             agendas.findIndex((el) => el.agenda_status == 'p') == -1
         )
     }
 
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
-            await axios.patch(
-                `${baseURL}/api/agenda/${progressAgenda?.agenda_id}/`,
-                {
-                    agenda_status: 'c',
-                    progress_time: progressTime,
-                }
-            )
+            await axios.patch(`${baseURL}/api/agenda/${progressAgenda?.agenda_id}/`, {
+                agenda_status: 'c',
+                progress_time: progressTime,
+            })
             if (isLastAgenda()) {
+                // 끝나고 다른 url 추가
                 router.push('/')
             }
             if (!isLastAgenda()) {
                 const idx = agendas.findIndex((el) => el.agenda_status == 'y')
                 const nextAgenda = agendas[idx]
-                await axios.patch(
-                    `${baseURL}/api/agenda/${nextAgenda?.agenda_id}/`,
-                    {
-                        agenda_status: 'p',
-                    }
-                )
+                await axios.patch(`${baseURL}/api/agenda/${nextAgenda?.agenda_id}/`, {
+                    agenda_status: 'p',
+                })
             }
 
             setActiveIdx(activeIdx)
@@ -74,7 +68,7 @@ function LeftPannel() {
     }, [agendas])
 
     useEffect(() => {
-        if (Array.isArray(agendas)) {
+        if (Array.isArray(agendas) && agendas.length > 0) {
             if (activeIdx !== -1) {
                 setProgressAgenda(agendas[activeIdx])
             } else {
@@ -94,19 +88,11 @@ function LeftPannel() {
             <MainPannelTop>
                 <div onClick={() => setAlarm((prev) => !prev)}>
                     {alarmSoundControl ? (
-                        <Svg
-                            viewBox={alarmonViewBox}
-                            width={'20'}
-                            height={'20'}
-                        >
+                        <Svg viewBox={alarmonViewBox} width={'20'} height={'20'}>
                             <Alarmon />
                         </Svg>
                     ) : (
-                        <Svg
-                            viewBox={alarmoffViewBox}
-                            width={'20'}
-                            height={'20'}
-                        >
+                        <Svg viewBox={alarmoffViewBox} width={'20'} height={'20'}>
                             <Alarmoff />
                         </Svg>
                     )}
@@ -134,18 +120,14 @@ function LeftPannel() {
             <MainPannelBody>
                 <div className="main_pannel_top">
                     <div className="main_pannel_body_progress">
-                        AGENDA{' '}
-                        {activeIdx !== -1 ? activeIdx + 1 : agendas.length}
+                        AGENDA {activeIdx !== -1 ? activeIdx + 1 : agendas.length}
                     </div>
-                    <div className="main_pannel_body_sub_title">
-                        {progressAgenda?.agenda_title}
-                    </div>
+                    <div className="main_pannel_body_sub_title">{progressAgenda?.agenda_title}</div>
                 </div>
                 <div>
                     {progressAgenda?.agenda_status == 'c' ? (
                         <div>done</div>
-                    ) : progressAgenda?.setting_time &&
-                      progressAgenda?.agenda_status == 'p' ? (
+                    ) : progressAgenda?.setting_time && progressAgenda?.agenda_status == 'p' ? (
                         <Timer
                             agendaId={progressAgenda?.agenda_id}
                             duration={progressAgenda?.setting_time}
@@ -159,9 +141,7 @@ function LeftPannel() {
                     )}
                 </div>
                 {twentyPercentLeft && (
-                    <div className="main_pannel_toast">
-                        🔥 결정사항을 정리할 시간이에요!
-                    </div>
+                    <div className="main_pannel_toast">🔥 결정사항을 정리할 시간이에요!</div>
                 )}
             </MainPannelBody>
         </MainPannelContainer>
