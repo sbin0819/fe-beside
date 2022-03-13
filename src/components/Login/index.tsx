@@ -150,6 +150,7 @@ function Login({ providers }: { providers: any }) {
             secure: true,
             SameSite: 'None',
         })
+        document.cookie = 'abc=abcd'
         if (session) {
             fetchLogin()
         }
