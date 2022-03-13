@@ -166,7 +166,7 @@ function MyRemove() {
             <TabContainer>
                 <ListBoxContainer>
                     {meetDatas &&
-                        meetDatas.map((meetData: any) => {
+                        meetDatas?.map((meetData: any) => {
                             return (
                                 <BoxContainer key={meetData.meet_id}>
                                     <div className="box-class">
