@@ -172,7 +172,7 @@ function Join() {
             name: session?.user?.name,
             nickname: inputName,
             email: session?.user?.email,
-            password: 'Y', //session.accesToken
+            password: 'password123YN!', //session.accesToken
             provider: 'google',
             img: 'img',
         }
@@ -217,9 +217,7 @@ function Join() {
                             onChange={(e) => setInputName(e.target.value)}
                         />
                         {inputName.length > 10 && (
-                            <p className="nicknameLength">
-                                닉네임은 10자 이내만 입력 가능합니다.
-                            </p>
+                            <p className="nicknameLength">닉네임은 10자 이내만 입력 가능합니다.</p>
                         )}
                         {inputName === null ||
                             (inputName.length === 0 && (
@@ -238,8 +236,7 @@ function Join() {
                             시작할게요
                         </button>
                         <p className="sign-text">
-                            가입시, 59mins의{' '}
-                            <span>개인정보처리방침, 서비스 이용약관</span>에
+                            가입시, 59mins의 <span>개인정보처리방침, 서비스 이용약관</span>에
                             동의합니다.
                         </p>
                     </SignInput>
