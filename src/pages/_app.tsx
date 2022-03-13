@@ -8,6 +8,7 @@ import useHeaderControl from '@hooks/useHeaderControl'
 import { SWRConfig } from 'swr'
 import { SessionProvider } from 'next-auth/react'
 // import 'react-datepicker/dist/react-datepicker.css'
+import { CookiesProvider } from 'react-cookie'
 
 const app = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     const { isHeader, desc, auth } = useHeaderControl()
@@ -37,9 +38,11 @@ const app = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
                     />
                 </Head>
                 <GlobalStyle />
-                {isHeader && <Header desc={desc} />}
-                <Component {...pageProps} />
-                <Footer />
+                <CookiesProvider>
+                    {isHeader && <Header desc={desc} />}
+                    <Component {...pageProps} />
+                    <Footer />
+                </CookiesProvider>
             </SWRConfig>
         </SessionProvider>
     )
