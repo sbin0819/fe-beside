@@ -103,6 +103,8 @@ function ActionItems({ agendaId, actionsData }: { agendaId: number; actionsData:
             agenda_id: agendaId,
             dead_line: null,
         })
+        setCurrentActionId(null)
+        setCurrentActionIdIdx(null)
         agendaMutate()
     }
     const deleteAction = async (id) => {
