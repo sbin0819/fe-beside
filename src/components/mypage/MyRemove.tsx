@@ -136,6 +136,9 @@ function MyRemove() {
                 meetWmutate()
             })
     }
+    useEffect(() => {
+        console.log('meetDatas', meetDatas)
+    }, [])
 
     return (
         <React.Fragment>
