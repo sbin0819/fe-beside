@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 
 function LeftPannel() {
     const router = useRouter()
-    const { agendas } = useMeeting()
+    const { agendas, meet } = useMeeting()
     const { setAgendaCursor } = useMeetingActions()
     const [alarmSoundControl, setAlarm] = useState(true)
     const [twentyPercentLeft, setTwentyPercentLeft] = useState(false)
@@ -35,7 +35,6 @@ function LeftPannel() {
             agendas.findIndex((el) => el.agenda_status == 'p') == -1
         )
     }
-
     const onEndAgenda = async () => {
         if (activeIdx !== -1) {
             await axios.patch(`${baseURL}/api/agenda/${progressAgenda?.agenda_id}/`, {
@@ -43,7 +42,9 @@ function LeftPannel() {
                 progress_time: progressTime,
             })
             if (isLastAgenda()) {
-                // 끝나고 다른 url 추가
+                await axios.patch(`${baseURL}/api/meet/${meet?.meet_id}/`, {
+                    meet_status: 'c',
+                })
                 router.push('/')
             }
             if (!isLastAgenda()) {
