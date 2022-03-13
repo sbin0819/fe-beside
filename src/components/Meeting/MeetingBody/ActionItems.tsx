@@ -93,19 +93,11 @@ interface ActionItems {
     person: string
 }
 
-function ActionItems({
-    agendaId,
-    actionsData,
-}: {
-    agendaId: number
-    actionsData: ActionItems[]
-}) {
+function ActionItems({ agendaId, actionsData }: { agendaId: number; actionsData: ActionItems[] }) {
     const { agendaMutate } = actionsSWR(agendaId)
     const [currentActionIdIdx, setCurrentActionIdIdx] = useState(null)
     const [currentActionId, setCurrentActionId] = useState(null)
-    const [innerActions, setActions] = useState<{ [key: number]: ActionItems }>(
-        {}
-    )
+    const [innerActions, setActions] = useState<{ [key: number]: ActionItems }>({})
     const addAction = async () => {
         await axios.post('/api/action/', {
             agenda_id: agendaId,
@@ -116,14 +108,16 @@ function ActionItems({
     const deleteAction = async (id) => {
         await axios.delete(`/api/action/${id}`)
         // delete 시 currentActionId, currentActionIdidx null
+        setCurrentActionId(null)
+        setCurrentActionIdIdx(null)
+
         agendaMutate()
     }
 
     const updateAction = async () => {
         if (currentActionId !== null && currentActionIdIdx !== null) {
             // 빈 값 일 때도 동작 해야함
-            const targetAction =
-                Object?.values(innerActions)[currentActionIdIdx]
+            const targetAction = Object?.values(innerActions)[currentActionIdIdx]
             const validAction = Object?.entries(targetAction)
                 .filter(([k, v]) => {
                     if (k !== 'agenda_id') return true
@@ -150,9 +144,7 @@ function ActionItems({
             [id]: {
                 ...prev[id],
                 [name]:
-                    name === 'dead_line'
-                        ? moment(value).format('YYYY-MM-DD') + ' 12:12:12'
-                        : value,
+                    name === 'dead_line' ? moment(value).format('YYYY-MM-DD') + ' 12:12:12' : value,
             },
         }))
     }
@@ -179,11 +171,7 @@ function ActionItems({
             <MenuContainer>
                 <Header>
                     <div>
-                        <Svg
-                            viewBox={actionItemViewBox}
-                            width={'20'}
-                            height={'18'}
-                        >
+                        <Svg viewBox={actionItemViewBox} width={'20'} height={'18'}>
                             <ActionItem />
                         </Svg>
                     </div>
@@ -191,103 +179,63 @@ function ActionItems({
                 </Header>
                 <Body>
                     <ItemList>
-                        {Object.entries(innerActions)?.map(
-                            ([key, value], idx) => (
-                                <Item key={key}>
-                                    <div style={{ display: 'flex' }}>
+                        {Object.entries(innerActions)?.map(([key, value], idx) => (
+                            <Item key={key}>
+                                <div style={{ display: 'flex' }}>
+                                    <input
+                                        type="text"
+                                        placeholder="액션 아이템을 작성해주세요"
+                                        value={value.action_title}
+                                        name="action_title"
+                                        onChange={(e) => {
+                                            onChange(e, value.action_id, idx)
+                                        }}
+                                    />
+                                    {idx !== 0 && (
+                                        <div
+                                            onClick={() => {
+                                                deleteAction(value.action_id)
+                                            }}
+                                        >
+                                            <Svg viewBox={closeViewBox} width={'20'} height={'18'}>
+                                                <Close />
+                                            </Svg>
+                                        </div>
+                                    )}
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg viewBox={peopleViewBox} width={'16'} height={'16'}>
+                                        <People />
+                                    </Svg>
+                                    <input
+                                        type="text"
+                                        placeholder="담당자"
+                                        value={value.person}
+                                        name="person"
+                                        onChange={(e) => {
+                                            onChange(e, value.action_id, idx)
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <Svg viewBox={calendarViewBox} width={'20'} height={'18'}>
+                                        <Calendar />
+                                    </Svg>
+                                    <StyledDateInput isValue={value.dead_line ? true : false}>
                                         <input
-                                            type="text"
-                                            placeholder="액션 아이템을 작성해주세요"
-                                            value={value.action_title}
-                                            name="action_title"
+                                            type="date"
+                                            // data-placeholder="마감기한"
+                                            min={moment(new Date()).format('YYYY-MM-DD')}
+                                            value={moment(value.dead_line).format('YYYY-MM-DD')}
+                                            name="dead_line"
                                             onChange={(e) => {
-                                                onChange(
-                                                    e,
-                                                    value.action_id,
-                                                    idx
-                                                )
+                                                onChange(e, value.action_id, idx)
                                             }}
                                         />
-                                        {idx !== 0 && (
-                                            <div
-                                                onClick={() => {
-                                                    deleteAction(
-                                                        value.action_id
-                                                    )
-                                                }}
-                                            >
-                                                <Svg
-                                                    viewBox={closeViewBox}
-                                                    width={'20'}
-                                                    height={'18'}
-                                                >
-                                                    <Close />
-                                                </Svg>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div
-                                        style={{ display: 'flex', gap: '8px' }}
-                                    >
-                                        <Svg
-                                            viewBox={peopleViewBox}
-                                            width={'16'}
-                                            height={'16'}
-                                        >
-                                            <People />
-                                        </Svg>
-                                        <input
-                                            type="text"
-                                            placeholder="담당자"
-                                            value={value.person}
-                                            name="person"
-                                            onChange={(e) => {
-                                                onChange(
-                                                    e,
-                                                    value.action_id,
-                                                    idx
-                                                )
-                                            }}
-                                        />
-                                    </div>
-                                    <div
-                                        style={{ display: 'flex', gap: '8px' }}
-                                    >
-                                        <Svg
-                                            viewBox={calendarViewBox}
-                                            width={'20'}
-                                            height={'18'}
-                                        >
-                                            <Calendar />
-                                        </Svg>
-                                        <StyledDateInput
-                                            isValue={
-                                                value.dead_line ? true : false
-                                            }
-                                        >
-                                            <input
-                                                type="date"
-                                                // data-placeholder="마감기한"
-                                                min={moment(new Date()).format(
-                                                    'YYYY-MM-DD'
-                                                )}
-                                                value={moment(
-                                                    value.dead_line
-                                                ).format('YYYY-MM-DD')}
-                                                name="dead_line"
-                                                onChange={(e) => {
-                                                    onChange(
-                                                        e,
-                                                        value.action_id,
-                                                        idx
-                                                    )
-                                                }}
-                                            />
-                                        </StyledDateInput>
-                                    </div>
-                                </Item>
-                            )
-                        )}
+                                    </StyledDateInput>
+                                </div>
+                            </Item>
+                        ))}
                     </ItemList>
                     <AddButton
                         onClick={() => {
@@ -295,11 +243,7 @@ function ActionItems({
                         }}
                     >
                         <div>
-                            <Svg
-                                viewBox={addViewBox}
-                                width={'20'}
-                                height={'18'}
-                            >
+                            <Svg viewBox={addViewBox} width={'20'} height={'18'}>
                                 <Add />
                             </Svg>
                         </div>
