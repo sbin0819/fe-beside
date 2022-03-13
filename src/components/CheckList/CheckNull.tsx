@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useOnClickOutside from '@hooks/useOnClickOutside'
 import axios from '@axios'
-
+import { useRouter } from 'next/router'
 import RadarChart from '@components/RadarChart'
 import {
     ModalContainer,
@@ -23,6 +23,8 @@ interface BooProps {
 }
 function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
     const ref = useRef<any>()
+    const router = useRouter()
+    const { id } = router.query
     useOnClickOutside(ref, () => {
         onClose()
     })
@@ -50,49 +52,23 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
         onClose: () => void
     }
     const createCheckBtn = () => {
-        console.log('resultdata', resultdata)
-        console.log(
-            'ownerShip',
-            check1,
-            check2,
-            check3,
-            check4,
-            check5,
-            check6,
-            check7,
-            check8,
-            check9,
-            check10
-        )
-        // axios
-        //     .post('http://127.0.0.1:8000/api/selfcheck/', {
-        //         meet_id: 2,
-        //         check1: check1,
-        //         check2: check2,
-        //         check3: check3,
-        //         check4: check4,
-        //         check5: check5,
-        //         check6: check6,
-        //         check7: check7,
-        //         check8: check8,
-        //         check9: check9,
-        //         check10: check10,
-        //     })
-        //     .then((res) => {
-        //         console.log(
-        //             check1,
-        //             check2,
-        //             check3,
-        //             check4,
-        //             check5,
-        //             check6,
-        //             check7,
-        //             check8,
-        //             check9,
-        //             check10
-        //         )
-        //         console.log(res)
-        //     })
+        axios
+            .post('http://127.0.0.1:8000/api/selfcheck/', {
+                meet_id: id,
+                check1: check1,
+                check2: check2,
+                check3: check3,
+                check4: check4,
+                check5: check5,
+                check6: check6,
+                check7: check7,
+                check8: check8,
+                check9: check9,
+                check10: check10,
+            })
+            .then((res) => {
+                // console.log(res)
+            })
     }
     const ownerShipCheck = [check1, check2, check3]
     const ownerShipCheck_length = ownerShipCheck.filter((check) => check === 'Y')
@@ -104,14 +80,14 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
     const productivityCheck_length = productivityCheck.filter((check) => check === 'Y')
 
     const changeClick = () => {
-        console.log('ownerShipCheck---', ownerShipCheck_length.length * 10)
+        // console.log('ownerShipCheck---', ownerShipCheck_length.length * 10)
         setOwnerShip(ownerShipCheck_length.length * 10)
         setParticipation(participationCheck_length.length * 15)
         setEfficiency(efficiencyCheck_length.length * 15)
         setProductivity(productivityCheck_length.length * 10)
     }
     const resultdata: Array<number> = [ownerShip, participation, efficiency, productivity]
-    console.log('resultdata', resultdata)
+    // console.log('resultdata', resultdata)
     const plusData = ownerShip + participation + efficiency + productivity
 
     function resultText() {
@@ -173,10 +149,7 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
                 <BodyContainer>
                     <CheckListContainer>
                         <div>
-                            <div className="checklist_title">
-                                {/* 나의 오너십(Ownership)은? (30점) */}
-                                제발... 여긴 데이터 없는 곳
-                            </div>
+                            <div className="checklist_title">나의 오너십(Ownership)은? (30점)</div>
                             <div className="checklist">
                                 <label>
                                     <input
@@ -206,10 +179,10 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
                                         onChange={(e) => {
                                             if (check2) {
                                                 setCheck2(null)
-                                                console.log('ddd')
+                                                // console.log('ddd')
                                             } else {
                                                 setCheck2('Y')
-                                                console.log('ccc')
+                                                // console.log('ccc')
                                             }
                                         }}
                                         checked={check2 ? true : false}
@@ -377,8 +350,8 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
                                     onClick={() => {
                                         setDisable(true)
                                         setChecklistResult(false)
-                                        // changeClick()
-                                        // createCheckBtn()
+                                        changeClick()
+                                        createCheckBtn()
                                     }}
                                 >
                                     자가진단 결과보기
@@ -409,6 +382,7 @@ function CheckNull({ onClose }: Props, { deactivate }: BooProps) {
                     <button
                         className="success-btn"
                         style={{ backgroundColor: '#bac0cc', color: '#fff' }}
+                        onClick={() => onClose()}
                     >
                         자가진단 완료
                     </button>

@@ -15,9 +15,6 @@ function EditPage() {
 
     const { meetData } = meetSWR(id)
 
-    React.useEffect(() => {
-        console.log('meet --', meetData)
-    }, [])
     return (
         <Container>
             <div>

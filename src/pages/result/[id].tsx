@@ -20,9 +20,7 @@ function ResultPage() {
         <div>
             {isOpen && <CheckList onClose={handleClose} />}
 
-            <StyledButton onClick={() => setIsOpen(true)}>
-                자가진단 열기
-            </StyledButton>
+            <StyledButton onClick={() => setIsOpen(true)}>자가진단 열기</StyledButton>
         </div>
     )
 }

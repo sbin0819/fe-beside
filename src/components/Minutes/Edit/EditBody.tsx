@@ -49,12 +49,6 @@ function Body() {
             })
     }
 
-    useEffect(() => {
-        console.log('agendasData', agendasData)
-        console.log('확인', meetData?.goal)
-        console.log('actionsData', actionsData)
-    }, [])
-
     return (
         <BoxContainer>
             {/* 회의 목적, 소요시간 */}

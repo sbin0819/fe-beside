@@ -61,14 +61,6 @@ function CheckData(CheckProps, { onClose }: Props) {
     const productivityCheck = [checkDatas?.check9, checkDatas?.check10]
     const productivityCheck_length = productivityCheck.filter((check) => check === 'Y')
 
-    // const changeClick = () => {
-    //     console.log('ownerShipCheck---', ownerShipCheck_length.length * 10)
-    //     setOwnerShip(ownerShipCheck_length.length * 10)
-    //     setParticipation(participationCheck_length.length * 15)
-    //     setEfficiency(efficiencyCheck_length.length * 15)
-    //     setProductivity(productivityCheck_length.length * 10)
-    // }
-
     const plusData = ownerShip + participation + efficiency + productivity
 
     function resultText() {
@@ -110,7 +102,7 @@ function CheckData(CheckProps, { onClose }: Props) {
         }
     }
     const resultdata: Array<number> = [ownerShip, participation, efficiency, productivity]
-    console.log('resultdata', resultdata)
+    // console.log('resultdata', resultdata)
     useEffect(() => {
         setOwnerShip(ownerShipCheck_length.length * 10)
         setParticipation(participationCheck_length.length * 15)

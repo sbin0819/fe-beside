@@ -61,25 +61,20 @@ function Header({ desc }: HeaderProps) {
     // const userName = userData.nickname
     const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
         axios.get(url).then((res) => {
-            console.log('66', res.data)
+            // console.log('66', res.data)
             res.data
             setUserName(res.data.nickname)
         })
     )
-
-    useEffect(() => {
-        console.log('userData', userData)
-        // console.log('userData --- ', userData.nickname)
-    }, [])
     return (
         <Container>
             <div className="header_inner" style={{ width: '1140px' }}>
                 <div className="header_logo">
-                    <Svg viewBox={logoDarkViewBox} width={'56'} height={'24'}>
-                        <Link href="/">
+                    <Link href="/">
+                        <Svg viewBox={logoDarkViewBox} width={'56'} height={'24'}>
                             <LogoDark />
-                        </Link>
-                    </Svg>
+                        </Svg>
+                    </Link>
                 </div>
                 <div className="header_desc">
                     <div className="username">{userData?.nickname}</div>

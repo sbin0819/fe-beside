@@ -57,11 +57,6 @@ function Header() {
         }
     }, [agendaCursor, activeAgenda])
 
-    useEffect(() => {
-        console.log('meetData', meetData)
-
-        // console.log('meetData', meetData.meet_title)
-    }, [])
     const onChange = (e) => {
         const { value, name } = e.target
         let rValue = value.replace(/\- /gi, ' · ')
@@ -113,7 +108,7 @@ function Header() {
                     {meetData?.[0].participants}
                 </TitleSubText>
             </div>
-            <ChartBox>차트임다</ChartBox>
+            <ChartBox>회의 자가진단 결과</ChartBox>
         </BoxContainer>
     )
 }

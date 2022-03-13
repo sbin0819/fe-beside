@@ -35,7 +35,7 @@ import BodyAction from './BodyAction'
 
 function Body() {
     const router = useRouter()
-    const id = 14
+    const { id } = router.query
     const { meetData, meetMutate } = meetSWR(id)
     const { agendasData } = agendasSWR(id)
     const { actionsData } = actionsSWR(id)
@@ -50,12 +50,6 @@ function Body() {
                 meetMutate()
             })
     }
-
-    useEffect(() => {
-        console.log('agendasData --- ', agendasData)
-        console.log('확인', meetData)
-        console.log('actionsData', actionsData)
-    }, [])
 
     return (
         <BoxContainer>
@@ -88,15 +82,16 @@ function Body() {
                                 <AgendaBodyGoodTime>
                                     <div style={{ fontSize: '35px' }}>🥳</div>
                                     <div className="agenda-body-time">
-                                        {datas?.progress_time}분{' '}
-                                        <span> / {datas?.setting_time}분</span>
+                                        {Math.floor(datas?.progress_time / 60)}분{' '}
+                                        <span> / {Math.floor(datas?.setting_time / 60)}분</span>
                                     </div>
 
                                     <div className="agenda-body-good-message">
                                         목표시간보다{' '}
                                         <span>
-                                            {datas?.setting_time - datas?.progress_time}분 빨리
-                                            끝났어요!
+                                            {Math.floor(datas?.setting_time / 60) -
+                                                Math.floor(datas?.progress_time / 60)}
+                                            분 빨리 끝났어요!
                                         </span>
                                     </div>
                                 </AgendaBodyGoodTime>
@@ -104,15 +99,16 @@ function Body() {
                                 <AgendaBodyBadTime>
                                     <div style={{ fontSize: '35px' }}>🥵</div>
                                     <div className="agenda-body-time">
-                                        {datas?.progress_time}분{' '}
-                                        <span> / {datas?.setting_time}분</span>
+                                        {Math.floor(datas?.progress_time / 60)}분{' '}
+                                        <span> / {Math.floor(datas?.setting_time / 60)}분</span>
                                     </div>
 
                                     <div className="agenda-body-bad-message">
                                         목표시간보다{' '}
                                         <span>
-                                            {datas?.progress_time - datas?.setting_time}분 늦게
-                                            끝났어요!
+                                            {Math.floor(datas?.progress_time / 60) -
+                                                Math.floor(datas?.setting_time / 60)}
+                                            분 늦게 끝났어요!
                                         </span>
                                     </div>
                                 </AgendaBodyBadTime>
@@ -130,7 +126,7 @@ function Body() {
                                     >
                                         <ActionItem />
                                     </Svg>
-                                    액션 아이템 {datas?.agenda_id}
+                                    액션 아이템
                                 </ActionItemText>
                                 <BodyAction actionsDatas={datas?.agenda_id} />
                             </ActionItemBox>
@@ -149,9 +145,9 @@ function Body() {
                                     </Svg>
                                     결정된 사항
                                 </ActionItemText>
-                                <div className="action-middle-title">{datas?.decisions}</div>
+                                {/* <div className="action-middle-title">{datas?.decisions}</div> */}
                                 <ul>
-                                    <ActionUi>{datas?.discussion}</ActionUi>
+                                    <ActionUi>{datas?.decisions}</ActionUi>
                                 </ul>
                             </FixBox>
                             <FixBox>
@@ -169,7 +165,11 @@ function Body() {
                                     </Svg>
                                     논의 내용
                                 </ActionItemText>
-                                <BodyAgenda datas={agendasData} />
+                                {/* <div className="action-middle-title">{datas?.discussion}</div> */}
+                                <ul>
+                                    <ActionUi>{datas?.decisions}</ActionUi>
+                                </ul>
+                                {/* <BodyAgenda datas={agendasData} /> */}
                             </FixBox>
                         </AgendaBox>
                     )

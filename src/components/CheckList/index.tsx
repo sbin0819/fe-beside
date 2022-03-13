@@ -7,6 +7,7 @@ import { checkSWR } from '@api/checklist'
 import RadarChart from '@components/RadarChart'
 import CheckNull from './CheckNull'
 import CheckData from './CheckData'
+import { useRouter } from 'next/router'
 import { Container, ModalContainer, TopContainer, FooterContainer } from './style'
 
 const LabelColor = styled.label<{ textColors?: boolean }>`
@@ -35,17 +36,19 @@ interface CheckProps {
 }
 function CheckListModal({ onClose }: Props) {
     const ref = useRef<any>()
-    let id = 4
+    const router = useRouter()
+    const { id } = router.query
     // const { checkData } = checkSWR(id)
     const [checkData, setCheckData] = useState<CheckProps>(null)
     const [checkResult, setCheckResult] = useState(null)
     useEffect(() => {
         // console.log(checkData)
-        axios.get(`${baseURL}/api/selfcheck/${id}/`).then((res) => {
+        axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
             console.log('check-', res.data)
             setCheckData(res.data)
             setCheckResult(res.data.success)
         })
+
         console.log('checkResult', checkData)
         // console.log('---', checkData.length)
     }, [])

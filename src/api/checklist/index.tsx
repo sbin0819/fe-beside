@@ -13,7 +13,7 @@ export const checkSWR = (id) => {
                     Authorization: cookies.get('Authorization'),
                 },
             }).then((res) => {
-                console.log(res)
+                // console.log(res)
                 res.json()
             })
     )
