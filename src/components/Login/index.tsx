@@ -126,13 +126,18 @@ function Login({ providers }: { providers: any }) {
                 })
             } else {
                 let token = res.data['token']
-                setCookie('Authorization', token, {
-                    path: '/',
-                    maxAge: 1000 * 60 * 60 * 24 * 7,
-                    secure: true,
-                    SameSite: 'None',
-                })
-                router.replace('/')
+
+                if (res.data['token']) {
+                    setCookie('Authorization', token, {
+                        path: '/',
+                        maxAge: 1000 * 60 * 60 * 24 * 7,
+                        secure: true,
+                        SameSite: 'None',
+                    })
+                    router.replace('/')
+                } else {
+                    alert(JSON.stringify(res.data, null, 2))
+                }
             }
         })
     }
