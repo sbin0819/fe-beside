@@ -10,12 +10,6 @@ const Container = styled.div`
 `
 
 function Minutes() {
-    let id = 4
-    const { meetData } = meetSWR(id)
-
-    React.useEffect(() => {
-        console.log('meet --', meetData)
-    }, [])
     return (
         <Container>
             <div>

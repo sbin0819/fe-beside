@@ -107,7 +107,7 @@ function YDataList(props: any) {
             meet_status: 'y',
             stateDiv: <p>회의세팅</p>,
             stateImg: (
-                <HoverImgStatus onClick={() => router.push('/setting')}>
+                <HoverImgStatus>
                     <Svg viewBox={draftsViewBox} width={'32'} height={'32'}>
                         <Drafts />
                     </Svg>
@@ -119,7 +119,6 @@ function YDataList(props: any) {
             meet_status: 'p',
             stateDiv: <p>회의진행</p>,
             stateImg: (
-                // onClick={() => router.push(`/metting/${}`)}
                 <HoverImgStatus>
                     <Svg viewBox={timerViewBox} width={'32'} height={'32'}>
                         <Timer />
@@ -132,7 +131,6 @@ function YDataList(props: any) {
             meet_status: 'c',
             stateDiv: <p>회의록</p>,
             stateImg: (
-                // onClick={() => router.push(`/minutes/${}`)}
                 <HoverImgStatus>
                     <Svg viewBox={noteViewBox} width={'32'} height={'32'}>
                         <Notepad />
@@ -224,9 +222,15 @@ function YDataList(props: any) {
                                     <HoverBoxContainer>
                                         <HoverBox>
                                             <HoverDiv
-                                            // onClick={() => {
-                                            //     meetData.meet_id
-                                            // }}
+                                                onClick={() => {
+                                                    if (meetData.meet_status === 'c') {
+                                                        router.push(`/minutes/${meetData.meet_id}`)
+                                                    } else if (meetData.meet_status === 'p') {
+                                                        router.push(`/metting/${meetData.meet_id}`)
+                                                    } else if (meetData.meet_status === 'y') {
+                                                        router.push('/setting')
+                                                    }
+                                                }}
                                             >
                                                 {meetData.meet_status === 'y' && [
                                                     hoverStateData[0].stateImg,

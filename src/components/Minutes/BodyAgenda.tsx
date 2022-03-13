@@ -5,10 +5,6 @@ interface AgendaProps {
     datas: any
 }
 function BodyAgenda({ datas }: AgendaProps) {
-    useEffect(() => {
-        console.log('number --', datas)
-    }, [])
-
     return (
         <>
             {datas &&

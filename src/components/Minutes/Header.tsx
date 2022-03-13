@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from '@axios'
 import { Svg } from '@components/common'
@@ -6,7 +6,8 @@ import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import { People, peopleViewBox } from '@svgs/People'
 import { meetSWR } from '@api/meet'
 import moment from 'moment'
-
+import { useRouter } from 'next/router'
+import CheckList from '@components/CheckList'
 const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
@@ -32,6 +33,7 @@ const ChartBox = styled.div`
     float: right;
     width: 267px;
     height: 134px;
+    cursor: pointer;
     flex-grow: 0;
     padding: 28px 32px 25px;
     border-radius: 24px;
@@ -41,14 +43,12 @@ const ChartBox = styled.div`
 `
 
 function Header() {
-    let id = 4
+    const router = useRouter()
+    const { id } = router.query
     const { meetData } = meetSWR(id)
 
-    useEffect(() => {
-        console.log('meetData', meetData)
-
-        // console.log('meetData', meetData.meet_title)
-    }, [])
+    const [isOpen, setIsOpen] = useState(false)
+    const handleClose = () => setIsOpen(false)
 
     return (
         <BoxContainer>
@@ -77,7 +77,15 @@ function Header() {
                     {meetData?.[0].participants}
                 </TitleSubText>
             </div>
-            <ChartBox>차트임다</ChartBox>
+            {isOpen && <CheckList onClose={handleClose} />}
+            <ChartBox
+                onClick={() => {
+                    router.push(`/result/${id}`)
+                    setIsOpen(true)
+                }}
+            >
+                회의 자가진단 결과
+            </ChartBox>
         </BoxContainer>
     )
 }
