@@ -127,8 +127,8 @@ function Login({ providers }: { providers: any }) {
             } else {
                 let token = res.data['token']
                 if (
-                    res.data['token'] !== 'user_info errors' ||
-                    res.data['token'].success === false
+                    res.data['token'] !== 'user_info errors' &&
+                    res.data['token'].success === true
                 ) {
                     setCookie('Authorization', token, {
                         path: '/',
