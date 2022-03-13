@@ -7,13 +7,7 @@ function useIsHeader() {
     const router = useRouter()
     const { pathname } = router
     const withOutAuthUrlList = ['/login', '/join']
-    const headerOmitList = [
-        '/login',
-        '/login/join',
-        '/signup',
-        '/randing',
-        '/404',
-    ]
+    const headerOmitList = ['/login', '/login/join', '/signup', '/randing', '/404']
     // 추후수정
     const descList = {
         '/': '님의 회의 리스트 목록입니다.',
@@ -44,11 +38,11 @@ function useIsHeader() {
         }
     }, [pathname])
 
-    useEffect(() => {
-        if (!authRef.current && !pathname.includes('/login')) {
-            router.replace('/login')
-        }
-    }, [router])
+    // useEffect(() => {
+    //     if (!authRef.current && !pathname.includes('/login')) {
+    //         router.replace('/login')
+    //     }
+    // }, [router])
 
     return {
         isHeader,

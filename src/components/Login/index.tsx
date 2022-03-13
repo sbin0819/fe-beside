@@ -10,8 +10,7 @@ import { useRouter } from 'next/router'
 import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
 import { signIn, useSession } from 'next-auth/react'
-const clientId =
-    '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
+const clientId = '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
     width: 100%;
     height: 100%;
@@ -110,7 +109,7 @@ interface UserProps {
 function Login({ providers }: { providers: any }) {
     const router = useRouter()
     const { data: session, status } = useSession()
-
+    console.log(session)
     const fetchLogin = async () => {
         const userData: any = {
             name: session?.user?.name,
@@ -133,7 +132,7 @@ function Login({ providers }: { providers: any }) {
                     secure: true,
                     SameSite: 'None',
                 })
-                router.replace('/')
+                // router.replace('/')
             }
         })
     }
