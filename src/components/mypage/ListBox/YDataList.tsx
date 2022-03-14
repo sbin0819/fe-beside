@@ -189,21 +189,10 @@ function YDataList(props: any) {
                             return (
                                 <BoxContainer key={meetData.meet_id}>
                                     <div className="box-class">
-                                        {meetData.meet_status === 'y' && [
-                                            stateData[0].stateDiv,
-                                            stateData[0].stateImg,
-                                        ]}
-                                        {meetData.meet_status === 'p' && [
-                                            stateData[1].stateDiv,
-                                            stateData[1].stateImg,
-                                        ]}
-                                        {meetData.meet_status === 'c' && [
-                                            stateData[2].stateDiv,
-                                            stateData[2].stateImg,
-                                        ]}
-                                        <InputPStype className="meet_title-name">
-                                            {meetData.meet_title}
-                                        </InputPStype>
+                                        {meetData.meet_status === 'y' && [stateData[0].stateDiv, stateData[0].stateImg]}
+                                        {meetData.meet_status === 'p' && [stateData[1].stateDiv, stateData[1].stateImg]}
+                                        {meetData.meet_status === 'c' && [stateData[2].stateDiv, stateData[2].stateImg]}
+                                        <InputPStype className="meet_title-name">{meetData.meet_title}</InputPStype>
                                         <TimeStyle className="last_time-name">
                                             <Svg
                                                 viewBox={calendarViewBox}
@@ -213,9 +202,7 @@ function YDataList(props: any) {
                                             >
                                                 <Calendar />
                                             </Svg>
-                                            {moment(meetData.last_time).format(
-                                                `YYYY-MM-DD HH시 mm분`
-                                            )}
+                                            {moment(meetData.last_time).format(`YYYY-MM-DD HH시 mm분`)}
                                         </TimeStyle>
                                     </div>
 
@@ -226,7 +213,7 @@ function YDataList(props: any) {
                                                     if (meetData.meet_status === 'c') {
                                                         router.push(`/minutes/${meetData.meet_id}`)
                                                     } else if (meetData.meet_status === 'p') {
-                                                        router.push(`/metting/${meetData.meet_id}`)
+                                                        router.push(`/meeting/${meetData.meet_id}`)
                                                     } else if (meetData.meet_status === 'y') {
                                                         router.push('/setting')
                                                     }
@@ -245,14 +232,8 @@ function YDataList(props: any) {
                                                     hoverStateData[2].stateDiv,
                                                 ]}
                                             </HoverDiv>
-                                            <DeleteHoverDiv
-                                                onClick={() => removeBtn(meetData.meet_id)}
-                                            >
-                                                <Svg
-                                                    viewBox={deleteViewBox}
-                                                    width={'32'}
-                                                    height={'32'}
-                                                >
+                                            <DeleteHoverDiv onClick={() => removeBtn(meetData.meet_id)}>
+                                                <Svg viewBox={deleteViewBox} width={'32'} height={'32'}>
                                                     <Delete />
                                                 </Svg>
                                                 <div
