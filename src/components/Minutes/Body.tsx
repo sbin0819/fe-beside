@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     BoxContainer,
     TopBox,
@@ -52,6 +52,11 @@ function Body() {
     }
     useEffect(() => {
         // console.log('===', agendasData)
+        // for (let i = 0; i < agendasData.length; i++) {
+        //     console.log('===11', agendasData[i]?.progress_time)
+        //     console.log('===2', agendasData[i]?.progress_time)
+        // }
+        // Math.floor(datas?.progress_time / 60)
     }, [])
 
     return (

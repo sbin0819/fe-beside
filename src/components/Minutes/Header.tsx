@@ -10,6 +10,7 @@ import { checkSWR } from '@api/checklist'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import CheckList from '@components/CheckList'
+import useSWR from 'swr'
 const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
@@ -73,59 +74,50 @@ function Header() {
         checkDatas?.check9,
         checkDatas?.check10,
     ]
-    const fiveResult = [
-        checkDatas?.check4,
-        checkDatas?.check5,
-        checkDatas?.check6,
-        checkDatas?.check7,
-    ]
+    const fiveResult = [checkDatas?.check4, checkDatas?.check5, checkDatas?.check6, checkDatas?.check7]
     const ten_length = tenResullt.filter((check) => check === 'Y')
     const five_length = fiveResult.filter((check) => check === 'Y')
     const tenScore = ten_length.length * 10
     const fiveScore = five_length.length * 15
     const resultScore = tenScore + fiveScore
-    useEffect(() => {
-        axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
+
+    const { data } = useSWR(`${baseURL}/api/selfcheck/?meet_id=${id}`, (url) =>
+        axios.get(url).then((res) => {
+            // console.log('66', res.data)
+            res.data
             setCheckDatas(res.data?.[0])
         })
-    }, [])
+    )
+
+    // useEffect(() => {
+    //     axios.get(`${baseURL}/api/selfcheck/?meet_id=${id}`).then((res) => {
+    //         setCheckDatas(res.data?.[0])
+    //         // console.log('최종점수', res.data?.[0])
+    //         // console.log('점수는요?', tenScore, fiveScore, resultScore)
+    //     })
+    // }, [])
 
     return (
         <div>
-            {isOpen && <CheckList idData={id} onClose={handleClose} />}
+            {isOpen && <CheckList onClose={handleClose} />}
             <BoxContainer>
                 <div style={{ float: 'left' }}>
                     <TitleText>{meetData?.[0].meet_title}</TitleText>
                     <TitleSubText style={{ marginBottom: '12px' }}>
-                        <Svg
-                            viewBox={calendarViewBox}
-                            width={'15'}
-                            height={'15'}
-                            style={{ marginRight: '15px' }}
-                        >
+                        <Svg viewBox={calendarViewBox} width={'15'} height={'15'} style={{ marginRight: '15px' }}>
                             <Calendar />
                         </Svg>
                         {moment(meetData?.meet_date).format('YYYY-MM-DD')}
                     </TitleSubText>
                     <TitleSubText>
-                        <Svg
-                            viewBox={peopleViewBox}
-                            width={'15'}
-                            height={'15'}
-                            style={{ marginRight: '15px' }}
-                        >
+                        <Svg viewBox={peopleViewBox} width={'15'} height={'15'} style={{ marginRight: '15px' }}>
                             <People />
                         </Svg>
                         {meetData?.[0].participants}
                     </TitleSubText>
                 </div>
 
-                <ChartBox
-                    onClick={() => {
-                        // router.push(`/result/${id}`)
-                        setIsOpen(true)
-                    }}
-                >
+                <ChartBox onClick={() => setIsOpen(true)}>
                     회의 자가진단 결과
                     <ResultText>{resultScore}점</ResultText>
                 </ChartBox>
