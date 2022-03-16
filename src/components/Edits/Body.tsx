@@ -18,7 +18,7 @@ import {
     MeetDelete,
 } from './style'
 
-import { Svg } from '@components/common'
+import { Svg, TextArea } from '@components/common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import { People, peopleViewBox } from '@svgs/People'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
@@ -32,13 +32,23 @@ import axios from '@axios'
 import { baseURL } from '@api/index'
 import BodyAgenda from './BodyAgenda'
 import BodyAction from './BodyAction'
+import useMeeting from '@store/meeting/useMeeting'
+import useMeetingActions from '@store/meeting/useMeetingActions'
+import { AgendaState } from '@store/meeting/meetingSlice'
 
 function Body() {
     const router = useRouter()
     const { id } = router.query
     const { meetData, meetMutate } = meetSWR(id)
     const { agendasData } = agendasSWR(id)
-    const { actionsData } = actionsSWR(id)
+    // const { actionsData } = actionsSWR(id)
+    const { agendas, agendaCursor } = useMeeting()
+    const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
+    const [areaForm, setAreaForm] = useState({ discussion: '', decisions: '', agenda_title: '' })
+    const { setForm } = useMeetingActions()
+    const [agendaTitle, setAgendaTitle] = useState('')
+
+    const { actionsData } = actionsSWR(activeAgenda?.agenda_id)
 
     const removeBtn = (meet_id: number) => {
         axios
@@ -50,17 +60,53 @@ function Body() {
                 meetMutate()
             })
     }
-    const testBtn = () => {
-        for (let i = 0; i < agendasData?.length; i++) {
-            // console.log('===11', agendasData[i]?.progress_time)
-            console.log('===2', agendasData[i]?.setting_time)
-            console.log('aaaa --- ', agendasData?.[i]?.setting_time)
+    useEffect(() => {
+        if (Array.isArray(agendas)) {
+            setActiveAgenda(agendas[agendaCursor])
+        }
+    }, [agendaCursor, activeAgenda])
+    useEffect(() => {
+        if (activeAgenda) {
+            setAreaForm({
+                discussion: activeAgenda?.discussion,
+                decisions: activeAgenda?.decisions,
+                agenda_title: activeAgenda?.agenda_title,
+            })
+        }
+    }, [activeAgenda])
+
+    const onChange = (e) => {
+        const { value, name } = e.target
+        let rValue = value.replace(/\- /gi, ' · ')
+        setAreaForm((prev) => ({ ...prev, [name]: rValue }))
+        const newAgenda = {
+            ...activeAgenda,
+            [name]: rValue,
+        }
+        setForm({ agendaCursor, newAgenda })
+    }
+    const onPatchAgenda = async () => {
+        console.log('agendasData', agendasData)
+        for (let i = 0; i < agendasData.length; i++) {
+            // console.log('aaaaaa', agendasData)
+            // await axios
+            //     .patch(`${baseURL}/api/agenda/${agendasData?.[i]?.agenda_id}/`, {
+            //         discussion: areaForm.discussion,
+            //         decisions: areaForm.decisions,
+            //     })
+            //     .then((res) => {
+            //         console.log('check --- ', agendasData?.[i].agenda_id)
+            //         console.log('결과 확인', res)
+            //     })
         }
     }
 
     useEffect(() => {
-        console.log('===', agendasData)
-
+        // console.log('===', agendasData)
+        // for (let i = 0; i < agendasData.length; i++) {
+        //     console.log('===11', agendasData[i]?.progress_time)
+        //     console.log('===2', agendasData[i]?.progress_time)
+        // }
         // Math.floor(datas?.progress_time / 60)
     }, [])
 
@@ -89,16 +135,19 @@ function Body() {
                         <AgendaBox key={datas.agenda_id}>
                             <AgendaTitle>
                                 <AgendaId>AGENDA {datas?.order_number}</AgendaId>
-                                <div className="agenda-title">{datas?.agenda_title}</div>
+                                <div className="agenda-title">
+                                    <TextArea
+                                        name="agenda_title"
+                                        onChange={onChange}
+                                        className="test11"
+                                        value={areaForm?.agenda_title || datas?.agenda_title}
+                                    />
+                                    {/* {datas?.agenda_title} */}
+                                </div>
                             </AgendaTitle>
                             {datas?.progress_time <= datas?.setting_time ? (
                                 <AgendaBodyGoodTime>
-                                    <div style={{ fontSize: '35px' }}>
-                                        <img
-                                            src="/image/assets/icon/Success_mini.png"
-                                            style={{ width: 32, height: 32 }}
-                                        />
-                                    </div>
+                                    <div style={{ fontSize: '35px' }}>🥳</div>
                                     <div className="agenda-body-time">
                                         {Math.floor(datas?.progress_time / 60)}분{' '}
                                         <span> / {Math.floor(datas?.setting_time / 60)}분</span>
@@ -115,10 +164,7 @@ function Body() {
                                 </AgendaBodyGoodTime>
                             ) : (
                                 <AgendaBodyBadTime>
-                                    <div style={{ fontSize: '35px' }}>
-                                        {' '}
-                                        <img src="/image/assets/icon/Fail_mini.png" style={{ width: 32, height: 32 }} />
-                                    </div>
+                                    <div style={{ fontSize: '35px' }}>🥵</div>
                                     <div className="agenda-body-time">
                                         {Math.floor(datas?.progress_time / 60)}분{' '}
                                         <span> / {Math.floor(datas?.setting_time / 60)}분</span>
@@ -168,7 +214,18 @@ function Body() {
                                 </ActionItemText>
                                 {/* <div className="action-middle-title">{datas?.decisions}</div> */}
                                 <ul>
-                                    <ActionUi>{datas?.decisions}</ActionUi>
+                                    <ActionUi>
+                                        <TextArea
+                                            name="discussion"
+                                            value={areaForm?.discussion || datas?.discussion}
+                                            onChange={onChange}
+                                            row={
+                                                areaForm?.discussion === null
+                                                    ? 1
+                                                    : areaForm?.discussion?.split('\n').length + 1
+                                            }
+                                        />
+                                    </ActionUi>
                                 </ul>
                             </FixBox>
                             <FixBox>
@@ -188,7 +245,19 @@ function Body() {
                                 </ActionItemText>
                                 {/* <div className="action-middle-title">{datas?.discussion}</div> */}
                                 <ul>
-                                    <ActionUi>{datas?.decisions}</ActionUi>
+                                    <ActionUi>
+                                        {' '}
+                                        <TextArea
+                                            name="decisions"
+                                            value={areaForm?.decisions || datas?.decisions}
+                                            onChange={onChange}
+                                            row={
+                                                areaForm?.decisions === null
+                                                    ? 1
+                                                    : areaForm?.decisions?.split('\n').length + 1
+                                            }
+                                        />
+                                    </ActionUi>
                                 </ul>
                                 {/* <BodyAgenda datas={agendasData} /> */}
                             </FixBox>
@@ -204,12 +273,17 @@ function Body() {
                 회의록 삭제
             </MeetDelete>
             <ButtonBox>
-                {/* router.push(`/edit/${id}`)} */}
-                <button className="cancel-btn" onClick={() => testBtn()}>
-                    수정
+                <button className="cancel-btn" onClick={() => router.push(`/`)}>
+                    취소
                 </button>
-                <button className="okay-btn" onClick={() => router.push('/')}>
-                    확인
+                <button
+                    className="okay-btn"
+                    onClick={() => {
+                        onPatchAgenda()
+                        // router.push(`/`)
+                    }}
+                >
+                    저장
                 </button>
             </ButtonBox>
         </BoxContainer>
