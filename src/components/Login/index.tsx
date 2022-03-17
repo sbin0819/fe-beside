@@ -127,6 +127,7 @@ function Login({ providers }: { providers: any }) {
                 })
             } else {
                 let token = res.data['token']
+                console.log('token ---', token)
                 if (res.data['token'] !== 'user_info errors') {
                     document.cookie = `Authorization=${token}`
 
@@ -164,7 +165,9 @@ function Login({ providers }: { providers: any }) {
                 <div className="left-text">
                     <div className="left-text-div">
                         <div className="hello">안녕하세요</div>
-                        <div className="hello-emoji">👋</div>
+                        <div className="hello-emoji">
+                            <img src="/image/assets/icon/Hello.png" style={{ width: '52px', height: '52px' }} />
+                        </div>
                     </div>
                     <p className="left-text-p">
                         늘어지고 주제에서 벗어나는 회의는 이제 그만! <br />

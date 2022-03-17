@@ -22,6 +22,8 @@ import { Svg } from '@components/common'
 import { Calendar, calendarViewBox } from '@svgs/Calendar'
 import { People, peopleViewBox } from '@svgs/People'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
+import { BlackNotepad, blackNotepadViewBox } from '@svgs/BlackNotepad'
+import { DeleteRed, deleteRedViewBox } from '@svgs/DeleteRed'
 import { Pin, pinViewBox } from '@svgs/Pin'
 import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { agendasSWR } from '@api/agenda'
@@ -50,17 +52,23 @@ function Body() {
                 meetMutate()
             })
     }
-    const testBtn = () => {
+    function progressTimeSum() {
+        let sum = 0
         for (let i = 0; i < agendasData?.length; i++) {
-            // console.log('===11', agendasData[i]?.progress_time)
-            console.log('===2', agendasData[i]?.setting_time)
-            console.log('aaaa --- ', agendasData?.[i]?.setting_time)
+            sum += Number(agendasData[i]?.progress_time)
         }
+        return Math.floor(sum / 60)
+    }
+    function settiongTimeSum() {
+        let sum = 0
+        for (let i = 0; i < agendasData?.length; i++) {
+            sum += agendasData[i]?.setting_time
+        }
+        return Math.floor(sum / 60)
     }
 
     useEffect(() => {
-        console.log('===', agendasData)
-
+        // console.log('===', agendasData)
         // Math.floor(datas?.progress_time / 60)
     }, [])
 
@@ -70,10 +78,12 @@ function Body() {
             <TopBox>
                 <TopBoxColLeft>
                     <div className="top-box-title">전체 회의 소요시간 / 목표시간</div>
-                    <p className="top-box-emoji">😎</p>
+                    <p className="top-box-emoji" style={{ marginRight: '27px' }}>
+                        <img src="/image/assets/icon/Full.png" style={{ width: '72px', height: '72px' }} />
+                    </p>
                     <div className="top-box-titme">
-                        <span className="big-time">45분</span>
-                        <span className="small-time"> / 45분</span>
+                        <span className="big-time">{progressTimeSum()}분</span>
+                        <span className="small-time"> / {settiongTimeSum()}분</span>
                     </div>
                     <div className="top-message">목표시간에 딱 맞게 끝났어요!</div>
                 </TopBoxColLeft>
@@ -174,7 +184,7 @@ function Body() {
                             <FixBox>
                                 <ActionItemText>
                                     <Svg
-                                        viewBox={noteViewBox}
+                                        viewBox={blackNotepadViewBox}
                                         width={'20'}
                                         height={'20'}
                                         style={{
@@ -182,7 +192,7 @@ function Body() {
                                             paddingTop: '5px',
                                         }}
                                     >
-                                        <Notepad />
+                                        <BlackNotepad />
                                     </Svg>
                                     논의 내용
                                 </ActionItemText>
@@ -201,11 +211,22 @@ function Body() {
                     router.push('/')
                 }}
             >
+                <Svg
+                    viewBox={deleteRedViewBox}
+                    width={'20'}
+                    height={'20'}
+                    style={{
+                        marginRight: '7px',
+                        paddingTop: '5px',
+                    }}
+                >
+                    <DeleteRed />
+                </Svg>
                 회의록 삭제
             </MeetDelete>
             <ButtonBox>
                 {/* router.push(`/edit/${id}`)} */}
-                <button className="cancel-btn" onClick={() => testBtn()}>
+                <button className="cancel-btn" onClick={() => router.push(`/edit/${id}`)}>
                     수정
                 </button>
                 <button className="okay-btn" onClick={() => router.push('/')}>

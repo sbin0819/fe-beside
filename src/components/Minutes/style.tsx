@@ -274,7 +274,7 @@ export const ActionItemEl = styled.div`
         line-height: 1.5;
     }
     .action-item-member {
-        width: 250px;
+        width: 240px;
         height: 20px;
         flex-grow: 0;
         font-family: Pretendard;
@@ -288,7 +288,7 @@ export const ActionItemEl = styled.div`
         color: #3c3c43;
     }
     .action-item-time {
-        width: 107px;
+        width: 120px;
         height: 20px;
         flex-grow: 0;
         font-family: Pretendard;
@@ -348,7 +348,7 @@ export const ButtonBox = styled.div`
     }
 `
 export const MeetDelete = styled.div`
-    width: 64px;
+    width: 104px;
     height: 20px;
     flex-grow: 0;
     float: right;
