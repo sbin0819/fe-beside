@@ -166,8 +166,8 @@ interface UserProps {
 function Join() {
     const router = useRouter()
     const { data: session, status } = useSession()
-
-    const [inputName, setInputName] = useState((session?.name as string) || '')
+    console.log(session)
+    const [inputName, setInputName] = useState((session?.user?.name as string) || '')
     const inputBorder = inputName.length === 0
     const loginBtn = () => {
         const userData: any = {
@@ -178,7 +178,6 @@ function Join() {
             provider: 'google',
             img: 'img',
         }
-
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
             document.cookie = `Authorization=${token}`
@@ -207,7 +206,9 @@ function Join() {
                 <div className="left-text">
                     <div className="left-text-div">
                         <div className="hello">반가워요</div>
-                        <div className="hello-emoji">🥳</div>
+                        <div className="hello-emoji">
+                            <img src="/image/assets/icon/Happy.png" style={{ width: '52px', height: '52px' }} />
+                        </div>
                     </div>
                     <p className="sign-welcom">
                         시간내에 끝내지 못한 회의에 지친 모든 <br />
@@ -226,24 +227,19 @@ function Join() {
                             <p className="nicknameLength">닉네임은 10자 이내만 입력 가능합니다.</p>
                         )}
                         {inputName === null ||
-                            (inputName.length === 0 && (
-                                <p className="nicknameLength">입력해주세요.</p>
-                            ))}
+                            (inputName.length === 0 && <p className="nicknameLength">입력해주세요.</p>)}
                         <button
                             onClick={() => {
                                 loginBtn()
                             }}
                             className={
-                                inputName.length > 10 || inputName.length === 0
-                                    ? 'sign-button-err'
-                                    : 'sign-button'
+                                inputName.length > 10 || inputName.length === 0 ? 'sign-button-err' : 'sign-button'
                             }
                         >
                             시작할게요
                         </button>
                         <p className="sign-text">
-                            가입시, 59mins의 <span>개인정보처리방침, 서비스 이용약관</span>에
-                            동의합니다.
+                            가입시, 59mins의 <span>개인정보처리방침, 서비스 이용약관</span>에 동의합니다.
                         </p>
                     </SignInput>
                 </div>

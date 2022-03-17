@@ -10,6 +10,7 @@ const Container = styled.div`
     color: rgba(60, 60, 67, 0.6);
     font-size: 10px;
     position: fixed;
+    border-top: 1px solid #f1f1f1;
     bottom: 0;
     .footer_59mins {
         width: 50%;
@@ -37,9 +38,7 @@ function Footer() {
             </div>
             <div className="footer_servies">
                 <Link href="/">
-                    <span className="footer-text footer-text1">
-                        서비스이용약관
-                    </span>
+                    <span className="footer-text footer-text1">서비스이용약관</span>
                 </Link>
                 <Link href="/">
                     <span className="footer-text">개인정보처리방침</span>
