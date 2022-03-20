@@ -52,6 +52,7 @@ function MyPageList() {
                     <div
                         style={{
                             color: activeIndex === 1 ? '#87878b' : '#000',
+                            fontWeight: activeIndex === 1 ? 'normal' : 'bold',
                         }}
                     >
                         전체 회의록
@@ -70,6 +71,7 @@ function MyPageList() {
                     <div
                         style={{
                             color: activeIndex === 1 ? '#000' : '#87878b',
+                            fontWeight: activeIndex === 1 ? 'bold' : 'normal',
                         }}
                     >
                         삭제된 회의록

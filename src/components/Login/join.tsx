@@ -45,11 +45,11 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
     width: 50%;
     height: 100%;
+    top: 420px;
     position: relative;
     .servies {
         text-align: center;
         margin: 0 auto;
-
         height: 32px;
         font-size: 20px;
         font-weight: 500;
@@ -61,7 +61,7 @@ const RightContainer = styled.div`
     .left-text {
         width: 460px;
         position: absolute;
-        top: 50%;
+        // top: 280px;
         margin-left: 109px;
         transform: translateY(-50%);
     }
@@ -121,12 +121,13 @@ const SignInput = styled.div`
     .nicknameLength {
         color: #e24646;
         font-size: 12px;
-        margin-top: 4px;
+        margin-top: 8px;
+        margin-left: 8px;
     }
     .sign-button {
         width: 364px;
         height: 52px;
-        margin: 40px 96px 16px 0;
+        margin: 30px 96px 16px 0;
         border-radius: 12px;
         background-color: #0c254c;
         font-size: 16px;
@@ -136,7 +137,7 @@ const SignInput = styled.div`
     .sign-button-err {
         width: 364px;
         height: 52px;
-        margin: 40px 96px 16px 0;
+        margin: 30px 96px 16px 0;
         border-radius: 12px;
         background-color: #fff;
         font-size: 16px;
@@ -166,7 +167,6 @@ interface UserProps {
 function Join() {
     const router = useRouter()
     const { data: session, status } = useSession()
-    console.log(session)
     const [inputName, setInputName] = useState((session?.user?.name as string) || '')
     const inputBorder = inputName.length === 0
     const loginBtn = () => {
@@ -177,6 +177,7 @@ function Join() {
             password: 'Y', //session.accesToken
             provider: 'google',
             img: 'img',
+            emoji: 1,
         }
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
@@ -188,10 +189,19 @@ function Join() {
             //     SameSite: 'None',
             // })
             if (res.data['success'] === true) {
-                router.push('/')
+                window.location.href = '/'
+                // router.push('/')
             }
         })
     }
+    function errText() {
+        if (inputName.length > 10) {
+            return <p>닉네임은 10자 이내만 입력 가능합니다.</p>
+        } else if (inputName === null || inputName.length === 0) {
+            return <p>입력해주세요.</p>
+        }
+    }
+
     return (
         <Container>
             <LeftContainer>
@@ -223,11 +233,10 @@ function Join() {
                             style={inputBorder ? redBorder : blackBorder}
                             onChange={(e) => setInputName(e.target.value)}
                         />
-                        {inputName.length > 10 && (
-                            <p className="nicknameLength">닉네임은 10자 이내만 입력 가능합니다.</p>
-                        )}
-                        {inputName === null ||
-                            (inputName.length === 0 && <p className="nicknameLength">입력해주세요.</p>)}
+                        <div className="nicknameLength" style={{ height: '5px' }}>
+                            {errText()}
+                        </div>
+
                         <button
                             onClick={() => {
                                 loginBtn()

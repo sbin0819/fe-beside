@@ -14,7 +14,7 @@ function Edit() {
         <Container>
             <div>
                 <Banner />
-                <Header />
+                {/* <Header /> */}
                 <Body />
             </div>
         </Container>

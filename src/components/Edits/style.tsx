@@ -5,7 +5,7 @@ export const BoxContainer = styled.div`
     transform: translateX(-50%);
     width: 1140px;
     left: 50%;
-    top: 267px;
+    top: 270px;
 `
 export const TopBox = styled.div`
     width: 1140px;
@@ -112,6 +112,10 @@ export const TopBoxColRight = styled.div`
         letter-spacing: normal;
         text-align: left;
         color: #fff;
+        width: 650px;
+        &:focus {
+            background: #0c254c;
+        }
     }
 `
 export const AgendaBox = styled.div`
@@ -294,7 +298,7 @@ export const ActionItemEl = styled.div`
         color: #3c3c43;
     }
     .action-item-time {
-        width: 107px;
+        width: 120px;
         height: 20px;
         flex-grow: 0;
         font-family: Pretendard;
@@ -369,4 +373,49 @@ export const MeetDelete = styled.div`
     letter-spacing: normal;
     text-align: left;
     color: #e2464d;
+`
+export const TitleText = styled.h2`
+    .meet-titile-class {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 24px;
+        width: 500px;
+    }
+`
+export const TitleSubText = styled.p`
+    color: #3c3c43;
+    width: 500px;
+    font-size: 14px;
+    line-height: 1.43;
+`
+export const ChartBox = styled.div`
+    float: right;
+    width: 267px;
+    height: 134px;
+    cursor: pointer;
+    flex-grow: 0;
+    padding: 28px 32px 25px;
+    border-radius: 24px;
+    box-shadow: 2px 4px 16px 0 rgba(0, 0, 0, 0.08);
+    border: solid 1px #f1f1f1;
+    background-color: #fff;
+`
+export const ResultText = styled.div`
+    font-size: 32px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.31;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c43;
+    margin-top: 20px;
+`
+export const BoxTopContainer = styled.div`
+    position: absolute;
+    transform: translateX(-50%);
+    width: 1140px;
+
+    left: 50%;
+    top: 50px;
 `
