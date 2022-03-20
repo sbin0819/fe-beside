@@ -24,7 +24,7 @@ const Container = styled.div`
         margin: 0 auto;
         align-items: center;
         justify-content: space-between;
-        height: 80px;
+        height: 72px;
         .header_logo {
             font-weight: 900;
             color: #0c254c;
@@ -34,7 +34,7 @@ const Container = styled.div`
             display: flex;
             align-items: center;
             .username {
-                font-weight: 900;
+                font-weight: 700;
             }
             .description {
                 padding-right: 12px;
@@ -58,14 +58,18 @@ function Header({ desc }: HeaderProps) {
         username: '오구민',
         icon: '😊',
     }
+    React.useEffect(() => {
+        console.log('userData --- ', userData?.emoji)
+        console.log('userData --- ', userData)
+    }, [])
     // const userName = userData.nickname
-    const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
-        axios.get(url).then((res) => {
-            // console.log('66', res.data)
-            res.data
-            setUserName(res.data.nickname)
-        })
-    )
+    // const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
+    //     axios.get(url).then((res) => {
+    //         console.log('66', res.data)
+    //         res.data
+    //         setUserName(res.data.nickname)
+    //     })
+    // )
     return (
         <Container>
             <div className="header_inner" style={{ width: '1140px' }}>
@@ -89,7 +93,8 @@ function Header({ desc }: HeaderProps) {
                             }}
                             onClick={() => setIsOpenModal((prev) => !prev)}
                         >
-                            {mockData.icon}
+                            <img src="/image/assets/emoji/Smile.png" style={{ width: '26px', height: '26px' }} />
+                            {/* {mockData.icon} */}
                         </div>
                         {isOpenModal && <DropdownMenu onClose={onCloseModal} />}
                     </div>

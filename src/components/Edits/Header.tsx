@@ -15,7 +15,6 @@ const BoxContainer = styled.div`
     position: absolute;
     transform: translateX(-50%);
     width: 1140px;
-
     left: 50%;
     top: 70px;
 `

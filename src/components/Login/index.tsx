@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
@@ -82,7 +82,7 @@ const RightContainer = styled.div`
     }
     .left-text-p {
         font-size: 20px;
-        font-weight: 500;
+        font-weight: 400;
         text-align: left;
         margin-bottom: 60px;
         color: rgba(60, 60, 67, 0.6);
@@ -110,6 +110,7 @@ interface UserProps {
 function Login({ providers }: { providers: any }) {
     const router = useRouter()
     const { data: session, status } = useSession()
+    const [isBtnHover, setIsBtnHover] = useState(false)
 
     const fetchLogin = async () => {
         const userData: any = {
@@ -182,10 +183,18 @@ function Login({ providers }: { providers: any }) {
                                     callbackUrl: '/login',
                                 })
                             }
+                            onMouseOver={() => setIsBtnHover(true)}
+                            onMouseOut={() => setIsBtnHover(false)}
                         >
-                            <Svg viewBox={googleBtnViewBox} width={'364'} height={'52'}>
-                                <GoogleBtn />
-                            </Svg>
+                            {isBtnHover ? (
+                                <Svg viewBox={googleBtnNoneViewBox} width={'364'} height={'52'}>
+                                    <GoogleBtnNone />
+                                </Svg>
+                            ) : (
+                                <Svg viewBox={googleBtnViewBox} width={'364'} height={'52'}>
+                                    <GoogleBtn />
+                                </Svg>
+                            )}
                         </div>
                     ))}
                 </div>

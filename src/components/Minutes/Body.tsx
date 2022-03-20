@@ -19,13 +19,10 @@ import {
 } from './style'
 
 import { Svg } from '@components/common'
-import { Calendar, calendarViewBox } from '@svgs/Calendar'
-import { People, peopleViewBox } from '@svgs/People'
 import { ActionItem, actionItemViewBox } from '@svgs/ActionItem'
 import { BlackNotepad, blackNotepadViewBox } from '@svgs/BlackNotepad'
 import { DeleteRed, deleteRedViewBox } from '@svgs/DeleteRed'
 import { Pin, pinViewBox } from '@svgs/Pin'
-import { Notepad, noteViewBox } from '@svgs/Notepad'
 import { agendasSWR } from '@api/agenda'
 import { meetSWR } from '@api/meet'
 import { actionsSWR } from '@api/actions'
@@ -67,6 +64,16 @@ function Body() {
         return Math.floor(sum / 60)
     }
 
+    function timeText() {
+        if (progressTimeSum() > settiongTimeSum()) {
+            return <div>다음번에는 목표시간을 지켜보세요!</div>
+        } else if (progressTimeSum() < settiongTimeSum()) {
+            return <div>목표 시간보다 빨리 끝났어요!</div>
+        } else if (progressTimeSum() === settiongTimeSum()) {
+            return <div>목표시간에 딱 맞게 끝났어요!</div>
+        }
+    }
+
     useEffect(() => {
         // console.log('===', agendasData)
         // Math.floor(datas?.progress_time / 60)
@@ -85,7 +92,7 @@ function Body() {
                         <span className="big-time">{progressTimeSum()}분</span>
                         <span className="small-time"> / {settiongTimeSum()}분</span>
                     </div>
-                    <div className="top-message">목표시간에 딱 맞게 끝났어요!</div>
+                    <div className="top-message">{timeText()}</div>
                 </TopBoxColLeft>
                 <TopBoxColRight>
                     <div className="top-box-title">회의 목적</div>

@@ -63,18 +63,11 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
     return (
         <div ref={ref}>
             <DropDownContainer>
-                {isOpenModal && (
-                    <MyInfo onClickToggleModal={onClickToggleModal} />
-                )}
+                {isOpenModal && <MyInfo onClickToggleModal={onClickToggleModal} />}
                 <div className="item" onClick={onClickToggleModal}>
-                    <Svg viewBox={profileViewBox} width={'20'} height={'18'}>
-                        <Profile />
-                    </Svg>
                     내 계정
                 </div>
-                <div className="item">
-                    <span className="box"></span>About 59mins
-                </div>
+                <div className="item">About 59mins</div>
                 <div className="item" onClick={() => logOutBtn()}>
                     <Svg viewBox={signoutViewBox} width={'20'} height={'18'}>
                         <Signout />

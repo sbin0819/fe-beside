@@ -7,6 +7,7 @@ export const TabContainer = styled.div`
     // background-color: #fff;
     display: flex;
     flex-direction: row;
+
     // position: relative;
 `
 export const NullTabContainer = styled.div`
@@ -16,6 +17,9 @@ export const NullTabContainer = styled.div`
     background-color: #fff;
     display: flex;
     flex-direction: row;
+    box-shadow: 2px 4px 16px 0 rgba(0, 0, 0, 0.08);
+    border: solid 1px #f1f1f1;
+    margin-bottom: 126px;
     // position: relative;
 `
 export const ListBoxContainer = styled.div`
