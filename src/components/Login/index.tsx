@@ -11,6 +11,7 @@ import { setCookie, getCookie } from '../utils/Cookie'
 import { baseURL } from '@api/index'
 import { signIn, useSession } from 'next-auth/react'
 import { LogoWh, logoWhViewBox } from '@svgs/LogoWh'
+import Landing from './Landing'
 const clientId = '184508570520-h1j9rlar4tjrbh2eadugdvqg1ovlmqaa.apps.googleusercontent.com'
 const Container = styled.div`
     width: 100%;
@@ -128,7 +129,6 @@ function Login({ providers }: { providers: any }) {
                 })
             } else {
                 let token = res.data['token']
-                console.log('token ---', token)
                 if (res.data['token'] !== 'user_info errors') {
                     document.cookie = `Authorization=${token}`
 
@@ -157,6 +157,7 @@ function Login({ providers }: { providers: any }) {
                         <LogoWh />
                     </Svg>
                 </h2>
+                <Landing />
             </LeftContainer>
             <RightContainer>
                 <div className="servies">

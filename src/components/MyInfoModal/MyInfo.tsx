@@ -1,9 +1,4 @@
-import React, {
-    PropsWithChildren,
-    useState,
-    useCallback,
-    useEffect,
-} from 'react'
+import React, { PropsWithChildren, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import { Svg } from '@common'
 import { Google, googleViewBox } from '@svgs/Google'
@@ -18,6 +13,7 @@ interface ModalDefaultType {
 function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
     const [isOpenModal, setOpenModal] = useState<boolean>(false)
     const [userInfo, setUserInfo] = useState<Array<string>>([])
+    const [emojiDatas, setEmojiDatas] = useState([])
 
     const [inputs, setInputs] = useState({
         nickname: '',
@@ -124,6 +120,11 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
             setInputs(res.data)
         })
     }, [])
+    useEffect(() => {
+        axios.get(`${baseURL}/api/emoji/`).then((res) => {
+            setEmojiDatas(res.data)
+        })
+    }, [])
 
     return (
         <div>
@@ -182,11 +183,11 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     <InfoBox style={{ top: '247px' }}>
                         <ModalH3>프로필 이미지</ModalH3>
                         <EmojiBox>
-                            {testEmojis &&
-                                testEmojis.map((testEmoji) => {
+                            {emojiDatas &&
+                                emojiDatas.map((emojiData) => {
                                     return (
-                                        <EmojiStyle key={testEmoji.id}>
-                                            {testEmoji.emoji}
+                                        <EmojiStyle key={emojiData.emoji_id}>
+                                            <img src={emojiData.emoji_path} style={{ width: '24px', height: '24px' }} />
                                         </EmojiStyle>
                                     )
                                 })}
@@ -338,7 +339,7 @@ const EmojiStyle = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    padding: 8px;
+    padding: 7px;
     border: solid 1px #d6d6d7;
     margin: 0 12px 12px 0;
     cursor: pointer;
