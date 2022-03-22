@@ -12,6 +12,7 @@ import { Svg } from '@components/common'
 import { LogoDark, logoDarkViewBox } from '@svgs/LogoDark'
 import DropdownMenu from './DropdownMenu'
 import { useRouter } from 'next/router'
+import { emojiSWR } from '@api/user'
 const Container = styled.div`
     background: linear-gradient(
         90deg,
@@ -49,27 +50,17 @@ interface HeaderProps {
 function Header({ desc }: HeaderProps) {
     const { userData } = userSWR()
     const router = useRouter()
-    // const { userInfo } = userDataSWR()
-    const [userName, setUserName] = useState()
     const [isOpenModal, setIsOpenModal] = useState(false)
-    // const [username, setUserName] = useState(userData.nickname)
+    const [emojiPath, setEmojiPath] = useState('')
     const onCloseModal = () => setIsOpenModal(false)
-    const mockData = {
-        username: '오구민',
-        icon: '😊',
-    }
-    React.useEffect(() => {
-        console.log('userData --- ', userData?.emoji)
-        console.log('userData --- ', userData)
-    }, [])
-    // const userName = userData.nickname
-    // const { data } = useSWR(`${baseURL}/api/user/`, (url) =>
-    //     axios.get(url).then((res) => {
-    //         console.log('66', res.data)
-    //         res.data
-    //         setUserName(res.data.nickname)
+    const { emojiData } = emojiSWR(userData?.emoji)
+    // console.log('emojiData', emojiData?.emoji_path)
+    // React.useEffect(() => {
+    //     axios.get(`${baseURL}/api/emoji/${userData?.emoji}/`).then((res) => {
+    //         setEmojiPath(res.data.emoji_path)
     //     })
-    // )
+    // }, [emojiPath])
+
     return (
         <Container>
             <div className="header_inner" style={{ width: '1140px' }}>
@@ -93,8 +84,7 @@ function Header({ desc }: HeaderProps) {
                             }}
                             onClick={() => setIsOpenModal((prev) => !prev)}
                         >
-                            <img src="/image/assets/emoji/Smile.png" style={{ width: '26px', height: '26px' }} />
-                            {/* {mockData.icon} */}
+                            <img src={emojiData?.emoji_path} style={{ width: '26px', height: '26px' }} />
                         </div>
                         {isOpenModal && <DropdownMenu onClose={onCloseModal} />}
                     </div>

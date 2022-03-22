@@ -74,6 +74,7 @@ function Body() {
     const { agendas, agendaCursor } = useMeeting()
     const [activeMeet, setActiveMeet] = useState<MeetState>(null)
     const [activeAgenda, setActiveAgenda] = useState<AgendaState>(null)
+    const [agendaId, setAgendaId] = useState(null)
     const [areaForm, setAreaForm] = useState({
         discussion: '',
         decisions: '',
@@ -98,15 +99,22 @@ function Body() {
         }
     }, [agendaCursor, activeAgenda])
     useEffect(() => {
-        if (activeAgenda && activeMeet) {
-            setAreaForm({
-                discussion: activeAgenda?.discussion,
-                decisions: activeAgenda?.decisions,
-                agenda_title: activeAgenda?.agenda_title,
-                meet_title: activeMeet?.meet_title,
-                goal: activeMeet?.goal,
-            })
-            // console.log('aaaa', activeAgenda?.discussion)
+        for (let i = 0; i < agendasData?.length; i++) {
+            setAgendaId(agendasData?.[i].agenda_id)
+        }
+    }, [agendasData?.agenda_id])
+    useEffect(() => {
+        for (let i = 0; i < agendasData?.length; i++) {
+            if (activeAgenda && activeMeet) {
+                setAreaForm({
+                    discussion: activeAgenda?.discussion,
+                    decisions: activeAgenda?.decisions,
+                    agenda_title: activeAgenda?.agenda_title,
+                    meet_title: activeMeet?.meet_title,
+                    goal: activeMeet?.goal,
+                })
+                // console.log('aaaa', activeAgenda?.discussion)
+            }
         }
     }, [activeAgenda])
 
@@ -119,6 +127,9 @@ function Body() {
     const onChange = (e) => {
         const { value, name } = e.target
         let rValue = value.replace(/\- /gi, ' · ')
+        for (let i = 0; i < agendasData?.length; i++) {
+            setAgendaId(agendasData?.[i].agenda_id)
+        }
         setAreaForm((prev) => ({ ...prev, [name]: rValue }))
         const newAgenda = {
             ...activeAgenda,
@@ -127,26 +138,27 @@ function Body() {
         }
         setForm({ agendaCursor, newAgenda })
     }
-    const onPatchAgenda = async () => {
+    const onPatchAgenda = async (agendaId) => {
         // console.log('agendasData', agendasData)
-        for (let i = 0; i < agendasData.length; i++) {
-            // console.log('aaaaaa', agendasData)
-            await axios
-                .patch(`${baseURL}/api/meet/${id}/`, {
-                    meet_title: areaForm.meet_title,
-                    goal: areaForm.goal,
-                })
-                .then((res) => {
-                    // console.log('meet update', res)
-                })
+        // console.log('aaaaaa', agendasData)
+        await axios
+            .patch(`${baseURL}/api/meet/${id}/`, {
+                meet_title: areaForm.meet_title,
+                goal: areaForm.goal,
+            })
+            .then((res) => {
+                // console.log('meet update', res)
+            })
 
+        for (let i = 0; i < agendasData.length; i++) {
             await axios
-                .patch(`${baseURL}/api/agenda/${agendasData?.[i]?.agenda_id}/`, {
+                .patch(`${baseURL}/api/agenda/${agendaId}/`, {
                     agenda_title: areaForm.agenda_title,
                     discussion: areaForm.discussion,
                     decisions: areaForm.decisions,
                 })
                 .then((res) => {
+                    // console.log('agendaId --- ', agendaId)
                     // console.log('check --- ', agendasData?.[i].agenda_id)
                     // console.log('결과 확인', res)
                 })
@@ -265,6 +277,7 @@ function Body() {
                             <AgendaBox key={datas.agenda_id}>
                                 <AgendaTitle>
                                     <AgendaId>AGENDA {datas?.order_number}</AgendaId>
+                                    {/* {agendaId === datas?.agenda_id && ( */}
                                     <div className="agenda-title">
                                         <TextArea
                                             name="agenda_title"
@@ -272,8 +285,9 @@ function Body() {
                                             className="test11"
                                             value={areaForm?.agenda_title || datas?.agenda_title}
                                         />
-                                        {/* {datas?.agenda_title} */}
+                                        {/* {console.log('datas', agendaId, datas?.agenda_id)} */}
                                     </div>
+                                    {/* )} */}
                                 </AgendaTitle>
                                 {datas?.progress_time <= datas?.setting_time ? (
                                     <AgendaBodyGoodTime>
@@ -355,6 +369,7 @@ function Body() {
                                     </ActionItemText>
                                     {/* <div className="action-middle-title">{datas?.decisions}</div> */}
                                     <ul>
+                                        {/* {agendaId === datas?.agenda_id && ( */}
                                         <ActionUi>
                                             <TextArea
                                                 name="discussion"
@@ -367,6 +382,7 @@ function Body() {
                                                 }
                                             />
                                         </ActionUi>
+                                        {/* )} */}
                                     </ul>
                                 </FixBox>
                                 <FixBox>
@@ -412,8 +428,8 @@ function Body() {
                     <button
                         className="okay-btn"
                         onClick={() => {
-                            onPatchAgenda()
-                            // router.push(`/`)
+                            onPatchAgenda(agendaId)
+                            router.push(`/`)
                         }}
                     >
                         저장

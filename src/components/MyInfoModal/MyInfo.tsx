@@ -6,14 +6,18 @@ import { Xclick, xclickviewBox } from '@svgs/Xclick'
 import UserCancel from './UserCancel'
 import axios from '@axios'
 import { baseURL } from '@api/index'
+import { emojiSWR, userSWR } from '@api/user'
 interface ModalDefaultType {
     onClickToggleModal: () => void
 }
 
 function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
+    const { userData } = userSWR()
+    const { emojiMutate } = emojiSWR(userData?.emoji)
     const [isOpenModal, setOpenModal] = useState<boolean>(false)
     const [userInfo, setUserInfo] = useState<Array<string>>([])
     const [emojiDatas, setEmojiDatas] = useState([])
+    const [emojiId, setEmojiId] = useState(null)
 
     const [inputs, setInputs] = useState({
         nickname: '',
@@ -111,8 +115,12 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
         axios
             .patch(`${baseURL}/api/user/`, {
                 nickname: nickname,
+                emoji: emojiId,
             })
-            .then((res) => {})
+            .then((res) => {
+                emojiMutate()
+                // console.log('//', res)
+            })
     }
 
     useEffect(() => {
@@ -186,7 +194,12 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             {emojiDatas &&
                                 emojiDatas.map((emojiData) => {
                                     return (
-                                        <EmojiStyle key={emojiData.emoji_id}>
+                                        <EmojiStyle
+                                            key={emojiData.emoji_id}
+                                            active={Number(inputs.emoji) === emojiData.emoji_id ? false : true}
+                                            onClick={() => setEmojiId(emojiData.emoji_id)}
+                                        >
+                                            {/* {console.log('pp', inputs.emoji === emojiData.emoji_id)} */}
                                             <img src={emojiData.emoji_path} style={{ width: '24px', height: '24px' }} />
                                         </EmojiStyle>
                                     )
@@ -335,17 +348,18 @@ const EmojiBox = styled.div`
 
     margin-top: 8px;
 `
-const EmojiStyle = styled.div`
+const EmojiStyle = styled.div<{ active?: boolean }>`
     width: 40px;
     height: 40px;
     border-radius: 20px;
     padding: 7px;
-    border: solid 1px #d6d6d7;
+    // border: solid 1px #d6d6d7;
+    border: solid 1px ${(prop) => (prop.active ? '#d6d6d7' : '#162f55')};
     margin: 0 12px 12px 0;
     cursor: pointer;
     transition: all 0.2s;
     :hover {
-        border: 2px solid #162f55;
+        border: 1px solid #162f55;
     }
 `
 
