@@ -54,7 +54,7 @@ function Header({ desc }: HeaderProps) {
     const [emojiPath, setEmojiPath] = useState('')
     const onCloseModal = () => setIsOpenModal(false)
     const { emojiData } = emojiSWR(userData?.emoji)
-    // console.log('emojiData', emojiData?.emoji_path)
+
     // React.useEffect(() => {
     //     axios.get(`${baseURL}/api/emoji/${userData?.emoji}/`).then((res) => {
     //         setEmojiPath(res.data.emoji_path)
