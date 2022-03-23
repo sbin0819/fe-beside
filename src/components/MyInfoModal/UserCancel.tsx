@@ -53,7 +53,7 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             position: 'absolute',
                         }}
                     >
-                        <Svg viewBox={xclickviewBox} width={'15'} height={'15'}>
+                        <Svg viewBox={xclickviewBox} width={'24'} height={'24'}>
                             <Xclick />
                         </Svg>
                     </div>
@@ -74,10 +74,8 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                         }}
                     >
                         너무 아쉽네요... 😭 <br />
-                        탈퇴하시기 전에 59mins를 떠나시는 이유를 알려주시면,{' '}
-                        <br />
-                        모든 직장인들의 효율적인 회의를 위해 서비스 개선에
-                        적극젇으로 반영하도록 하겠습니다.
+                        탈퇴하시기 전에 59mins를 떠나시는 이유를 알려주시면, <br />
+                        모든 직장인들의 효율적인 회의를 위해 서비스 개선에 적극젇으로 반영하도록 하겠습니다.
                     </p>
                 </InfoBox>
                 <InfoBox style={{ top: '173px' }}>
@@ -122,14 +120,10 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                                 name="radio4"
                                 id="radio4"
                                 value="제공하는 기능 및 서비스 부족"
-                                checked={
-                                    select === '제공하는 기능 및 서비스 부족'
-                                }
+                                checked={select === '제공하는 기능 및 서비스 부족'}
                                 onChange={(e) => handleselectChange(e)}
                             />
-                            <label htmlFor="radio4">
-                                제공하는 기능 및 서비스 부족
-                            </label>
+                            <label htmlFor="radio4">제공하는 기능 및 서비스 부족</label>
                         </LiBox>
                         <LiBox>
                             <RadioInput
@@ -151,9 +145,7 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                                 checked={select === '사이트 시스템의 에러 불만'}
                                 onChange={(e) => handleselectChange(e)}
                             />
-                            <label htmlFor="radio6">
-                                사이트 시스템의 에러 불만
-                            </label>
+                            <label htmlFor="radio6">사이트 시스템의 에러 불만</label>
                         </LiBox>
                         <LiBox>
                             <RadioInput
@@ -179,25 +171,15 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     <ModalH3>탈퇴하시기 전에 꼭 확인해주세요!</ModalH3>
                     <TextUi>
                         <TextLi>
-                            1. 탈퇴시 작성했던 회의록은 즉시 삭제되어 복구할 수
-                            없습니다. <br />
-                            <span
-                                style={{ color: '#e24646', marginLeft: '13px' }}
-                            >
-                                *재가입 하실 경우에도 복원되지 않으니 신중하게
-                                생각해주세요.
+                            1. 탈퇴시 작성했던 회의록은 즉시 삭제되어 복구할 수 없습니다. <br />
+                            <span style={{ color: '#e24646', marginLeft: '13px' }}>
+                                *재가입 하실 경우에도 복원되지 않으니 신중하게 생각해주세요.
                             </span>
                         </TextLi>
+                        <TextLi>2. 탈퇴 시 해당 계정이 삭제되어 해당 계정으로 7일간 재가입이 불가능합니다.</TextLi>
                         <TextLi>
-                            2. 탈퇴 시 해당 계정이 삭제되어 해당 계정으로 7일간
-                            재가입이 불가능합니다.
-                        </TextLi>
-                        <TextLi>
-                            3. 가입된 계정 정보는 별도의 DB로 옮겨져 내부 방침
-                            및 기타 법령에 의한 <br />
-                            <span style={{ marginLeft: '15px' }}>
-                                보유 사유에 따라 90일간 보존 후 삭제처리 됩니다.
-                            </span>
+                            3. 가입된 계정 정보는 별도의 DB로 옮겨져 내부 방침 및 기타 법령에 의한 <br />
+                            <span style={{ marginLeft: '15px' }}>보유 사유에 따라 90일간 보존 후 삭제처리 됩니다.</span>
                         </TextLi>
                     </TextUi>
                 </InfoBox>
@@ -234,10 +216,9 @@ function UserCancel({ ClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             padding: '10px 20px',
                             borderRadius: '12px',
                             fontSize: '14px',
-                            marginRight: '12px',
                         }}
                     >
-                        저장
+                        탈퇴
                     </button>
                 </div>
             </DialogBox>
@@ -286,7 +267,7 @@ const InfoBox = styled.div`
 `
 const RadioBox = styled.div`
     font-size: 14px;
-    color: #89898b;
+    color: #87878b;
     display: flex;
     flex-wrap: wrap;
     width: 436px;
@@ -301,6 +282,10 @@ const RadioInput = styled.input`
     margin-right: 8px;
 `
 const TextUi = styled.ul`
+    padding-top: 10px;
+    width: 484px;
+    height: 158px;
+    background-color: #fbfbfb;
     font-size: 14px;
     color: #87878b;
     margin-left: 20px;
