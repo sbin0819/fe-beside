@@ -11,7 +11,7 @@ import useOnClickOutside from '@hooks/useOnClickOutside'
 const DropDownContainer = styled.div`
     position: absolute;
     right: 0px;
-    top: 32px;
+    top: 50px;
     width: 180px;
     height: 124px;
     padding: 16px 46px 16px 16px;
@@ -72,7 +72,7 @@ function DropdownMenu({ onClose }: DropdownMenuProps) {
                     <Svg viewBox={signoutViewBox} width={'20'} height={'18'}>
                         <Signout />
                     </Svg>
-                    로그아웃
+                    <p style={{ marginLeft: '6px' }}>로그아웃</p>
                 </div>
             </DropDownContainer>
         </div>

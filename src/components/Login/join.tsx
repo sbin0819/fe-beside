@@ -182,15 +182,8 @@ function Join() {
         axios.post(`${baseURL}/api/user/`, [userData]).then((res) => {
             let token = res.data['token']
             document.cookie = `Authorization=${token}`
-            // setCookie('Authorization', token, {
-            //     path: '/',
-            //     maxAge: 1000 * 60 * 60 * 24 * 7,
-            //     secure: true,
-            //     SameSite: 'None',
-            // })
             if (res.data['success'] === true) {
                 window.location.href = '/'
-                // router.push('/')
             }
         })
     }

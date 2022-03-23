@@ -37,80 +37,6 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
         setOpenModal(!isOpenModal)
     }, [isOpenModal])
 
-    const testEmojis = [
-        {
-            id: 1,
-            emoji: '😀',
-        },
-        {
-            id: 2,
-            emoji: '😴',
-        },
-        {
-            id: 3,
-            emoji: '😎',
-        },
-        {
-            id: 4,
-            emoji: '🤯',
-        },
-        {
-            id: 5,
-            emoji: '😱',
-        },
-        {
-            id: 6,
-            emoji: '🤔',
-        },
-        {
-            id: 7,
-            emoji: '🐶',
-        },
-        {
-            id: 8,
-            emoji: '🐱',
-        },
-        {
-            id: 9,
-            emoji: '🙊',
-        },
-        {
-            id: 10,
-            emoji: '👻',
-        },
-        {
-            id: 11,
-            emoji: '👀',
-        },
-        {
-            id: 12,
-            emoji: '👾',
-        },
-        {
-            id: 13,
-            emoji: '👿',
-        },
-        {
-            id: 14,
-            emoji: '🔥',
-        },
-        {
-            id: 15,
-            emoji: '❤',
-        },
-        {
-            id: 16,
-            emoji: '💨',
-        },
-        {
-            id: 17,
-            emoji: '💡',
-        },
-        {
-            id: 18,
-            emoji: '📖',
-        },
-    ]
     const userUpdate = () => {
         axios
             .patch(`${baseURL}/api/user/`, {
@@ -166,24 +92,19 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             position: 'absolute',
                         }}
                     >
-                        <Svg viewBox={xclickviewBox} width={'15'} height={'15'}>
+                        <Svg viewBox={xclickviewBox} width={'24'} height={'24'}>
                             <Xclick />
                         </Svg>
                     </div>
                     <InfoBox style={{ top: '133px' }}>
                         <ModalH3>닉네임</ModalH3>
-                        <input
+                        <Input
                             name="nickname"
                             value={nickname}
                             onChange={onChange}
+                            maxLength={15}
                             style={{
-                                marginTop: '8px',
-                                width: '360px',
-                                height: '48px',
-                                padding: '0 20px',
-                                borderRadius: '12px',
-                                border: '1px solid #d6d6d7',
-                                marginBottom: '31px',
+                                border: `1px solid ${nickname?.length > 0 ? '#0c254c' : '#d6d6d7'}`,
                             }}
                         />
                     </InfoBox>
@@ -208,16 +129,18 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                     </InfoBox>
 
                     <InfoBox style={{ top: '427px' }}>
-                        <ModalH3>계정</ModalH3>
-                        <Svg
-                            viewBox={googleViewBox}
-                            width={'20'}
-                            height={'18'}
-                            style={{ marginRight: '5px', marginTop: '5px' }}
-                        >
-                            <Google />
-                        </Svg>
-                        {email}
+                        <ModalH3 style={{ marginBottom: '8px' }}>계정</ModalH3>
+                        <div style={{ alignItems: 'center', display: 'flex' }}>
+                            <Svg
+                                viewBox={googleViewBox}
+                                width={'20'}
+                                height={'18'}
+                                style={{ marginRight: '5px', marginTop: '5px' }}
+                            >
+                                <Google />
+                            </Svg>
+                            <span style={{ marginTop: '3px' }}>{email}</span>
+                        </div>
                     </InfoBox>
                     <InfoBox style={{ top: '500px' }}>
                         <ModalH3>계정 탈퇴</ModalH3>
@@ -264,7 +187,6 @@ function MyInfo({ onClickToggleModal }: PropsWithChildren<ModalDefaultType>) {
                             style={{
                                 backgroundColor: '#162f55',
                                 color: '#fff',
-                                marginRight: '12px',
                                 cursor: 'pointer',
                             }}
                         >
@@ -317,6 +239,15 @@ const InfoBox = styled.div`
     position: absolute;
     left: 36px;
 `
+const Input = styled.input`
+    margin-top: 8px;
+    width: 360px;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 12px;
+    margin-bottom: 31px;
+    border: 1px solid;
+`
 const ModalH3 = styled.h3`
     font-size: 14px;
     font-weight: bold;
@@ -335,7 +266,7 @@ const Backdrop = styled.div`
     position: fixed;
     top: 0;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.6);
 `
 const EmojiBox = styled.div`
     width: 460px;
